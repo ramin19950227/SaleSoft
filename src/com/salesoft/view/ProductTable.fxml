@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="700.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.salesoft.view.ProductTableController">
+   <children>
+      <AnchorPane layoutX="174.0" layoutY="29.0" prefHeight="100.0" prefWidth="700.0" style="-fx-background-color: yellow;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label layoutX="79.0" layoutY="42.0" text="Barcod:" AnchorPane.leftAnchor="79.0" />
+            <TextField layoutX="163.0" layoutY="38.0" AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="38.0" />
+            <TextField layoutX="360.0" layoutY="38.0" AnchorPane.leftAnchor="360.0" AnchorPane.topAnchor="38.0" />
+            <Label layoutX="334.0" layoutY="42.0" text="Ad" AnchorPane.leftAnchor="334.0" AnchorPane.topAnchor="42.0" />
+         </children>
+      </AnchorPane>
+      <TableView layoutY="100.0" prefHeight="500.0" prefWidth="700.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+        <columns>
+          <TableColumn prefWidth="75.0" text="C1" />
+          <TableColumn prefWidth="75.0" text="C2" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+   </children>
+</AnchorPane>
