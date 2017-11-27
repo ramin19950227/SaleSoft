@@ -5,10 +5,13 @@
  */
 package com.salesoft.view;
 
+import com.salesoft.DAO.ProductDAO;
 import com.salesoft.MainApp;
 import com.salesoft.model.Product;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -43,18 +46,36 @@ public class ProductTableController implements Initializable {
     private ObservableList<Product> productList = FXCollections.observableArrayList();
 
     /**
-     *bunlar Cedvelimizin obyekti ve sutunlarinin obyektidir
+     * productTable - cedvelimizin obyekti
      */
     @FXML
     private TableView<Product> productTable;
+
+    /**
+     * nameColumn - Ad Sutunu
+     */
     @FXML
     private TableColumn<Product, String> nameColumn;
+    /**
+     * qtyColumn - Say Sutunu diqqet integer tipli sutun ucun Product, Integer
+     * yox Product, Number yazmaq lazimdir
+     */
     @FXML
-    private TableColumn<Product, Integer> qtyColumn;
+    private TableColumn<Product, Number> qtyColumn;
+    /**
+     * purchasePriceColumn - Alih Qiymeti Sutunu diqqet Double tipli sutun ucun
+     * Product, Double yox Product, Number yazmaq lazimdir
+     */
     @FXML
-    private TableColumn<Product, Double> purchasePriceColumn;
+    private TableColumn<Product, Number> purchasePriceColumn;
+    /**
+     * barCodeColumn - Barcod Sutunu
+     */
     @FXML
     private TableColumn<Product, String> barCodeColumn;
+    /**
+     * noteColumn - Qeyd Sutunu
+     */
     @FXML
     private TableColumn<Product, String> noteColumn;
 
@@ -69,18 +90,63 @@ public class ProductTableController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+
+        //Cedvelimizin sutunlarini inicializasiya edirik
+        //adlarimiz cedvelde gosteririk
+        nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+
+        //saylari gosteririk
+        qtyColumn.setCellValueFactory(cellData -> cellData.getValue().qtyProperty());
+
+        //qiymetleri gosteririk
+        purchasePriceColumn.setCellValueFactory(cellData -> cellData.getValue().purchasePriceProperty());
+        
+        //barcodlarimizi gosteririk
+        barCodeColumn.setCellValueFactory(cellData -> cellData.getValue().barCodeProperty());
+        
+        //qeydlerimizi gosterek
+        noteColumn.setCellValueFactory(cellData -> cellData.getValue().noteProperty());
+
+        updateTable();
 
     }
 
     /**
-     * Cedveli Yenilemek ucun bu metodu cagirmaq lazimdir bu metod bazadan
-     * malumatlari ArrayListde alir ve yoxlayir bosh deyilse o zaman Tableye
-     * yerleshdirir.
+     * Cedveli Yenilemek ucun bu metodu cagirmaq lazimdir bu metod
+     * ProductDAO-dan malumatlari ArrayListde alir ve yoxlayir bosh deyilse o
+     * zaman Tableye yerleshdirir.
      *
      */
-    public void updateTable() {
+    private void updateTable() {
+        //LOG yaziriq metodun cagirilmasi ile elaqedar
+        MainApp.getLogger().info("ProductTableController.updateTable() - called");
+
+        //bazya sorgu edirik ve butun mehsullari isteyirik
+        //varsa qaytaracaq yoxdursa null qaytaracaq
+        ArrayList<Product> requestList = ProductDAO.getAllProductList();
+
+        // yoxlayiriq eger requestList bosh deyilse
+        // onda if blokundaki emirleri edirik
+        if (requestList != null) {
+
+            //LOG aldigimiz Product obyektini sayini yaziriq
+            MainApp.getLogger().log(Level.SEVERE, "ProductTableController.updateTable() \n"
+                    + "requestList items=:" + requestList.size());
+
+            // Listimizi temizleyirik
+            productList.clear();
+
+            productList.addAll(requestList);
+
+            //Observable Listde olan melumatlari 
+            //cedvelimize yerleshdiririk
+            productTable.setItems(productList);
+        } else {
+            //LOG 
+            MainApp.getLogger().log(Level.INFO, "ProductTableController.updateTable() \n"
+                    + "ProductDAO.getAllProductList() == null");
+
+        }
 
     }
-
 }

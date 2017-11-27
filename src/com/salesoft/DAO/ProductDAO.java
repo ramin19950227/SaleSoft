@@ -36,6 +36,7 @@ public class ProductDAO {
     /**
      * getAllProductList - Bazada olan mehsullari Product modeli obyektine yigib
      * ArrayList kimi qaytarir
+     * @return arrayList
      */
     public static ArrayList<Product> getAllProductList() {
         Product p = null;
@@ -47,12 +48,12 @@ public class ProductDAO {
             boolean found = false;
             while (rs.next()) {
                 p = new Product();
-                p.setId(rs.getInt("id"));
-                p.setName(rs.getString("ad"));
-                p.setQty(rs.getInt("say"));
-                p.setPurchasePrice(rs.getDouble("alishqiymeti"));
-                p.setBarCode(rs.getString("barcode"));
-                p.setNote(rs.getString("qeyd"));
+                p.setId(rs.getInt(1));
+                p.setName(rs.getString(2));
+                p.setQty(rs.getInt(3));
+                p.setPurchasePrice(rs.getDouble(4));
+                p.setBarCode(rs.getString(5));
+                p.setNote(rs.getString(6));
 
                 arrayList.add(p);
 
