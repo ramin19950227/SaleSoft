@@ -7,6 +7,9 @@ package com.salesoft.model;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
@@ -24,13 +27,22 @@ public class Product {
     //cunki adi qayda ile int a, String b, tipli yazsam irelide
     //problemle rastlashacam Cedvelde Redkte 
     private IntegerProperty id;//1
-    private StringProperty name;//2
+    private StringProperty name;;//2
     private IntegerProperty qty;//3  
     private DoubleProperty purchasePrice;//4
     private StringProperty barCode;//5
     private StringProperty note;//6
 
-    public final void setId(Integer value) {
+    public Product() {
+        this.id = new SimpleIntegerProperty(0);
+        this.name = new SimpleStringProperty("name");
+        this.qty = new SimpleIntegerProperty(0);
+        this.purchasePrice = new SimpleDoubleProperty(0.0);
+        this.barCode = new SimpleStringProperty("barCode");
+        this.note = new SimpleStringProperty("note");
+    }
+
+    public final void setId(int value) {
         id.set(value);
     }
 
@@ -54,7 +66,7 @@ public class Product {
         return name;
     }
 
-    public final void setQty(Integer value) {
+    public final void setQty(int value) {
         qty.set(value);
     }
 
@@ -66,7 +78,7 @@ public class Product {
         return qty;
     }
 
-    public final void setPurchasePrice(Double value) {
+    public final void setPurchasePrice(double value) {
         purchasePrice.set(value);
     }
 
