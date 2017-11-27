@@ -1,8 +1,11 @@
 package com.salesoft;
 
+import com.salesoft.util.MyLogger;
 import com.salesoft.view.ProductTableController;
 import com.salesoft.view.RootLayoutController;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -12,63 +15,78 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class MainApp extends Application {
-
+    
     private Stage primaryStage;
+    //Ana sehifemizi elan edirik
     private BorderPane rootLayout;
+    //MyLogger Obyektini elan edirik ve yaradiriq, adini XXXXXXX-AppLog.txt qoyuruq
+    private Logger logger = new MyLogger("AppLog").getLogger();
 
     /**
-     *
-     * Bu metod mainApp obyekti yani bu obyekt istifade olunaraq rootLayoutdan
-     * cagirilacaq Sehifeleri RootLayoutun ortasina yukleyecek bu metod root
-     * layoute bize lazim olan sehifeni yukleyir diget sehifelerde bu prinsiple
-     * ishleyecek bu Yontemin ustunluyu ondadir ki bu cur metoda girish
-     * parametride qoymaq mumkundur Meselen irelide ProductEdit sehifesini
-     * duzeldende Productu redakte etmek ucun o sehifeni yuklemek lazim olaca
-     * amma biz hardan bileceyik ki biz hansi productu redakte etmek isteyirik
-     * bunnan otru bu metodun girisine int dipli productun id-sini vereceyik ve
-     * controllerin obyektini alaraq ordan bize lazim olan metodu acacayiq en
-     * gozeli irelide goreceyik nece ishlediyini
+     * showProductTable() - Bu metod mainApp obyekti istifade olunaraq
+     * cagirilacaq Sehifeni(Scena-ni) RootLayoutun ortasina yukleyecek diger
+     * sehifelerde bu prinsiple ishleyecek bu Yontemin ustunluyu ondadir ki bu
+     * cur metoda girish parametride qoymaq mumkundur Meselen irelide
+     * ProductEdit sehifesini duzeldende Productu redakte etmek ucun o sehifeni
+     * yuklemek lazim olacaq amma biz hardan bileceyik ki biz hansi Product-i
+     * redakte etmek isteyirik bunnan otru bu metodun girisine int dipli
+     * Product-in id-sini vereceyik ve Controllerin obyektini alaraq ordan bize
+     * lazim olan metodu acacayiq inshaAllah irelide goreceyik nece ishlediyini
      */
     public void showProductTable() {
         try {
-            // ��������� �������� �� ���������.
+            // gostermek istedyimiz sehifeni FXML faylini aliriq.
+            // AnchorPane -e yukleyirik obyektin adi (productView)
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/ProductTable.fxml"));
-            AnchorPane productOverview = (AnchorPane) loader.load();
+            AnchorPane productView = (AnchorPane) loader.load();
 
-            // �������� �������� �� ��������� � ����� ��������� ������.
-            rootLayout.setCenter(productOverview);
+            // aldigimiz (productView) sehife obyektini yukleyirik Ana sehifemizin ortasina
+            // solunda ve Yuxarisinda ise bizim menumuz var
+            rootLayout.setCenter(productView);
 
-            // ��� ����������� ������ � �������� ����������.
+            // Sehifemizin Controllerini aliriq ve
+            // Controllerimize Esas Class-in yani MainApp-in linni veririk
+            // bu irelide Main appin icinde olan sehifeleri deyishmek imkani verecek.
+            // MyLogger obyektine log yazmaq imkani verecek ve s.
             ProductTableController controller = loader.getController();
+
+            //MainApp -in linkini this deyerek veririk Controllere
             controller.setMainApp(this);
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            new MyLogger("MainApp.showProductTable() - IOException").getLogger().log(Level.SEVERE, "IOException", ex);
         }
     }
 
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("AddressApp");
+
+        //Proqramin adini yazir acilan pencerenin yuxari sol kuncunde yazilan ad
+        this.primaryStage.setTitle("Sale Soft");
 
         //Programi full screen-de acir 
         this.primaryStage.setFullScreen(true);
 
+        //Ana sehifemizi hazirlayiriq ve Ilkin gorutu hazirliqlarini edirik
         initRootLayout();
 
+        // ProductTable - Mehsul olan cedvelimizi Ana sehifeye  yukleyirik
+        // irelide proqram acilan kimi bashqa sehife gostermek istesek eger
+        // o zaman bunu deyishib gostermek istediyimiz sehifenin metodunu 
+        // bura yazacayiq
         showProductTable();
     }
 
     /**
-     * Sol menyu v ust menu hissesini inicializasiya edir ve yukleyir sonra bize
-     * lazim olan hisseni bunun ortasina yukleyerek gostereceyik bizim
-     * sehifelerimiz deyishecek amma bu sol menu ve ust menu deyishmeyecek cunki
-     * bu Ana Paneldir nece deyeller Bu yuklenir sonra bunun ortasinda setCenter
-     * metodu ile yukleyib gostermek istediyimiz hisseni gonderirik parametrinde
-     * Meselen: rootLayout.setCenter(Gostermek istediyimiz AnchorPane ve ya her
-     * neise Node deyilir);
+     * initRootLayout() - Sol menyu ve ust menu hissesini inicializasiya edir ve
+     * yukleyir sonra bize lazim olan hisseni bunun ortasina yukleyerek
+     * gostereceyik bizim sehifelerimiz deyishecek amma bu sol menu ve ust menu
+     * deyishmeyecek cunki bu Ana Paneldir nece deyeller Bu yuklenir sonra bunun
+     * ortasinda setCenter metodu ile yukleyib gostermek istediyimiz hisseni
+     * gonderirik parametrinde Meselen: rootLayout.setCenter(Gostermek
+     * istediyimiz AnchorPane ve ya her neise Node deyilir);
      */
     public void initRootLayout() {
         try {
@@ -77,7 +95,13 @@ public class MainApp extends Application {
             loader.setLocation(MainApp.class.getResource("view/RootLayout.fxml"));
             rootLayout = (BorderPane) loader.load();
 
+            // Sehifemizin Controllerini aliriq ve
+            // Controllerimize Esas Class-in yani MainApp-in linni veririk
+            // bu irelide Main appin icinde olan sehifeleri deyishmek imkani verecek.
+            // MyLogger obyektine log yazmaq imkani verecek ve s.
             RootLayoutController controller = loader.getController();
+
+            //MainApp -in linkini this deyerek veririk Controllere
             controller.setMainApp(this);
 
             // Yuklediyimiz deyishkeni Ekrana gostermesi ucun Stage obyektine gonderib
@@ -85,8 +109,8 @@ public class MainApp extends Application {
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            new MyLogger("MainApp.initRootLayout() - IOException").getLogger().log(Level.SEVERE, "IOException", ex);
         }
     }
 
