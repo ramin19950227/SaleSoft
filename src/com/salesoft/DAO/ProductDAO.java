@@ -6,13 +6,13 @@
 package com.salesoft.DAO;
 
 import com.salesoft.model.Product;
+import com.salesoft.util.MyLogger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * ProductDAO - bu Melumat bazasindan melumatlari almaq ucun istifade olunur.
@@ -28,14 +28,11 @@ public class ProductDAO {
     private static final String PRODUCT_TABLE_NAME = "product_list";
 
     /**
-     * Bizim SQL sorgularimiz, adlarinden bilinir ne ucun istifade olunursa
-     * biraz inglis dili bilmek bes eder
+     * SQL sorgularimiz, adlarindan bilinir ne ucun istifade olunursa biraz
+     * inglis dili bilmek bes eder
      */
     private static final String SQL_GET_ALL_PRODUCTS = "SELECT * FROM " + PRODUCT_TABLE_NAME;
 
-    /**
-     * Bunlarda Metodlarimiz
-     */
     /**
      * getAllProductList - Bazada olan mehsullari Product modeli obyektine yigib
      * ArrayList kimi qaytarir
@@ -69,7 +66,7 @@ public class ProductDAO {
                 return null; // no entires found
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ProductDAO.class.getName()).log(Level.SEVERE, "SQLException - in metod: (ArrayList<Product> getAllProductList())", ex);
+            new MyLogger("ProductDAO.getAllProductList() - SQLException").getLogger().log(Level.SEVERE, "SQLException - in metod: (ArrayList<Product> getAllProductList())", ex);
             return (null);
         }
     }
