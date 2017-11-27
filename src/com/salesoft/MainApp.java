@@ -14,13 +14,32 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+/**
+ * MainApp - Proqramin Esas main olan Class-i dir butun proqram burdan bashlayir
+ *
+ * @author Ramin
+ */
 public class MainApp extends Application {
-    
+
     private Stage primaryStage;
+
     //Ana sehifemizi elan edirik
     private BorderPane rootLayout;
-    //MyLogger Obyektini elan edirik ve yaradiriq, adini XXXXXXX-AppLog.txt qoyuruq
-    private Logger logger = new MyLogger("AppLog").getLogger();
+
+    // MyLogger Obyektini elan edirik ve yaradiriq, adini XXXXXXX-AppLog.txt qoyuruq
+    // static ve final edirik eks teqdirde error cixirdi bilmedim niye
+    private static final Logger logger = new MyLogger("AppLog").getLogger();
+
+    /**
+     * MyLogger - Proqramimizin esas MyLogger obyektinin linkini almaq ucun
+     * istifade olunur bunun sayesinde esas AppLog faylina qeydlerimizi ede
+     * bilerik proqram baglanana qeder ne ish gorulecekse qeyd ede bilerk
+     *
+     * @return
+     */
+    public static Logger getLogger() {
+        return logger;
+    }
 
     /**
      * showProductTable() - Bu metod mainApp obyekti istifade olunaraq
@@ -114,12 +133,6 @@ public class MainApp extends Application {
         }
     }
 
-    /**
-     *
-     *
-     * @return
-     *
-     */
     public Stage getPrimaryStage() {
         return primaryStage;
     }
