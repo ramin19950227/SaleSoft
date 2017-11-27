@@ -16,10 +16,13 @@
             <Label layoutX="334.0" layoutY="42.0" text="Ad" AnchorPane.leftAnchor="334.0" AnchorPane.topAnchor="42.0" />
          </children>
       </AnchorPane>
-      <TableView layoutY="100.0" prefHeight="500.0" prefWidth="700.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+      <TableView fx:id="productTable" layoutY="100.0" prefHeight="500.0" prefWidth="700.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
+          <TableColumn fx:id="nameColumn" prefWidth="75.0" text="Mehsul adı" />
+          <TableColumn fx:id="qtyColumn" prefWidth="75.0" text="Say" />
+            <TableColumn fx:id="purchasePriceColumn" prefWidth="75.0" text="Alış Qiyməti" />
+            <TableColumn fx:id="barCodeColumn" prefWidth="75.0" text="BarCod" />
+            <TableColumn fx:id="noteColumn" prefWidth="75.0" text="Qeyd" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

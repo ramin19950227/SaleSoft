@@ -11,7 +11,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 /**
  * FXML Controller class
@@ -21,10 +24,10 @@ import javafx.fxml.Initializable;
 public class ProductTableController implements Initializable {
 
     /**
-     * bu properti esas Java Klass olan MainApp klasinin Obyektinin linkini
-     * saxlayacaq ozunde bunu setMainApp(MainApp mainApp) metodu ile sehifeni
-     * Yukledimiz zaman linkin set edirik ki bize bashqa bir sehifeni yuklemek
-     * lazim olduqda bunu rahatliqla ede bilek
+     * mainApp bu properti esas Java Klass olan MainApp klasinin Obyektinin
+     * linkini saxlayacaq ozunde bunu setMainApp(MainApp mainApp) metodu ile
+     * sehifeni Yukledimiz zaman linkin set edirik ki bize bashqa bir sehifeni
+     * yuklemek lazim olduqda bunu rahatliqla ede bilek
      */
     private MainApp mainApp;
 
@@ -32,13 +35,28 @@ public class ProductTableController implements Initializable {
         this.mainApp = mainApp;
     }
 
-
     /**
      * bu properti ozunde cedvelde gosterilecek melumatlari saxlayir ve Bazadan
      * yenilendikden sonra bu ObservableList-de saxlanacaq
      *
      */
     private ObservableList<Product> productList = FXCollections.observableArrayList();
+
+    /**
+     *bunlar Cedvelimizin obyekti ve sutunlarinin obyektidir
+     */
+    @FXML
+    private TableView<Product> productTable;
+    @FXML
+    private TableColumn<Product, String> nameColumn;
+    @FXML
+    private TableColumn<Product, Integer> qtyColumn;
+    @FXML
+    private TableColumn<Product, Double> purchasePriceColumn;
+    @FXML
+    private TableColumn<Product, String> barCodeColumn;
+    @FXML
+    private TableColumn<Product, String> noteColumn;
 
     /**
      * Controllerin inicializasiyasi ucun bu metod istifade olunur bu sehife
@@ -64,7 +82,5 @@ public class ProductTableController implements Initializable {
     public void updateTable() {
 
     }
-
-
 
 }
