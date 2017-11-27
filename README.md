@@ -1,2 +1,3 @@
-# SaleSoft2017
+# SaleSoft
+
 Satis Programi Barcod Sistemli 
