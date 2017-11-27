@@ -1,11 +1,11 @@
 package com.salesoft.DAO;
 
+import com.salesoft.util.MyLogger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Bu Class-i Biz Melumat bazamizla elaqe qurmaq ucun istifade edeceyik burada
@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  * @author Ramin
  */
 public class DatabaseConnection {
-
+    
     final static String HOST = "localhost";
     final static String PORT = "3306";
     final static String DB_NAME = "testdb";
@@ -40,15 +40,14 @@ public class DatabaseConnection {
             con = DriverManager.getConnection(connectionURL, "" + USER + "", "" + PASSWORD + "");
 
         } catch (SQLException ex) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, "SQLException", ex);
+            new MyLogger("DatabaseConnection - SQLException").getLogger().log(Level.SEVERE, "SQLException", ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, "ClassNotFoundException", ex);
+            new MyLogger("DatabaseConnection - ClassNotFoundException").getLogger().log(Level.SEVERE, "ClassNotFoundException", ex);
         } catch (InstantiationException ex) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, "InstantiationException", ex);
+            new MyLogger("DatabaseConnection - InstantiationException").getLogger().log(Level.SEVERE, "InstantiationException", ex);
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, "IllegalAccessException", ex);
+            new MyLogger("DatabaseConnection - IllegalAccessException").getLogger().log(Level.SEVERE, "IllegalAccessException", ex);
         }
-System.out.println("returned");
         return con;
     }
 
@@ -70,7 +69,7 @@ System.out.println("returned");
             try {
                 con.close();
             } catch (SQLException ex) {
-                Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, "SQLException : Error in DatabaseConnection.close(Connection con)", ex);
+                new MyLogger("DatabaseConnection.close(con) - SQLException").getLogger().log(Level.SEVERE, "SQLException : Error in DatabaseConnection.close(Connection con)", ex);
             }
 
         }
@@ -92,7 +91,7 @@ System.out.println("returned");
             try {
                 rs.close();
             } catch (SQLException ex) {
-                Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, "SQLException : Error in DatabaseConnection.close(ResultSet rs)", ex);
+                new MyLogger("DatabaseConnection.close(rs) - SQLException").getLogger().log(Level.SEVERE, "SQLException : Error in DatabaseConnection.close(ResultSet rs)", ex);
             }
         }
 
