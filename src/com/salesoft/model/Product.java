@@ -23,46 +23,46 @@ public class Product {
     //modellerin Property-lerini javaFX de nece lzimdirsa ele yigiram
     //cunki adi qayda ile int a, String b, tipli yazsam irelide
     //problemle rastlashacam Cedvelde Redkte 
-    private StringProperty id;//1
-    private IntegerProperty name;//2
-    private StringProperty qty;//3
+    private IntegerProperty id;//1
+    private StringProperty name;//2
+    private IntegerProperty qty;//3  
     private DoubleProperty purchasePrice;//4
     private StringProperty barCode;//5
     private StringProperty note;//6
 
-    public final void setId(String value) {
+    public final void setId(Integer value) {
         id.set(value);
     }
 
-    public final String getId() {
+    public final Integer getId() {
         return id.get();
     }
 
-    public final StringProperty idProperty() {
+    public final IntegerProperty idProperty() {
         return id;
     }
 
-    public final void setName(Integer value) {
+    public final void setName(String value) {
         name.set(value);
     }
 
-    public final Integer getName() {
+    public final String getName() {
         return name.get();
     }
 
-    public final IntegerProperty nameProperty() {
+    public final StringProperty nameProperty() {
         return name;
     }
 
-    public final void setQty(String value) {
+    public final void setQty(Integer value) {
         qty.set(value);
     }
 
-    public final String getQty() {
+    public final Integer getQty() {
         return qty.get();
     }
 
-    public final StringProperty qtyProperty() {
+    public final IntegerProperty qtyProperty() {
         return qty;
     }
 
@@ -101,7 +101,5 @@ public class Product {
     public final StringProperty noteProperty() {
         return note;
     }
-            
-    
-    
+
 }
