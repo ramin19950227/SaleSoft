@@ -5,18 +5,21 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="700.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.salesoft.view.ProductTableController">
    <children>
       <AnchorPane layoutX="174.0" layoutY="29.0" prefHeight="100.0" prefWidth="700.0" style="-fx-background-color: yellow;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label layoutX="79.0" layoutY="42.0" text="Barcod:" AnchorPane.leftAnchor="79.0" />
-            <TextField layoutX="163.0" layoutY="38.0" AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="38.0" />
-            <TextField layoutX="360.0" layoutY="38.0" AnchorPane.leftAnchor="360.0" AnchorPane.topAnchor="38.0" />
-            <Label layoutX="334.0" layoutY="42.0" text="Ad" AnchorPane.leftAnchor="334.0" AnchorPane.topAnchor="42.0" />
+            <Label layoutX="124.0" layoutY="19.0" text="Mehsul haqqinda melumat almaq ucun, barcodunu ve ya Adin yazin:" textAlignment="CENTER" AnchorPane.topAnchor="19.0">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="searchField" layoutX="276.0" layoutY="50.0" onKeyReleased="#searchFieldReleased" prefWidth="149.0" AnchorPane.topAnchor="50.0" />
          </children>
       </AnchorPane>
-      <TableView fx:id="productTable" layoutY="100.0" prefHeight="500.0" prefWidth="700.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+      <TableView fx:id="productTable" layoutY="103.0" prefHeight="514.0" prefWidth="700.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="-17.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="103.0">
         <columns>
           <TableColumn fx:id="nameColumn" prefWidth="75.0" text="Mehsul adı" />
           <TableColumn fx:id="qtyColumn" prefWidth="75.0" text="Say" />

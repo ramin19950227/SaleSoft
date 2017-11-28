@@ -5,7 +5,7 @@
  */
 package com.salesoft.view;
 
-import com.salesoft.DAO.ProductDAO;
+import com.salesoft.DAO.ProductGetDAO;
 import com.salesoft.MainApp;
 import com.salesoft.model.Product;
 import java.net.URL;
@@ -18,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 
 /**
  * FXML Controller class
@@ -80,6 +81,22 @@ public class ProductTableController implements Initializable {
     private TableColumn<Product, String> noteColumn;
 
     /**
+     * ??
+     */
+    @FXML
+    private TextField searchField;
+
+    /**
+     * infoFieldReleased
+     */
+    @FXML
+    private void searchFieldReleased() {
+        String data = searchField.getText();
+        System.out.println(data);
+        updateTable(data);
+    }
+
+    /**
      * Controllerin inicializasiyasi ucun bu metod istifade olunur bu sehife
      * yuklenende avtomatik cagrilir burada biz tablemizi init ede bilerik yani
      * hazirlaya bilerik Mehsullari gosteren sehife yuklenen kimi bosh
@@ -100,14 +117,14 @@ public class ProductTableController implements Initializable {
 
         //qiymetleri gosteririk
         purchasePriceColumn.setCellValueFactory(cellData -> cellData.getValue().purchasePriceProperty());
-        
+
         //barcodlarimizi gosteririk
         barCodeColumn.setCellValueFactory(cellData -> cellData.getValue().barCodeProperty());
-        
+
         //qeydlerimizi gosterek
         noteColumn.setCellValueFactory(cellData -> cellData.getValue().noteProperty());
 
-        updateTable();
+        updateTable("");
 
     }
 
@@ -116,37 +133,76 @@ public class ProductTableController implements Initializable {
      * ProductDAO-dan malumatlari ArrayListde alir ve yoxlayir bosh deyilse o
      * zaman Tableye yerleshdirir.
      *
+     * @param data - demeli ele bu metod bele ishleyir, daxil olan melumati
+     * birinci probelleri silir evvelden ve axirdan tirim() ile sonra onu
+     * yoxlayir eger *(Ulduz)-dursa ve ya boshdursa o zaman hamsini gosterir YOX
+     * EGER deyilse o zaman barcod olub olmadigini yoxlayir ve EGER barcod ile
+     * axtarish ugurlu alinirsa o zaman o neticeni gosterir YOX EGER barcod
+     * alinmadisa o zaman ad ile axtarish edir axtarishi da GLOBAL (global match
+     * % ? %) edir bu o demek dirki evvelden ortadan ve ya axirdan her hansi
+     * hisse uygun gelse onu gosterecek meselen b herfi yazsam hansi mehsulun
+     * adinda b varsa onlari gosterecek YOX EGER ad ile axtarishda ugurlu
+     * alinmadisa o zaman hecne gostermir ObservableList-i .clear() edir yani
+     * temizleyir ve bosh listi cedvele yerleshdirir yani hecne gostermir bosh
+     * cedvel gorsenir ve bu da o demekdirki hecne tapmadiq :)))
+     *
+     *
      */
-    private void updateTable() {
+    private void updateTable(String data) {
+        data = data.trim();
         //LOG yaziriq metodun cagirilmasi ile elaqedar
-        MainApp.getLogger().info("ProductTableController.updateTable() - called");
+        MainApp.getLogger().info("ProductTableController.updateTable(\"*\" or \"\")(ALL) - called Parameter (String data) =:" + data);
 
-        //bazya sorgu edirik ve butun mehsullari isteyirik
-        //varsa qaytaracaq yoxdursa null qaytaracaq
-        ArrayList<Product> requestList = ProductDAO.getAllProductList();
+        if (data.equals("*") || data.equals("")) {//eger daxil olan  * dursa ve ya bosh setirdirse o zaman hamsini goster
+            //eger daxil olan data ULDUZ-durza (*) onda hamsini goster
+            //bazya sorgu edirik ve butun mehsullari isteyirik
+            //varsa qaytaracaq yoxdursa null qaytaracaq
+            ArrayList<Product> requestList = ProductGetDAO.getAllProductList();
+            // yoxlayiriq eger requestList bosh deyilse
+            // onda if blokundaki emirleri edirik
+            if (requestList != null) {
 
-        // yoxlayiriq eger requestList bosh deyilse
-        // onda if blokundaki emirleri edirik
-        if (requestList != null) {
+                //LOG aldigimiz Product obyektini sayini yaziriq
+                MainApp.getLogger().log(Level.SEVERE, "ProductTableController.updateTable() \n"
+                        + "requestList items=:" + requestList.size());
 
-            //LOG aldigimiz Product obyektini sayini yaziriq
-            MainApp.getLogger().log(Level.SEVERE, "ProductTableController.updateTable() \n"
+                // Listimizi temizleyirik
+                productList.clear();
+
+                productList.addAll(requestList);
+
+                //Observable Listde olan melumatlari 
+                //cedvelimize yerleshdiririk
+                productTable.setItems(productList);
+            } else {
+                //LOG 
+                MainApp.getLogger().log(Level.INFO, "ProductTableController.updateTable() \n"
+                        + "ProductDAO.getAllProductList() == null");
+
+            }
+        } else if (ProductGetDAO.getAllProductListByBarCode(data) != null) {// barcodla tapdisa bu blok ishe dushecek
+            ArrayList<Product> requestList = ProductGetDAO.getAllProductListByBarCode(data);
+
+            MainApp.getLogger().log(Level.SEVERE, "ProductTableController.updateTable(BARCODE) \n"
+                    + "BarCode=: " + data
                     + "requestList items=:" + requestList.size());
 
-            // Listimizi temizleyirik
             productList.clear();
-
             productList.addAll(requestList);
-
-            //Observable Listde olan melumatlari 
-            //cedvelimize yerleshdiririk
             productTable.setItems(productList);
-        } else {
-            //LOG 
-            MainApp.getLogger().log(Level.INFO, "ProductTableController.updateTable() \n"
-                    + "ProductDAO.getAllProductList() == null");
+        } else if (ProductGetDAO.getAllProductListByNameLike(data) != null) {//adla axtarib tapdisa bu blok ishe dushecek
+            ArrayList<Product> requestList = ProductGetDAO.getAllProductListByNameLike(data);
 
+            MainApp.getLogger().log(Level.SEVERE, "ProductTableController.updateTable(BARCODE) \n"
+                    + "BarCode=: " + data
+                    + "requestList items=:" + requestList.size());
+
+            productList.clear();
+            productList.addAll(requestList);
+            productTable.setItems(productList);
+        } else { // hec biri deyilse o zaman bu ishe dushecek
+            productList.clear();
+            productTable.setItems(productList);
         }
-
     }
 }
