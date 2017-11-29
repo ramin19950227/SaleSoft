@@ -6,6 +6,7 @@
 package com.salesoft.view;
 
 import com.salesoft.DAO.ProductGetDAO;
+import com.salesoft.DAO.ProductUpdateDAO;
 import com.salesoft.MainApp;
 import com.salesoft.model.Product;
 import java.net.URL;
@@ -16,9 +17,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.util.converter.NumberStringConverter;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.control.TableColumn.CellEditEvent;
 
 /**
  * FXML Controller class
@@ -44,7 +49,7 @@ public class ProductTableController implements Initializable {
      * yenilendikden sonra bu ObservableList-de saxlanacaq
      *
      */
-    private ObservableList<Product> productList = FXCollections.observableArrayList();
+    private final ObservableList<Product> productList = FXCollections.observableArrayList();
 
     /**
      * productTable - cedvelimizin obyekti
@@ -57,23 +62,27 @@ public class ProductTableController implements Initializable {
      */
     @FXML
     private TableColumn<Product, String> nameColumn;
+
     /**
      * qtyColumn - Say Sutunu diqqet integer tipli sutun ucun Product, Integer
      * yox Product, Number yazmaq lazimdir
      */
     @FXML
     private TableColumn<Product, Number> qtyColumn;
+
     /**
      * purchasePriceColumn - Alih Qiymeti Sutunu diqqet Double tipli sutun ucun
      * Product, Double yox Product, Number yazmaq lazimdir
      */
     @FXML
     private TableColumn<Product, Number> purchasePriceColumn;
+
     /**
      * barCodeColumn - Barcod Sutunu
      */
     @FXML
     private TableColumn<Product, String> barCodeColumn;
+
     /**
      * noteColumn - Qeyd Sutunu
      */
@@ -81,7 +90,7 @@ public class ProductTableController implements Initializable {
     private TableColumn<Product, String> noteColumn;
 
     /**
-     * ??
+     * Axtarish ucun istifade olunur
      */
     @FXML
     private TextField searchField;
@@ -104,28 +113,96 @@ public class ProductTableController implements Initializable {
      * etmeliyik yani datalari cedvelimize yerleshdirmeliyik Cedvelin
      * yenilenmesini de Bashqa bir metodda realize edecem cunki her emeliyyatdan
      * sonra cedveli yenilemeye bezen ehtiyac olur.
+     *
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
+        //cedvelimizde Excelde oldugu kimi xanalari REDAKTE ede bilmek ucun
+        //bu metodun parametrine true vermek lazimdir 
+        productTable.setEditable(true);
+
+        productTable.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    
+                    // bazada axtarish verdikde Error cixirdi
+                    // bu JavaFx-de table view cox qeribedir eee oz ozune avtomatik bu metodu cagirir
+                    // ona gore birinci yoxlayiram sonra.
+                    // yoxsa gonderirem ve error cixir nullPointerException
+                    if (newValue != null) {
+                        mainApp.setToRightProductEdit(newValue);
+                    } else {
+                        System.out.println("productTable Selection PRODUCT NULL AUTOCALL");
+                    }
+                });
 
         //Cedvelimizin sutunlarini inicializasiya edirik
         //adlarimiz cedvelde gosteririk
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 
-        //saylari gosteririk
+        //mehsul adini edit etmek ucun bu metodlardan istifade olunur
+        nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        // xanaya tiklayib deyishiklik edib ve enteri basdiqda 
+        // bu metod acilir
+        nameColumn.setOnEditCommit((CellEditEvent<Product, String> t) -> {
+            //mehsulumuz redakte olunduqdn sonra enteri basdiqda bu metod ishe dushur
+
+            //redakte tamamlandiqdan sonra yenilenmish melumati ve mehsulun id-sini
+            //gonderirik DAO class-ina ki, Melumat bazasinda yenileyek
+            ProductUpdateDAO.updateProductNameById(t.getRowValue().getId(), t.getNewValue());
+
+            // mehsulun yeni adini melumat bazasina gonderib yeniledikden sonra Cedvelimizi yenileyirik
+            // yani mehsullarin siyahisini bazadan yeniden yukleyirik
+            updateTable("");
+
+            // cedvelimizi bazadan yeniledikden sonra mehsulumuzu 
+            //  select edirik, yani secirik ki Edit panelinede dushsun yeni melumatlar
+            productTable.getSelectionModel().select(t.getRowValue());
+        });
+
         qtyColumn.setCellValueFactory(cellData -> cellData.getValue().qtyProperty());
+        qtyColumn.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
+        qtyColumn.setOnEditCommit((CellEditEvent<Product, Number> t) -> {
+            ProductUpdateDAO.updateProductQtyById(t.getRowValue().getId(), t.getNewValue().intValue());
+            updateTable("");
+            productTable.getSelectionModel().select(t.getRowValue());
 
-        //qiymetleri gosteririk
+        });
+
         purchasePriceColumn.setCellValueFactory(cellData -> cellData.getValue().purchasePriceProperty());
+        purchasePriceColumn.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
+        purchasePriceColumn.setOnEditCommit((CellEditEvent<Product, Number> t) -> {
+            ProductUpdateDAO.updateProductPurchasePriceById(t.getRowValue().getId(), t.getNewValue().doubleValue());
+            updateTable("");
+            productTable.getSelectionModel().select(t.getRowValue());
 
-        //barcodlarimizi gosteririk
+        });
+
         barCodeColumn.setCellValueFactory(cellData -> cellData.getValue().barCodeProperty());
+        barCodeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        barCodeColumn.setOnEditCommit((CellEditEvent<Product, String> t) -> {
+            ProductUpdateDAO.updateProductBarCodeById(t.getRowValue().getId(), t.getNewValue());
+            updateTable("");
+            productTable.getSelectionModel().select(t.getRowValue());
 
-        //qeydlerimizi gosterek
+        });
+
         noteColumn.setCellValueFactory(cellData -> cellData.getValue().noteProperty());
+        noteColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        noteColumn.setOnEditCommit((CellEditEvent<Product, String> t) -> {
+            ProductUpdateDAO.updateProductNoteById(t.getRowValue().getId(), t.getNewValue());
+            updateTable("");
+            productTable.getSelectionModel().select(t.getRowValue());
+
+        });
+
+        // bu cedvel bosh olduqda xeberdarliq cixarir yani meselen mehsul yoxdur ve s.
+        productTable.setPlaceholder(new Label("Bazada Mehsul Tapilmadi"));
 
         updateTable("");
-
     }
 
     /**
@@ -151,7 +228,7 @@ public class ProductTableController implements Initializable {
     private void updateTable(String data) {
         data = data.trim();
         //LOG yaziriq metodun cagirilmasi ile elaqedar
-        MainApp.getLogger().info("ProductTableController.updateTable(\"*\" or \"\")(ALL) - called Parameter (String data) =:" + data);
+        MainApp.getLogger().log(Level.INFO, "ProductTableController.updateTable(\"*\" or \"\")(ALL) - called Parameter (String data) =:{0}", data);
 
         if (data.equals("*") || data.equals("")) {//eger daxil olan  * dursa ve ya bosh setirdirse o zaman hamsini goster
             //eger daxil olan data ULDUZ-durza (*) onda hamsini goster
@@ -163,12 +240,12 @@ public class ProductTableController implements Initializable {
             if (requestList != null) {
 
                 //LOG aldigimiz Product obyektini sayini yaziriq
-                MainApp.getLogger().log(Level.SEVERE, "ProductTableController.updateTable() \n"
-                        + "requestList items=:" + requestList.size());
+                MainApp.getLogger().log(Level.SEVERE, "ProductTableController.updateTable() \nrequestList items=:{0}", requestList.size());
 
                 // Listimizi temizleyirik
                 productList.clear();
 
+                // Bazadan DAO sayesinde aldigimiz listi -> ObservableList-e keciririk
                 productList.addAll(requestList);
 
                 //Observable Listde olan melumatlari 
@@ -176,16 +253,15 @@ public class ProductTableController implements Initializable {
                 productTable.setItems(productList);
             } else {
                 //LOG 
-                MainApp.getLogger().log(Level.INFO, "ProductTableController.updateTable() \n"
-                        + "ProductDAO.getAllProductList() == null");
+                MainApp.getLogger().log(Level.INFO, "ProductDAO.getAllProductList() == null");
 
             }
+            //yoxlama Eger daxil edilen melumat barcoddursa o zaman songu gonderib  cavabini
+            // yoxlayiriq ve eger barcoddursao zaman sorgunun cavabina mehsul Listi gelmelidir
         } else if (ProductGetDAO.getAllProductListByBarCode(data) != null) {// barcodla tapdisa bu blok ishe dushecek
             ArrayList<Product> requestList = ProductGetDAO.getAllProductListByBarCode(data);
 
-            MainApp.getLogger().log(Level.SEVERE, "ProductTableController.updateTable(BARCODE) \n"
-                    + "BarCode=: " + data
-                    + "requestList items=:" + requestList.size());
+            MainApp.getLogger().log(Level.SEVERE, "ProductTableController.updateTable(BARCODE) \nBarCode=: {0}requestList items=:{1}", new Object[]{data, requestList.size()});
 
             productList.clear();
             productList.addAll(requestList);
@@ -193,9 +269,7 @@ public class ProductTableController implements Initializable {
         } else if (ProductGetDAO.getAllProductListByNameLike(data) != null) {//adla axtarib tapdisa bu blok ishe dushecek
             ArrayList<Product> requestList = ProductGetDAO.getAllProductListByNameLike(data);
 
-            MainApp.getLogger().log(Level.SEVERE, "ProductTableController.updateTable(BARCODE) \n"
-                    + "BarCode=: " + data
-                    + "requestList items=:" + requestList.size());
+            MainApp.getLogger().log(Level.SEVERE, "ProductTableController.updateTable(BARCODE) \nBarCode=: {0}requestList items=:{1}", new Object[]{data, requestList.size()});
 
             productList.clear();
             productList.addAll(requestList);

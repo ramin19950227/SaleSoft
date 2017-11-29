@@ -1,6 +1,8 @@
 package com.salesoft;
 
+import com.salesoft.model.Product;
 import com.salesoft.util.MyLogger;
+import com.salesoft.view.ProductEditController;
 import com.salesoft.view.ProductTableController;
 import com.salesoft.view.RootLayoutController;
 import java.io.IOException;
@@ -23,6 +25,10 @@ public class MainApp extends Application {
 
     private Stage primaryStage;
 
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
     //Ana sehifemizi elan edirik
     private BorderPane rootLayout;
 
@@ -39,43 +45,6 @@ public class MainApp extends Application {
      */
     public static Logger getLogger() {
         return logger;
-    }
-
-    /**
-     * showProductTable() - Bu metod mainApp obyekti istifade olunaraq
-     * cagirilacaq Sehifeni(Scena-ni) RootLayoutun ortasina yukleyecek diger
-     * sehifelerde bu prinsiple ishleyecek bu Yontemin ustunluyu ondadir ki bu
-     * cur metoda girish parametride qoymaq mumkundur Meselen irelide
-     * ProductEdit sehifesini duzeldende Productu redakte etmek ucun o sehifeni
-     * yuklemek lazim olacaq amma biz hardan bileceyik ki biz hansi Product-i
-     * redakte etmek isteyirik bunnan otru bu metodun girisine int dipli
-     * Product-in id-sini vereceyik ve Controllerin obyektini alaraq ordan bize
-     * lazim olan metodu acacayiq inshaAllah irelide goreceyik nece ishlediyini
-     */
-    public void showProductTable() {
-        try {
-            // gostermek istedyimiz sehifeni FXML faylini aliriq.
-            // AnchorPane -e yukleyirik obyektin adi (productView)
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("view/ProductTable.fxml"));
-            AnchorPane productView = (AnchorPane) loader.load();
-
-            // aldigimiz (productView) sehife obyektini yukleyirik Ana sehifemizin ortasina
-            // solunda ve Yuxarisinda ise bizim menumuz var
-            rootLayout.setCenter(productView);
-
-            // Sehifemizin Controllerini aliriq ve
-            // Controllerimize Esas Class-in yani MainApp-in linni veririk
-            // bu irelide Main appin icinde olan sehifeleri deyishmek imkani verecek.
-            // MyLogger obyektine log yazmaq imkani verecek ve s.
-            ProductTableController controller = loader.getController();
-
-            //MainApp -in linkini this deyerek veririk Controllere
-            controller.setMainApp(this);
-
-        } catch (IOException ex) {
-            new MyLogger("MainApp.showProductTable() - IOException").getLogger().log(Level.SEVERE, "IOException", ex);
-        }
     }
 
     @Override
@@ -133,12 +102,77 @@ public class MainApp extends Application {
         }
     }
 
-    public Stage getPrimaryStage() {
-        return primaryStage;
+    /**
+     * showProductTable() - Bu metod mainApp obyekti istifade olunaraq
+     * cagirilacaq Sehifeni(Scena-ni) RootLayoutun ortasina yukleyecek diger
+     * sehifelerde bu prinsiple ishleyecek bu Yontemin ustunluyu ondadir ki bu
+     * cur metoda girish parametride qoymaq mumkundur Meselen irelide
+     * ProductEdit sehifesini duzeldende Productu redakte etmek ucun o sehifeni
+     * yuklemek lazim olacaq amma biz hardan bileceyik ki biz hansi Product-i
+     * redakte etmek isteyirik bunnan otru bu metodun girisine int dipli
+     * Product-in id-sini vereceyik ve Controllerin obyektini alaraq ordan bize
+     * lazim olan metodu acacayiq inshaAllah irelide goreceyik nece ishlediyini
+     */
+    public void showProductTable() {
+        try {
+            // gostermek istedyimiz sehifeni FXML faylini aliriq.
+            // AnchorPane -e yukleyirik obyektin adi (productView)
+            FXMLLoader loaderLeft = new FXMLLoader();
+            loaderLeft.setLocation(MainApp.class.getResource("view/ProductTable.fxml"));
+            AnchorPane productView = (AnchorPane) loaderLeft.load();
+
+            // aldigimiz (productView) sehife obyektini yukleyirik Ana sehifemizin ortasina
+            // solunda ve Yuxarisinda ise bizim menumuz var
+            rootLayout.setCenter(productView);
+
+            // Sehifemizin Controllerini aliriq ve
+            // Controllerimize Esas Class-in yani MainApp-in linni veririk
+            // bu irelide Main appin icinde olan sehifeleri deyishmek imkani verecek.
+            // MyLogger obyektine log yazmaq imkani verecek ve s.
+            ProductTableController controller = loaderLeft.getController();
+
+            //MainApp -in linkini this deyerek veririk Controllere
+            controller.setMainApp(this);
+
+        } catch (IOException ex) {
+            new MyLogger("MainApp.showProductTable() - IOException").getLogger().log(Level.SEVERE, "IOException", ex);
+        }
     }
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    /**
+     * bu metod Ana sehifemizin sagina ProductEdit.fxml -i yukleyir bir soznen
+     * redakte panelini gosterir, productTable-de yani mehsullarin siyahisiolan
+     * vedvelde her hansi bir mehsul setrini secdikde Listener ishe dushur ve bu
+     * metodu cagirir ve metodu cagiranda metodun parametrine siyahida secilen
+     * productun melumatlarinida verir ki, o melumatlari Redakte sahesine
+     * yerleshdirsin bu metodda ki sehifeni yukleyir ve controllerine de deyirki
+     * bax product budur
+     *
+     * @param newValue - Redakte panelinde gosterilecek olan Mehsul
+     */
+    public void setToRightProductEdit(Product newValue) {
+
+        try {
+            // fxml fayli tapib yukleyirik AnchorPane tipli Deyishkene.
+            FXMLLoader loaderRight = new FXMLLoader();
+            loaderRight.setLocation(MainApp.class.getResource("view/ProductEdit.fxml"));
+            AnchorPane productEditPanel = (AnchorPane) loaderRight.load();
+            rootLayout.setRight(productEditPanel);
+            ProductEditController controller = loaderRight.getController();
+            controller.setMainApp(this);
+            controller.setEditingProductId(newValue);
+
+        } catch (IOException ex) {
+            new MyLogger("IOException in MainApp.setToRightProductEdit(Product newValue)").getLogger().log(Level.SEVERE, "IOException", ex);
+        }
+    }
+    
+    public void clearRight(){
+        rootLayout.setRight(null);
     }
 
 }
