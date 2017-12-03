@@ -10,7 +10,9 @@
  */
 package com.salesoft.view;
 
+import com.salesoft.DAO.HistoryDAO;
 import com.salesoft.DAO.ProductGetDAO;
+import com.salesoft.DAO.ProductUpdateDAO;
 import com.salesoft.MainApp;
 import com.salesoft.model.Cart;
 import com.salesoft.model.CartItem;
@@ -85,6 +87,13 @@ public class ProductSaleCartController implements Initializable {
      * yazilir duymede
      */
     private boolean update = false;
+
+    //-----------------------------SAG EDIT PANEL PROPERTIES
+    /**
+     * Mushteri adi
+     */
+    @FXML
+    private TextField consumerName;
 
     /**
      * -----------------------------TABLE, COLUMN PROPERTIES
@@ -177,7 +186,7 @@ public class ProductSaleCartController implements Initializable {
                         qtyField.setText(newValue.getQty().toString());
                         onePrice.setText(newValue.getSalePrice().toString());
                         totalPrice.setText(newValue.getTotalPrice().toString());
-                        
+
                     } else {
                         System.out.println("cartTable Selection PRODUCT NULL AUTOCALL");
                     }
@@ -435,7 +444,7 @@ public class ProductSaleCartController implements Initializable {
     }
 
     /**
-     * mebleg Getter and Validator
+     * xanada yazilan mebleg Getter and Validator
      *
      */
     private Double getTotalPriceFormField() {
@@ -445,6 +454,33 @@ public class ProductSaleCartController implements Initializable {
             if (total > 0) {
                 return total;
             }
+        }
+        return null;
+    }
+
+    /**
+     * Mehsulllarin hamsinin cemi meblegi Getter and Validator
+     *
+     */
+    private Double getTotalPriceFormCart() {
+        String filed = cartTotalPrice.getText();
+        if (filed != null && !filed.equals("")) {
+            Double total = Double.valueOf(cartTotalPrice.getText());
+            if (total > 0) {
+                return total;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Mushteri adi Getter and Validator for null
+     *
+     */
+    private String getConsumerNameFormField() {
+        String filed = consumerName.getText();
+        if (filed != null && !filed.equals("")) {
+            return filed;
         }
         return null;
     }
@@ -512,6 +548,9 @@ public class ProductSaleCartController implements Initializable {
 
     }
 
+    /**
+     * Cart obyektinde olan mehsullarin meblegini cemleyib gosterir
+     */
     private void calcCartTotalPrice() {
         if (cart.getArrayList() != null) {
             Double ctp = 0.0;
@@ -520,6 +559,58 @@ public class ProductSaleCartController implements Initializable {
             }
             cartTotalPrice.setText(ctp.toString());
         }
+    }
+
+    /**
+     * Satishi Tamamlayan metod
+     */
+    @FXML
+    private void saleAllProductInCart() {
+
+        //satisha bashladiqda ilk once qaime nomresi almaq lazimdir
+        // Mushteri adi ve mebleg ile qaime siyahisina melumatlari yaziriq ve id-sini aliriq
+        // mushteri adimizi alar
+        String consumerName = null;
+        if (getConsumerNameFormField() == null) {
+            errorAlert("Mushteri adi daxil edin", "Mushteri adi daxil edin", "Mushteri adi daxil edin");
+            return;
+        } else {
+            consumerName = getConsumerNameFormField();
+        }
+
+        //meblegi aliriq
+        Double totalPrice = null;
+        if (getTotalPriceFormCart() == null) {
+            errorAlert("Satish Meblegi 0-dir", "Satish Meblegi 0-dir", "Satish Meblegi 0-dir");
+            return;
+        } else {
+            totalPrice = getTotalPriceFormCart();
+        }
+
+        // Qaime syahisina yaziriq ve id aliriq
+        Integer history_id = HistoryDAO.startSatishHistoryAndGetHistoryId(consumerName, totalPrice);
+
+        //Qaime nomremiz var indi satish edirik
+        //mehsulumuzu dovrile bir bir satacayiq ve satish siyahimiza qeydlerimizi edeceyik
+        for (CartItem ci : cart.getArrayList()) {
+            System.out.println(ci.getName());
+
+            // saylarimiz haqqinda melumati aliriqq
+            Integer evvelki_say = ci.getProduct().getQty();
+            Integer satish_sayi = ci.getQty();
+            Integer qaliq_say = evvelki_say - satish_sayi;
+
+            //mehsulumuzu satiriq yani sayini yenileyirik
+            // buna ProductDAO-da satish funksyasida yiga bilerik ve bir satish sayini vere bilerik
+            //qalanini ozude ede biler
+            ProductUpdateDAO.updateProductQtyById(ci.getId(), qaliq_say);
+
+            //indi sayi azaltdiq satish haqqinda melumati yazaq bazaya brbir
+            HistoryDAO.insertSaleDetailsIntoSATISH_LIST(history_id, ci);
+
+        }
+        
+        mainApp.showProductSaleCart();
 
     }
 }
