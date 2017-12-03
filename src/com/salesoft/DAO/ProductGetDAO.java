@@ -8,6 +8,7 @@ package com.salesoft.DAO;
 import com.salesoft.MainApp;
 import com.salesoft.model.Product;
 import com.salesoft.util.MyLogger;
+import com.salesoft.util.PStoProduct;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,6 +34,9 @@ public class ProductGetDAO {
      * inglis dili bilmek bes eder
      */
     private static final String SQL_GET_ALL_PRODUCTS = "SELECT * FROM " + PRODUCT_TABLE_NAME;
+    private static final String SQL_GET_PRODUCT_BY_ID = "SELECT * FROM " + PRODUCT_TABLE_NAME + " WHERE id=?";
+    private static final String SQL_GET_PRODUCT_BY_BARCODE = "SELECT * FROM " + PRODUCT_TABLE_NAME + " WHERE barcode=?";
+
     private static final String SQL_GEL_ALL_PRODUCTS_BY_NAME_LIKE = "SELECT * FROM " + PRODUCT_TABLE_NAME + " WHERE ad LIKE ?";
     private static final String SQL_GEL_ALL_PRODUCTS_BY_BARCODE = "SELECT * FROM " + PRODUCT_TABLE_NAME + " WHERE barcode=?";
 
@@ -178,6 +182,39 @@ public class ProductGetDAO {
             }
         } catch (SQLException ex) {
             new MyLogger("ProductDAO.getAllProductListByBarCode(String BarCode) - SQLException").getLogger().log(Level.SEVERE, "SQLException - Search word(BarCode)=:" + barCode, ex);//LOG++++++++++++++++++++
+            return (null);
+        }
+    }
+
+    /**
+     * BU metod verilen id ile Product-i qaytarir
+     *
+     * @param id
+     * @return
+     */
+    public static Product getProductById(int id) {
+        try {
+            Connection con = DatabaseConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement(SQL_GET_PRODUCT_BY_ID);
+            ps.setInt(1, id);
+            //ps.setObject(1, id);
+
+            return PStoProduct.getProduct(ps, con);
+        } catch (SQLException ex) {
+            new MyLogger("SQLException in - ProductGetDAO.getProductById(int id)").getLogger().log(Level.SEVERE, "SQLException - id=:" + id, ex);//LOG++++++++++++++++++++
+            return (null);
+        }
+    }
+
+    public static Product getProductByBarCode(String barCode) {
+        try {
+            Connection con = DatabaseConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement(SQL_GET_PRODUCT_BY_BARCODE);
+            ps.setString(1, barCode);
+
+            return PStoProduct.getProduct(ps, con);
+        } catch (SQLException ex) {
+            new MyLogger("SQLException in - ProductGetDAO.getProductByBarCode(String barCode)").getLogger().log(Level.SEVERE, "SQLException - barCode=:" + barCode, ex);//LOG++++++++++++++++++++
             return (null);
         }
     }

@@ -3,6 +3,7 @@ package com.salesoft.DAO;
 import com.salesoft.util.MyLogger;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -17,7 +18,7 @@ import java.util.logging.Level;
  * @author Ramin
  */
 public class DatabaseConnection {
-    
+
     final static String HOST = "localhost";
     final static String PORT = "3306";
     final static String DB_NAME = "testdb";
@@ -85,8 +86,6 @@ public class DatabaseConnection {
      * @param rs ResultSet - tipli obyekt verinki, onu baglasin
      */
     public static void close(ResultSet rs) {
-        //yoxlayiriq eger verilen obyekt bosh deyilse yani null deyilse baglayiriq
-        //yoxlamasaq eger ve verilen null dursa onda NullPointException cixacaq ))
         if (rs != null) {
             try {
                 rs.close();
@@ -97,4 +96,13 @@ public class DatabaseConnection {
 
     }
 
+    public static void close(PreparedStatement ps) {
+        if (ps != null) {
+            try {
+                ps.close();
+            } catch (SQLException ex) {
+                new MyLogger("SQLException in - DatabaseConnection.close(ps) - ").getLogger().log(Level.SEVERE, "ps.close()", ex);
+            }
+        }
+    }
 }

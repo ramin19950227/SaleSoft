@@ -3,6 +3,7 @@ package com.salesoft;
 import com.salesoft.model.Product;
 import com.salesoft.util.MyLogger;
 import com.salesoft.view.ProductEditController;
+import com.salesoft.view.ProductSaleCartController;
 import com.salesoft.view.ProductTableController;
 import com.salesoft.view.RootLayoutController;
 import java.io.IOException;
@@ -29,11 +30,15 @@ public class MainApp extends Application {
         return primaryStage;
     }
 
-    //Ana sehifemizi elan edirik
+    /**
+     * Ana sehifemizi elan edirik
+     */
     private BorderPane rootLayout;
 
-    // MyLogger Obyektini elan edirik ve yaradiriq, adini XXXXXXX-AppLog.txt qoyuruq
-    // static ve final edirik eks teqdirde error cixirdi bilmedim niye
+    /**
+     * MyLogger Obyektini elan edirik ve yaradiriq, adini XXXXXXX-AppLog.txt
+     * qoyuruq static ve final edirik eks teqdirde error cixirdi bilmedim niye
+     */
     private static final Logger logger = new MyLogger("AppLog").getLogger();
 
     /**
@@ -139,6 +144,23 @@ public class MainApp extends Application {
         }
     }
 
+    /**
+     * Satish Sebetini Gosterir
+     */
+    public void showProductSaleCart() {
+        try {
+            clearRight();
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("view/ProductSaleCart.fxml"));
+            AnchorPane productSaleCart = (AnchorPane) loader.load();
+            rootLayout.setCenter(productSaleCart);
+            ProductSaleCartController controller = loader.getController();
+            controller.setMainApp(this);
+        } catch (IOException ex) {
+            new MyLogger("IOException in -  MainApp.showProductSaleCart()").getLogger().log(Level.SEVERE, "IOException", ex);
+        }
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -170,8 +192,12 @@ public class MainApp extends Application {
             new MyLogger("IOException in MainApp.setToRightProductEdit(Product newValue)").getLogger().log(Level.SEVERE, "IOException", ex);
         }
     }
-    
-    public void clearRight(){
+
+    /**
+     * Bu metod ProductTable-de mehsulun saginda ProductEdit- panelini, yani
+     * redakte panili silir yox edir
+     */
+    public void clearRight() {
         rootLayout.setRight(null);
     }
 

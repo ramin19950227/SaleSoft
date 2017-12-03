@@ -26,12 +26,12 @@ public class Product {
     //modellerin Property-lerini javaFX de nece lzimdirsa ele yigiram
     //cunki adi qayda ile int a, String b, tipli yazsam irelide
     //problemle rastlashacam Cedvelde Redkte 
-    private IntegerProperty id;//1
-    private StringProperty name;;//2
-    private IntegerProperty qty;//3  
-    private DoubleProperty purchasePrice;//4
-    private StringProperty barCode;//5
-    private StringProperty note;//6
+    private final IntegerProperty id;//1
+    private final StringProperty name;;//2
+    private final IntegerProperty qty;//3  
+    private final DoubleProperty purchasePrice;//4
+    private final StringProperty barCode;//5
+    private final StringProperty note;//6
 
     public Product() {
         this.id = new SimpleIntegerProperty(0);

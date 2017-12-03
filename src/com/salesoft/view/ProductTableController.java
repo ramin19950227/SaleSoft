@@ -126,7 +126,7 @@ public class ProductTableController implements Initializable {
 
         productTable.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
-                    
+
                     // bazada axtarish verdikde Error cixirdi
                     // bu JavaFx-de table view cox qeribedir eee oz ozune avtomatik bu metodu cagirir
                     // ona gore birinci yoxlayiram sonra.
