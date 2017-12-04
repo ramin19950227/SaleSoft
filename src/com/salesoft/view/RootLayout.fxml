@@ -34,7 +34,7 @@
    <left>
       <AnchorPane prefHeight="575.0" prefWidth="152.0" style="-fx-background-color: yellow; -fx-border-color: red;" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="14.0" layoutY="100.0" mnemonicParsing="false" onAction="#showProductTable" prefHeight="40.0" prefWidth="125.0" text="Mehsullar" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="100.0" />
+            <Button layoutX="14.0" layoutY="100.0" mnemonicParsing="false" onAction="#showProductTable" onKeyPressed="#showProductTable" prefHeight="40.0" prefWidth="125.0" text="Mehsullar" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="100.0" />
             <AnchorPane layoutX="2.0" layoutY="2.0" prefHeight="87.0" prefWidth="150.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
                <children>
                   <Label layoutX="17.0" layoutY="33.0" text="Sale Soft 7.11">
@@ -44,7 +44,8 @@
                   </Label>
                </children>
             </AnchorPane>
-            <Button layoutX="15.0" layoutY="151.0" mnemonicParsing="false" onAction="#showProductSaleCart" prefHeight="40.0" prefWidth="125.0" text="Satish" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="150.0" />
+            <Button layoutX="15.0" layoutY="151.0" mnemonicParsing="false" onAction="#showProductSaleCart" onKeyReleased="#showProductSaleCart" prefHeight="40.0" prefWidth="125.0" text="Satish" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="150.0" />
+            <Button layoutX="16.0" layoutY="211.0" mnemonicParsing="false" onAction="#showProductSaleInvoice" onKeyPressed="#showProductSaleInvoice" prefHeight="40.0" prefWidth="125.0" text="Satish Tarixcesi" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="200.0" />
          </children>
       </AnchorPane>
    </left>

@@ -32,4 +32,9 @@ public class RootLayoutController {
         mainApp.showProductSaleCart();
     }
 
+    @FXML
+    private void showProductSaleInvoice() {
+        mainApp.showProductSaleInvoice();
+    }
+
 }

@@ -6,6 +6,8 @@ import com.salesoft.view.ProductEditController;
 import com.salesoft.view.ProductSaleCartController;
 import com.salesoft.view.ProductTableController;
 import com.salesoft.view.RootLayoutController;
+import com.salesoft.view.SaleInvoiceDetailsTableController;
+import com.salesoft.view.SaleInvoiceTableController;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -156,6 +158,41 @@ public class MainApp extends Application {
             rootLayout.setCenter(productSaleCart);
             ProductSaleCartController controller = loader.getController();
             controller.setMainApp(this);
+        } catch (IOException ex) {
+            new MyLogger("IOException in -  MainApp.showProductSaleCart()").getLogger().log(Level.SEVERE, "IOException", ex);
+        }
+    }
+
+    /**
+     * Satishlarin Siyahisini Gosterir
+     */
+    public void showProductSaleInvoice() {
+        try {
+            clearRight();
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("view/SaleInvoiceTable.fxml"));
+            AnchorPane productSaleCart = (AnchorPane) loader.load();
+            rootLayout.setCenter(productSaleCart);
+            SaleInvoiceTableController controller = loader.getController();
+            controller.setMainApp(this);
+        } catch (IOException ex) {
+            new MyLogger("IOException in -  MainApp.showProductSaleCart()").getLogger().log(Level.SEVERE, "IOException", ex);
+        }
+    }
+
+    /**
+     * satishlar haqqinda melumat ve mehsullarin Siyahisini Gosterir
+     */
+    public void showSaleInvoiceDetailsTable(Integer id) {
+        try {
+            clearRight();
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("view/SaleInvoiceDetailsTable.fxml"));
+            AnchorPane productSaleCart = (AnchorPane) loader.load();
+            rootLayout.setCenter(productSaleCart);
+            SaleInvoiceDetailsTableController controller = loader.getController();
+            controller.setMainApp(this);
+            controller.initDataById(id);
         } catch (IOException ex) {
             new MyLogger("IOException in -  MainApp.showProductSaleCart()").getLogger().log(Level.SEVERE, "IOException", ex);
         }

@@ -610,7 +610,8 @@ public class ProductSaleCartController implements Initializable {
 
         }
         
-        mainApp.showProductSaleCart();
+        
+        mainApp.showSaleInvoiceDetailsTable(history_id);
 
     }
 }
