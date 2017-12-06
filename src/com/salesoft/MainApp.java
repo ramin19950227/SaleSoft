@@ -1,8 +1,6 @@
 package com.salesoft;
 
-import com.salesoft.model.Product;
 import com.salesoft.util.MyLogger;
-import com.salesoft.view.ProductEditController;
 import com.salesoft.view.ProductSaleCartController;
 import com.salesoft.view.ProductTableController;
 import com.salesoft.view.RootLayoutController;
@@ -151,7 +149,6 @@ public class MainApp extends Application {
      */
     public void showProductSaleCart() {
         try {
-            clearRight();
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/ProductSaleCart.fxml"));
             AnchorPane productSaleCart = (AnchorPane) loader.load();
@@ -168,7 +165,6 @@ public class MainApp extends Application {
      */
     public void showProductSaleInvoice() {
         try {
-            clearRight();
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/SaleInvoiceTable.fxml"));
             AnchorPane productSaleCart = (AnchorPane) loader.load();
@@ -185,7 +181,6 @@ public class MainApp extends Application {
      */
     public void showSaleInvoiceDetailsTable(Integer id) {
         try {
-            clearRight();
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/SaleInvoiceDetailsTable.fxml"));
             AnchorPane productSaleCart = (AnchorPane) loader.load();
@@ -200,42 +195,6 @@ public class MainApp extends Application {
 
     public static void main(String[] args) {
         launch(args);
-    }
-
-    /**
-     * bu metod Ana sehifemizin sagina ProductEdit.fxml -i yukleyir bir soznen
-     * redakte panelini gosterir, productTable-de yani mehsullarin siyahisiolan
-     * vedvelde her hansi bir mehsul setrini secdikde Listener ishe dushur ve bu
-     * metodu cagirir ve metodu cagiranda metodun parametrine siyahida secilen
-     * productun melumatlarinida verir ki, o melumatlari Redakte sahesine
-     * yerleshdirsin bu metodda ki sehifeni yukleyir ve controllerine de deyirki
-     * bax product budur
-     *
-     * @param newValue - Redakte panelinde gosterilecek olan Mehsul
-     */
-    public void setToRightProductEdit(Product newValue) {
-
-        try {
-            // fxml fayli tapib yukleyirik AnchorPane tipli Deyishkene.
-            FXMLLoader loaderRight = new FXMLLoader();
-            loaderRight.setLocation(MainApp.class.getResource("view/ProductEdit.fxml"));
-            AnchorPane productEditPanel = (AnchorPane) loaderRight.load();
-            rootLayout.setRight(productEditPanel);
-            ProductEditController controller = loaderRight.getController();
-            controller.setMainApp(this);
-            controller.setEditingProductId(newValue);
-
-        } catch (IOException ex) {
-            new MyLogger("IOException in MainApp.setToRightProductEdit(Product newValue)").getLogger().log(Level.SEVERE, "IOException", ex);
-        }
-    }
-
-    /**
-     * Bu metod ProductTable-de mehsulun saginda ProductEdit- panelini, yani
-     * redakte panili silir yox edir
-     */
-    public void clearRight() {
-        rootLayout.setRight(null);
     }
 
 }

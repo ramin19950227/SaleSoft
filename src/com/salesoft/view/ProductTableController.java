@@ -17,6 +17,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -42,6 +44,7 @@ public class ProductTableController implements Initializable {
 
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
+        searchField.requestFocus();
     }
 
     /**
@@ -132,7 +135,7 @@ public class ProductTableController implements Initializable {
                     // ona gore birinci yoxlayiram sonra.
                     // yoxsa gonderirem ve error cixir nullPointerException
                     if (newValue != null) {
-                        mainApp.setToRightProductEdit(newValue);
+                        setProductToEdit(newValue);
                     } else {
                         System.out.println("productTable Selection PRODUCT NULL AUTOCALL");
                     }
@@ -203,6 +206,7 @@ public class ProductTableController implements Initializable {
         productTable.setPlaceholder(new Label("Bazada Mehsul Tapilmadi"));
 
         updateTable("");
+        setProductToEdit(null);
     }
 
     /**
@@ -277,6 +281,153 @@ public class ProductTableController implements Initializable {
         } else { // hec biri deyilse o zaman bu ishe dushecek
             productList.clear();
             productTable.setItems(productList);
+        }
+    }
+
+    /**
+     * Edit Bolumu
+     * ///////////////////////////////////////////////////////////////////////////////////////////////
+     *
+     *
+     *
+     */
+    @FXML
+    private Label idLabel;
+    @FXML
+    private TextField nameField;
+    @FXML
+    private TextField qtyField;
+    @FXML
+    private TextField purchasePriceField;
+    @FXML
+    private TextField barCodeField;
+    @FXML
+    private TextField noteField;
+
+    /**
+     * edit bolumunde yadda saxla duymesini basanda bu ishde dushur
+     */
+    @FXML
+    private void handleSave() {
+        if (isInputValid()) {
+
+            ProductUpdateDAO.updateProductNameById(Integer.valueOf(idLabel.getText()), nameField.getText());
+            ProductUpdateDAO.updateProductQtyById(Integer.valueOf(idLabel.getText()), Integer.valueOf(qtyField.getText()));
+            ProductUpdateDAO.updateProductPurchasePriceById(Integer.valueOf(idLabel.getText()), Double.valueOf(purchasePriceField.getText()));
+            ProductUpdateDAO.updateProductBarCodeById(Integer.valueOf(idLabel.getText()), barCodeField.getText());
+            ProductUpdateDAO.updateProductNoteById(Integer.valueOf(idLabel.getText()), noteField.getText());
+
+            updateTable("");
+        }
+    }
+
+    /**
+     * edit bolumunde legv et duymesini basdiqda bu ishde dushur
+     */
+    @FXML
+    private void handleCansel() {
+        setProductToEdit(null);
+        searchField.requestFocus();
+    }
+
+    /**
+     * Заполняет все текстовые поля, отображая подробности об адресате. Если
+     * указанный адресат = null, то все текстовые поля очищаются.
+     *
+     * @param product — адресат типа product или null
+     */
+    private void setProductToEdit(Product product) {
+
+        if (product != null) {
+            // Заполняем метки информацией из объекта person.
+            idLabel.setText(product.getId().toString());
+            nameField.setText(product.getName());
+            qtyField.setText(product.getQty().toString());
+            purchasePriceField.setText(product.getPurchasePrice().toString());
+            barCodeField.setText(product.getBarCode());
+            noteField.setText(product.getNote());
+
+            // TODO: Нам нужен способ для перевода дня рождения в тип String! 
+            // birthdayLabel.setText(...);
+        } else {
+            // Если Person = null, то убираем весь текст.
+            idLabel.setText("");
+            nameField.setText("");
+            qtyField.setText("");
+            purchasePriceField.setText("");
+            barCodeField.setText("");
+            noteField.setText("");
+            nameField.setStyle("-fx-border-color: white;-fx-border-width: 0");
+            qtyField.setStyle("-fx-border-color: white;-fx-border-width: 0;");
+            purchasePriceField.setStyle("-fx-border-color: white;-fx-border-width: 0;");
+            barCodeField.setStyle("-fx-border-color: white;-fx-border-width: 0;");
+
+        }
+
+    }
+
+    /**
+     * Проверяет пользовательский ввод в текстовых полях.
+     *
+     * @return true, если пользовательский ввод корректен
+     */
+    private boolean isInputValid() {
+        String errorMessage = "";
+
+        if (nameField.getText() == null || nameField.getText().length() == 0) {
+            errorMessage += "Mehsulun Adini dogru daxil edin!\n";
+            nameField.setStyle("-fx-border-color: red;-fx-border-width: 5;");
+        }
+
+        if (qtyField.getText() == null || qtyField.getText().length() == 0) {
+            errorMessage += "Mehsulun Sayini dogru daxil edin!\n";
+            qtyField.setStyle("-fx-border-color: red;-fx-border-width: 5;");
+        } else {
+            // пытаемся преобразовать почтовый код в int.
+            try {
+                Integer.parseInt(qtyField.getText());
+            } catch (NumberFormatException e) {
+                errorMessage += "Kecərli say daxil edin (Tam eded olmalidir)!\n";
+                qtyField.setStyle("-fx-border-color: red;-fx-border-width: 5;");
+            }
+        }
+
+        if (purchasePriceField.getText() == null || purchasePriceField.getText().length() == 0) {
+            errorMessage += "Mehsulun Qiymetini dogru daxil edin!\n";
+            purchasePriceField.setStyle("-fx-border-color: red;-fx-border-width: 5;");
+        } else {
+            // пытаемся преобразовать почтовый код в int.
+            try {
+                Double.parseDouble(purchasePriceField.getText());
+            } catch (NumberFormatException e) {
+                errorMessage += "Kecərli Qiymət daxil edin!\n";
+                purchasePriceField.setStyle("-fx-border-color: red;-fx-border-width: 5;");
+            }
+        }
+
+        if (barCodeField.getText() == null || barCodeField.getText().length() == 0) {
+            errorMessage += "Mehsulun Barcodunu dogru daxil edin!\n";
+            barCodeField.setStyle("-fx-border-color: red;-fx-border-width: 5;");
+
+        }
+
+        if (errorMessage.length() == 0) {
+            nameField.setStyle("-fx-border-color: white;-fx-border-width: 0");
+            qtyField.setStyle("-fx-border-color: white;-fx-border-width: 0;");
+            purchasePriceField.setStyle("-fx-border-color: white;-fx-border-width: 0;");
+            barCodeField.setStyle("-fx-border-color: white;-fx-border-width: 0;");
+            return true;
+        } else {
+            // Показываем сообщение об ошибке.
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.initOwner(mainApp.getPrimaryStage());
+            alert.setTitle("Dogru Daxil edin");
+            alert.setHeaderText("Zehmet olmasa Mehsulun melumatlarini dogru daxil edin");
+            alert.setContentText(errorMessage);
+
+            alert.showAndWait();
+
+            return false;
         }
     }
 }
