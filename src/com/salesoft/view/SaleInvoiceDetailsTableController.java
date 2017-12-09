@@ -81,30 +81,23 @@ public class SaleInvoiceDetailsTableController implements Initializable {
      */
     @FXML
     public void initDataById(int id) {
-        System.out.println("initDataById  id = " + id);
-        //1 ne edirem Haydi
-        // 1-ci id ni xanadan aliram
-        // 2-ci id ile melumatlari toplayib set edirem tableye ve s. @@@@@@@@@@@@@@@@@@@@@@@@@
-        // id ile melumatlari almiram eeeeeeeeeeeee
-        // ay adam Sen JAVADA ishleyirsen
-        // ve dogrusu budur DINLE
-        // id ile Invoice obyektini al sonra doldur lazimi yerlere
-
         Invoice invoice = InvoiceDAO.getInvoiceById(id);
 
-        cutomerNameLabel.setText(invoice.getCustomerName());
-        tarixLabel.setText(invoice.getDate());
-        idField.setText(invoice.getId().toString());
-        meblegLabel.setText(invoice.getTotalPrice().toString());
+        if (invoice != null) {
+            cutomerNameLabel.setText(invoice.getCustomerName());
+            tarixLabel.setText(invoice.getDate());
+            idField.setText(invoice.getId().toString());
+            meblegLabel.setText(invoice.getTotalPrice().toString());
 
-        invoicetList.clear();
-//		if(invoice.getList() != null){
+            invoicetList.clear();
+            if (invoice.getList() != null) {
+                invoicetList.addAll(invoice.getList());
+                invoiceTable.setItems(invoicetList);
+            }
+        } else {
+            errorAlert("Bu Nomre ile Qaime Tapilmadi", "Bu Nomre ile Qaime Tapilmadi", "Bu Nomre ile Qaime Tapilmadi");
+        }
 
-        invoicetList.addAll(invoice.getList());
-        System.out.println(invoice.getList().get(0).getName());
-//		}
-
-        invoiceTable.setItems(invoicetList);
     }
 
     /**
@@ -113,12 +106,24 @@ public class SaleInvoiceDetailsTableController implements Initializable {
      */
     @FXML
     private void onActionShowInvoiceButton() {
-        Integer id = getIdFromField();
-        if (id == null){
-            errorAlert("Id Daxil edin", "Id Daxil edin", "Id Daxil edin");
-        }else{
-            initDataById(id);
+
+        if (idField.getText() == null || idField.getText().length() == 0) {
+            errorAlert("Qaime nomresini daxil edin", "Qaime nomresini daxil edin", "Qaime nomresini daxil edin");
+            idField.setStyle("-fx-border-color: red;-fx-border-width: 5;");
+        } else {
+            // пытаемся преобразовать почтовый код в int.
+            try {
+                Integer.parseInt(idField.getText());
+                initDataById(Integer.parseInt(idField.getText()));
+                idField.setStyle("-fx-border-color: white;-fx-border-width: 0;");
+            } catch (NumberFormatException e) {
+                errorAlert("Kecerli Qaime nomresini daxil edin", "Kecerli Qaime nomresini daxil edin", "Kecerli Qaime nomresini daxil edin (Tam eded olmalidir)");
+                idField.setStyle("-fx-border-color: red;-fx-border-width: 5;");
+            }
         }
+        idField.requestFocus();
+        idField.selectAll();
+
     }
 
     /**
@@ -134,21 +139,6 @@ public class SaleInvoiceDetailsTableController implements Initializable {
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
-    }
-
-    /**
-     * ID Getter and Validator for null
-     *
-     */
-    private Integer getIdFromField() {
-        String field = idField.getText();
-        if (field != null && !field.equals("")) {
-            Integer say = Integer.valueOf(idField.getText());
-            if (say >= 0) {
-                return say;
-            }
-        }
-        return null;
     }
 
 }

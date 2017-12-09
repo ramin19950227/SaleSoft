@@ -15,9 +15,13 @@ import java.util.logging.Logger;
 
 public class InvoiceDAO {
 
+    private static final String PRODUCT_TABLE_NAME = "satish_history";
+
     private static final String getInvoiceById = "SELECT * FROM satish_history WHERE id=?";
     private static final String getAllInvoice = "SELECT * FROM satish_history ORDER BY `id` DESC"; //yeniler yuxarida
     private static final String getAllInvoiceItemById = "SELECT * FROM satish_list WHERE history_id=? ORDER BY `id` DESC";
+    private static final String SQL_UPDATE_INVOICE_CUSTOMERNAME_BY_ID = "UPDATE " + PRODUCT_TABLE_NAME + " SET customer=? WHERE id=?;";
+    private static final String SQL_GEL_ALL_INVOICE_BY_NAME_LIKE = "SELECT * FROM " + PRODUCT_TABLE_NAME + " WHERE customer LIKE ?";
 
     /**
      *
@@ -104,4 +108,47 @@ public class InvoiceDAO {
         }
     }
 
+    public static void updateInvoiceCustoemerNameById(Integer id, String customerName) {
+        MainApp.getLogger().log(Level.SEVERE, "InvoiceDAO.updateInvoiceCustoemerNameById(int id, String customerName)  \n"
+                + "id=: " + id
+                + "customerName=:" + customerName);
+        try {
+
+            Connection con = DatabaseConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement(SQL_UPDATE_INVOICE_CUSTOMERNAME_BY_ID);
+            ps.setString(1, customerName);
+            ps.setInt(2, id);
+
+            ps.executeUpdate();
+
+        } catch (Exception ex) {
+            new MyLogger("Exception in - InvoiceDAO.updateInvoiceCustoemerNameById(int id, String customerName)").getLogger().log(Level.SEVERE, "\n"
+                    + "Parametr customerName=" + customerName + "\n"
+                    + "Parametr id=" + id + "\n", ex);//LOG++++++++++++++++++++
+
+        }
+    }
+
+    public static ArrayList<Invoice> getInvoiceListByNameLike(String name) {
+        ArrayList<Invoice> list = new ArrayList<>();
+        try {
+
+            Connection con = DatabaseConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement(SQL_GEL_ALL_INVOICE_BY_NAME_LIKE);
+            ps.setString(1, "%" + name + "%");
+            
+            ResultSet rs = ps.executeQuery();
+
+
+            while (rs.next()) {
+
+                list.add(new Invoice(rs.getInt(1), rs.getString(6), rs.getDouble(3), rs.getString(2)));
+
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(InvoiceDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
 }

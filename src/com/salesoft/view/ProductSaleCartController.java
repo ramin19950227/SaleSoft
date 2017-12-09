@@ -393,6 +393,7 @@ public class ProductSaleCartController implements Initializable {
     @FXML
     private void onActionClearFields() {
         clearFields();
+        barCodeField.requestFocus();
     }
 
     //-----------------------------Additional Metods

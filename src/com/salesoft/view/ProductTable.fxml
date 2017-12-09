@@ -15,7 +15,7 @@
    <children>
       <AnchorPane layoutX="174.0" layoutY="29.0" prefHeight="100.0" prefWidth="700.0" style="-fx-border-color: red; -fx-background-color: yellow;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <AnchorPane id="AnchorPane" layoutX="618.0" layoutY="2.0" prefHeight="598.0" prefWidth="191.0" style="-fx-border-color: red; -fx-background-color: yellow;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane id="AnchorPane" layoutX="618.0" layoutY="2.0" prefHeight="700.0" prefWidth="200.0" style="-fx-border-color: red; -fx-background-color: yellow;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <Label layoutX="59.0" layoutY="123.0" text="Redakte Bolum" />
                   <GridPane layoutX="6.0" layoutY="145.0" prefHeight="338.0" prefWidth="190.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="135.0">
@@ -63,7 +63,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <TableView fx:id="productTable" layoutY="103.0" prefHeight="492.0" prefWidth="588.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="5.0">
+      <TableView fx:id="productTable" layoutY="103.0" prefHeight="492.0" prefWidth="588.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="205.0" AnchorPane.topAnchor="5.0">
         <columns>
           <TableColumn fx:id="nameColumn" prefWidth="75.0" text="Mehsul adı" />
           <TableColumn fx:id="qtyColumn" prefWidth="75.0" text="Say" />

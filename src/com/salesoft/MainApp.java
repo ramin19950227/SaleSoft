@@ -62,7 +62,14 @@ public class MainApp extends Application {
         //Programi full screen-de acir 
         this.primaryStage.setFullScreen(true);
 
-        //Ana sehifemizi hazirlayiriq ve Ilkin gorutu hazirliqlarini edirik
+        //azca inglis dili bilen ashagidaki metod ne ish gorduyunu anlayar
+        this.primaryStage.setFullScreenExitHint("Full Ekran Modundan Çıxmaq üçün Klaviaturadan ESC düyməsini basın!");
+
+        //penceremizinn olcusune limit qoyuruq ki bu olculerden ashagi azalda bilmesin
+        this.primaryStage.setMinHeight(600);
+        this.primaryStage.setMinWidth(800);
+
+        //Ana sehifemizi hazirlayiriq ve Ilkin goruntu hazirliqlarini edirik
         initRootLayout();
 
         // ProductTable - Mehsul olan cedvelimizi Ana sehifeye  yukleyirik
