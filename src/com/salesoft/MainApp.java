@@ -1,11 +1,7 @@
 package com.salesoft;
 
-import com.salesoft.util.MyLogger;
-import com.salesoft.view.ProductSaleCartController;
-import com.salesoft.view.ProductTableController;
-import com.salesoft.view.RootLayoutController;
-import com.salesoft.view.SaleInvoiceDetailsTableController;
-import com.salesoft.view.SaleInvoiceTableController;
+import com.salesoft.util.*;
+import com.salesoft.view.*;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -110,7 +106,7 @@ public class MainApp extends Application {
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException ex) {
-            new MyLogger("MainApp.initRootLayout() - IOException").getLogger().log(Level.SEVERE, "IOException", ex);
+            new MyLogger("IOException in - MainApp.initRootLayout()").getLogger().log(Level.SEVERE, "IOException", ex);
         }
     }
 
@@ -147,7 +143,7 @@ public class MainApp extends Application {
             controller.setMainApp(this);
 
         } catch (IOException ex) {
-            new MyLogger("MainApp.showProductTable() - IOException").getLogger().log(Level.SEVERE, "IOException", ex);
+            new MyLogger("IOException in - MainApp.showProductTable()").getLogger().log(Level.SEVERE, "IOException", ex);
         }
     }
 
@@ -179,12 +175,14 @@ public class MainApp extends Application {
             SaleInvoiceTableController controller = loader.getController();
             controller.setMainApp(this);
         } catch (IOException ex) {
-            new MyLogger("IOException in -  MainApp.showProductSaleCart()").getLogger().log(Level.SEVERE, "IOException", ex);
+            new MyLogger("IOException in -  MainApp.showProductSaleInvoice()").getLogger().log(Level.SEVERE, "IOException", ex);
         }
     }
 
     /**
      * satishlar haqqinda melumat ve mehsullarin Siyahisini Gosterir
+     *
+     * @param id
      */
     public void showSaleInvoiceDetailsTable(Integer id) {
         try {
@@ -196,12 +194,25 @@ public class MainApp extends Application {
             controller.setMainApp(this);
             controller.initDataById(id);
         } catch (IOException ex) {
-            new MyLogger("IOException in -  MainApp.showProductSaleCart()").getLogger().log(Level.SEVERE, "IOException", ex);
+            new MyLogger("IOException in -  MainApp.showSaleInvoiceDetailsTable()").getLogger().log(Level.SEVERE, "IOException", ex);
         }
     }
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public void showProductPurchsePanel() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("view/ProductPurchsePanel.fxml"));
+            AnchorPane productSaleCart = (AnchorPane) loader.load();
+            rootLayout.setCenter(productSaleCart);
+            ProductPurchsePanelController controller = loader.getController();
+            controller.setMainApp(this);
+        } catch (IOException ex) {
+            new MyLogger("IOException in -  MainApp.showProductPurchsePanel()").getLogger().log(Level.SEVERE, "IOException", ex);
+        }
     }
 
 }

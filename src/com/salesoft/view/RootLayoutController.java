@@ -7,13 +7,12 @@ public class RootLayoutController {
 
     private MainApp mainApp;
 
-    @FXML
-    private void initialize() {
-
-    }
-
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
+    }
+
+    @FXML
+    private void initialize() {
     }
 
     /**
@@ -37,4 +36,8 @@ public class RootLayoutController {
         mainApp.showProductSaleInvoice();
     }
 
+    @FXML
+    private void showProductPurchsePanel() {
+        mainApp.showProductPurchsePanel();
+    }
 }

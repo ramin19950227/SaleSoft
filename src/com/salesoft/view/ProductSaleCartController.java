@@ -215,19 +215,25 @@ public class ProductSaleCartController implements Initializable {
         //Mehsulu aldiqdan sonra yoxlayiriq eger sebette varsa ne edek?
         // sayini 1 ed artiraqmi
         // yoxsa gosterek sag panelde ve update edekmi?
-        if (barCodeEnteredProduct != null && !cart.containsKey(barCodeEnteredProduct.getId())) {
+        if (barCodeEnteredProduct != null && barCodeEnteredProduct.getQty() != 0) {
 
-            clearFields();
-            setProductToEditFields(barCodeEnteredProduct);
-            updateStatusChange(false);
+            if (!cart.containsKey(barCodeEnteredProduct.getId())) {
+                clearFields();
+                setProductToEditFields(barCodeEnteredProduct);
+                updateStatusChange(false);
+            } else {
+                clearFields();
+                setProductToEditFields(barCodeEnteredProduct);
+                updateStatusChange(true);
+            }
 
-        } else if (barCodeEnteredProduct != null && cart.containsKey(barCodeEnteredProduct.getId())) {
-
-            clearFields();
-            setProductToEditFields(barCodeEnteredProduct);
-            updateStatusChange(true);
-
+        } else if (barCodeEnteredProduct != null && barCodeEnteredProduct.getQty() == 0) {
+            
+            barCodeField.setText("Bazada Mehsul Qalmayib");
+            barCodeField.selectAll();
+            
         } else {
+
             errorAlert("Bu BarCod-la Mehsul Tapilmadi", "Mehsul Tapilmadi", "Mehsul Tapilmadi");
             clearFields();
         }
@@ -610,8 +616,7 @@ public class ProductSaleCartController implements Initializable {
             HistoryDAO.insertSaleDetailsIntoSATISH_LIST(history_id, ci);
 
         }
-        
-        
+
         mainApp.showSaleInvoiceDetailsTable(history_id);
 
     }

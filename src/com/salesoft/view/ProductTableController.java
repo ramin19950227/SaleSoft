@@ -364,7 +364,7 @@ public class ProductTableController implements Initializable {
         } else {
             String name = selectedProduct.getName();
             Integer id = selectedProduct.getId();
-            
+
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Mehsulun Bazadan Silinmesi");
             alert.setHeaderText(null);
