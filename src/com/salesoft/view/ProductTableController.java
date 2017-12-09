@@ -5,20 +5,24 @@
  */
 package com.salesoft.view;
 
+import com.salesoft.DAO.ProductDeleteDAO;
 import com.salesoft.DAO.ProductGetDAO;
 import com.salesoft.DAO.ProductUpdateDAO;
 import com.salesoft.MainApp;
 import com.salesoft.model.Product;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -26,6 +30,8 @@ import javafx.scene.control.TextField;
 import javafx.util.converter.NumberStringConverter;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 /**
  * FXML Controller class
@@ -98,8 +104,11 @@ public class ProductTableController implements Initializable {
     @FXML
     private TextField searchField;
 
+    //cedvelden mehsulu secdikde bura yazilir
+    Product selectedProduct = null;
+
     /**
-     * infoFieldReleased
+     * searchFieldReleased method
      */
     @FXML
     private void searchFieldReleased() {
@@ -140,6 +149,15 @@ public class ProductTableController implements Initializable {
                         System.out.println("productTable Selection PRODUCT NULL AUTOCALL");
                     }
                 });
+
+        // delduyymesi basildiqda mehsulu silir (Secilmish mehsulu Bazadan Silir)
+        productTable.setOnKeyReleased((KeyEvent t) -> {
+            KeyCode key = t.getCode();
+            if (key == KeyCode.DELETE) {
+                handleDelete();
+            }
+
+        });
 
         //Cedvelimizin sutunlarini inicializasiya edirik
         //adlarimiz cedvelde gosteririk
@@ -331,12 +349,43 @@ public class ProductTableController implements Initializable {
     }
 
     /**
+     * handle Delete cedvelden secilmish mehsulu silir
+     */
+    @FXML
+    private void handleDelete() {
+        if (selectedProduct == null) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.initOwner(mainApp.getPrimaryStage());
+            alert.setTitle("Mehsulu Secin");
+            alert.setHeaderText("Zehmet olmasa Mehsulu Secin");
+            alert.setContentText("Zehmet Olmasa Silmek istediyiniz Mehsulu Secin");
+
+            alert.showAndWait();
+        } else {
+            String name = selectedProduct.getName();
+            Integer id = selectedProduct.getId();
+            
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Mehsulun Bazadan Silinmesi");
+            alert.setHeaderText(null);
+            alert.setContentText("( " + name + " ) - Bu Mehsulu Bazadan silmek isteyirsiniz?");
+            Optional<ButtonType> action = alert.showAndWait();
+
+            if (action.get() == ButtonType.OK) {
+                ProductDeleteDAO.deleteProductById(id);
+            }
+            updateTable("");
+        }
+    }
+
+    /**
      * Заполняет все текстовые поля, отображая подробности об адресате. Если
      * указанный адресат = null, то все текстовые поля очищаются.
      *
      * @param product — адресат типа product или null
      */
     private void setProductToEdit(Product product) {
+        selectedProduct = product;
 
         if (product != null) {
             // Заполняем метки информацией из объекта person.

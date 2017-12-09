@@ -18,7 +18,7 @@
             <AnchorPane id="AnchorPane" layoutX="618.0" layoutY="2.0" prefHeight="700.0" prefWidth="200.0" style="-fx-border-color: red; -fx-background-color: yellow;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <Label layoutX="59.0" layoutY="123.0" text="Redakte Bolum" />
-                  <GridPane layoutX="6.0" layoutY="145.0" prefHeight="338.0" prefWidth="190.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="135.0">
+                  <GridPane layoutX="7.0" layoutY="137.0" prefHeight="357.0" prefWidth="188.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="136.0">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                      </columnConstraints>
@@ -35,6 +35,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="24.0" minHeight="4.0" prefHeight="12.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="54.0" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="54.0" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
                         <Label text="Məhsulun Adı" />
@@ -47,12 +48,13 @@
                         <TextField fx:id="barCodeField" GridPane.rowIndex="7" />
                         <Label text="Qeyd" GridPane.rowIndex="8" />
                         <TextField fx:id="noteField" GridPane.rowIndex="9" />
-                        <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="11">
+                        <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="67.0" prefWidth="265.0" GridPane.rowIndex="11">
                            <buttons>
-                              <Button mnemonicParsing="false" onAction="#handleCansel" onKeyPressed="#handleCansel" text="Legv et" />
+                              <Button minWidth="47.0" mnemonicParsing="false" onAction="#handleCansel" onKeyPressed="#handleCansel" prefHeight="25.0" text="Legv et" />
                               <Button mnemonicParsing="false" onAction="#handleSave" onKeyPressed="#handleSave" prefHeight="25.0" prefWidth="88.0" text="Yadda saxla" />
                            </buttons>
                         </ButtonBar>
+                        <Button minWidth="33.0" mnemonicParsing="false" onAction="#handleDelete" onKeyPressed="#handleDelete" prefHeight="25.0" text="SIL" GridPane.rowIndex="12" />
                      </children>
                   </GridPane>
                   <Label fx:id="idLabel" layoutX="11.0" layoutY="123.0" text="id" />
