@@ -1,14 +1,20 @@
 package com.salesoft;
 
+import com.salesoft.DAO.AllPropertiesGetDAO;
+import com.salesoft.Properties.AllProperties;
+import com.salesoft.custom.MyFXMLLoader;
 import com.salesoft.util.*;
 import com.salesoft.view.*;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -19,6 +25,11 @@ import javafx.stage.Stage;
  * @author Ramin
  */
 public class MainApp extends Application {
+
+    //Butun datalarin alinmasi, unvanlarin, metinlerin, tercuelerin ve s.
+    public static final AllProperties ALL_PROPERTIES = AllPropertiesGetDAO.getAllProperties();
+
+    private final String loginViewTitle = ALL_PROPERTIES.getUIProperty().getApplicationTitle();
 
     private Stage primaryStage;
 
@@ -50,29 +61,40 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        this.primaryStage = primaryStage;
 
-        //Proqramin adini yazir acilan pencerenin yuxari sol kuncunde yazilan ad
-        this.primaryStage.setTitle("Sale Soft");
+        primaryStage.setScene(MyFXMLLoader.getSceneFromURL(ALL_PROPERTIES.getURLProperty().getLoginFxmlURL()));
 
-        //Programi full screen-de acir 
-        this.primaryStage.setFullScreen(true);
+        primaryStage.setTitle(loginViewTitle);
 
-        //azca inglis dili bilen ashagidaki metod ne ish gorduyunu anlayar
-        this.primaryStage.setFullScreenExitHint("Full Ekran Modundan Çıxmaq üçün Klaviaturadan ESC düyməsini basın!");
+        primaryStage.getIcons().add(new Image("com/salesoft/image/icon.png"));
+        primaryStage.setMaximized(false);
+        primaryStage.setMinHeight(500.0);
+        primaryStage.setMinWidth(850.0);
+        primaryStage.show();
 
-        //penceremizinn olcusune limit qoyuruq ki bu olculerden ashagi azalda bilmesin
-        this.primaryStage.setMinHeight(600);
-        this.primaryStage.setMinWidth(800);
-
-        //Ana sehifemizi hazirlayiriq ve Ilkin goruntu hazirliqlarini edirik
-        initRootLayout();
-
-        // ProductTable - Mehsul olan cedvelimizi Ana sehifeye  yukleyirik
-        // irelide proqram acilan kimi bashqa sehife gostermek istesek eger
-        // o zaman bunu deyishib gostermek istediyimiz sehifenin metodunu 
-        // bura yazacayiq
-        showProductTable();
+//        this.primaryStage = primaryStage;
+////
+////        //Proqramin adini yazir acilan pencerenin yuxari sol kuncunde yazilan ad
+////        this.primaryStage.setTitle("Sale Soft");
+////
+////        //Programi full screen-de acir 
+////        this.primaryStage.setFullScreen(true);
+////
+////        //azca inglis dili bilen ashagidaki metod ne ish gorduyunu anlayar
+////        this.primaryStage.setFullScreenExitHint("Full Ekran Modundan Çıxmaq üçün Klaviaturadan ESC düyməsini basın!");
+////
+////        //penceremizinn olcusune limit qoyuruq ki bu olculerden ashagi azalda bilmesin
+////        this.primaryStage.setMinHeight(600);
+////        this.primaryStage.setMinWidth(800);
+//
+//        //Ana sehifemizi hazirlayiriq ve Ilkin goruntu hazirliqlarini edirik
+//        initRootLayout();
+//
+//        // ProductTable - Mehsul olan cedvelimizi Ana sehifeye  yukleyirik
+//        // irelide proqram acilan kimi bashqa sehife gostermek istesek eger
+//        // o zaman bunu deyishib gostermek istediyimiz sehifenin metodunu 
+//        // bura yazacayiq
+//        showProductTable();
     }
 
     /**

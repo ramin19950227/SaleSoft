@@ -19,11 +19,11 @@ import java.util.logging.Level;
  */
 public class DatabaseConnection {
 
-    final static String HOST = "localhost";
-    final static String PORT = "3306";
-    final static String DB_NAME = "testdb";
-    final static String USER = "root";
-    final static String PASSWORD = "password";
+    public final static String HOST = "localhost";
+    public final static String PORT = "3306";
+    public final static String DB_NAME = "testdb";
+    public final static String USER = "root";
+    public final static String PASSWORD = "password";
 
     static Connection con = null;
 
