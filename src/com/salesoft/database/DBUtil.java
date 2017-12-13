@@ -53,8 +53,8 @@ public class DBUtil {
      */
     private static Connection conn = null;
     // Lazimi Obyektlerimizi Elan edirik ve null teyin edirik
-    private static Statement stmt;
-    private static ResultSet rs;
+    private static Statement stmt = null;
+    private static ResultSet rs = null;
 
     /**
      * Driveri bundan evvel herqoshulmada teyin edirdi yada hazirlayirdi her ne
@@ -72,14 +72,13 @@ public class DBUtil {
 
             System.out.println("Where is You MySql JDBC Driver? ;) ");
             Logger.getLogger(DBUtil.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("END");
         }
 
         System.out.println("MySQL JDBC Driver = OK!");
     }
 
     /**
-     * Bazamizla elaqe yaradir. conn obyektin dolduruq ve elaqe acir yani sorgu
+     * Bazamizla elaqe yaradir. conn obyektini dolduruq ve elaqe acir yani sorgu
      * gonderme ucun hazirlayir
      *
      * @throws java.sql.SQLException
@@ -110,12 +109,21 @@ public class DBUtil {
      * baglayir yani sifirlayir bu sifirlama emeliyyatindan sonra obyekte hec
      * bir unvan yollanmadigi ucun obyekt olu sayilir ve bir muddet sonra Garbac
      * Collector deyilen Bir Yontemle ve ya bir Metodla her nedirse onunla
-     * Heap-dan Silinecek ve Ramda yer boshalacaq,
+     * Heap-dan Silinecek ve Ramda yer boshalacaq, Update: Statement ve
+     * ResultSet obyektlerinide baglayir
      *
      * @throws SQLException
      */
     public static void dbDisconnect() throws SQLException {
         try {
+            if (rs != null) {
+                //Close resultSet
+                rs.close();
+            }
+            if (stmt != null) {
+                //Close Statement
+                stmt.close();
+            }
             if (conn != null && !conn.isClosed()) {
                 conn.close();
             }
@@ -132,58 +140,60 @@ public class DBUtil {
     //finally olaraq rs-i baglayir rs bagli oldugu halda onu alan metod oxumaga calishsa onda ne ola biler?
     // amma rs qaytariram heleki normal ishleyir gorek ne olacaq
     /**
-     * Bu Metoda SQL Soru vereceyik ve necicede ise ChachedRowSetImpl Obyekti
-     * Qaytaracaq, bu obyekti ResultSet- ile alacayiq yani meselen ResultSet rs
-     * = DBUtl.bdExecuteQuery(SQL); bu cur, mence bunun ustunluyu odurki MENCE:
-     * connection yani baza le elaqe baglandirqdan sonra qaytrila melumatlar
-     * itme ehtimali olmur, cunki melumatlari aldiqdan sonra yaddashda saxlayir
-     * ve Elaqe baglansa bele o melumatlarlaishleme olacaq.
+     * Bu Metoda SQL Soru vereceyik ve necicede ise ResultSet Obyekti
+     * Qaytaracaq, meselen ResultSet rs = DBUtl.bdExecuteQuery(SQL);
      *
-     * @param queryStmt
-     * @return
+     * @param selectSQLQuery
+     * @return ResultSet Tipli obyekt qaytarir
      * @throws SQLException
      */
-    public static ResultSet dbExecuteQuery(String queryStmt) throws SQLException {
+    public static ResultSet dbExecuteQuery(String selectSQLQuery) throws SQLException {
 
         //old
         //CachedRowSetImpl crs = new CachedRowSetImpl();
         try {
             //Connect to DB (Establish MySQL Connection)
             dbConnect();
-            System.out.println("Select statement: " + queryStmt + "\n");
+            System.out.println("selectSQLQuery: " + selectSQLQuery + "\n");
 
-            //Create statement
-            PreparedStatement ps = conn.prepareStatement(queryStmt);
+            stmt = conn.createStatement();
 
             //Execute select (query) operation
-            rs = ps.executeQuery();
+            rs = stmt.executeQuery(selectSQLQuery);
 
             return rs;
         } catch (SQLException e) {
             System.out.println("Problem occurred at executeQuery operation : " + e);
             throw e;
+        } finally {
+            //Close connection
+            dbDisconnect();
         }
     }
 
-    //DB Execute Update (For Update/Insert/Delete) Operation
-    public static void dbExecuteUpdate(String sqlStmt) throws SQLException, ClassNotFoundException {
-        //Declare statement as null
-        Statement stmt = null;
+    /**
+     * DB Execute Update (For Update/Insert/Delete) Operation
+     *
+     * @param updateSQLQuery
+     * @throws SQLException
+     */
+    public static void dbExecuteUpdate(String updateSQLQuery) throws SQLException {
         try {
             //Connect to DB (Establish MySQL Connection)
             dbConnect();
+
+            System.out.println("updateSQLQuery :" + updateSQLQuery);
+
             //Create Statement
             stmt = conn.createStatement();
             //Run executeUpdate operation with given sql statement
-            stmt.executeUpdate(sqlStmt);
+            stmt.executeUpdate(updateSQLQuery);
         } catch (SQLException e) {
+            System.out.println("com.salesoft.database.DBUtil.dbExecuteUpdate()");
+            System.out.println("SQLQuery :" + updateSQLQuery);
             System.out.println("Problem occurred at executeUpdate operation : " + e);
             throw e;
         } finally {
-            if (stmt != null) {
-                //Close statement
-                stmt.close();
-            }
             //Close connection
             dbDisconnect();
         }
