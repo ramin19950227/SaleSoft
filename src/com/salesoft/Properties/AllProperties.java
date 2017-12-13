@@ -5,11 +5,7 @@
  */
 package com.salesoft.Properties;
 
-import com.salesoft.MainApp;
-import java.net.URL;
-
 /**
- * 1=LoginFxml, 2=ApplicationFxml
  *
  * @author Ramin
  */

@@ -17,7 +17,7 @@ import com.salesoft.model.Users;
 import com.salesoft.DAO.DatabaseConnection;
 import com.salesoft.MainApp;
 import static com.salesoft.MainApp.ALL_PROPERTIES;
-import com.salesoft.custom.MyFXMLLoader;
+import com.salesoft.util.MyFXMLLoader;
 import com.sun.javaws.Main;
 import java.io.IOException;
 import java.net.URL;
@@ -238,12 +238,41 @@ public class ApplicationController implements Initializable {
         homeActive();
     }
 
+    /**
+     *
+     * @param event
+     * @throws IOException
+     */
     @FXML
-    private void btnStoreOnClick(ActionEvent event) throws IOException {
+    public void btnStockOnClick() {
         // bu kod secilen buttonun stilini ve shekllini deyishdirir qirmisi olanla yani selected
         stockActive();
+
+        //bu Sehifemizin Controllerini almaq ucun istifade edeceyik
+        FXMLLoader loader = new FXMLLoader();
+
+        // loaderimize sehifemizin unvanini gosteririk
+        loader.setLocation(MainApp.ALL_PROPERTIES.getURLProperty().getAnbarRootLayoutURL());
+
+        //sehifemizi yukleyitik
+        // ve yalniz sehifemizi yuledikden sonra Controllerimizi ala bilerik
+        // eks halda NullPointerException olacaq
+        AnchorPane ap = null;
+        try {
+            ap = loader.load();
+        } catch (IOException ex) {
+            Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        // controller obyektimizi loaderden aliriq
+        AnbarRootLayoutController anbarController = loader.getController();
+
+        //ve controllerimizden bize lazim olan metodu cagiririq
+        anbarController.toggleButtonAnbarOnAction();
+        anbarController.setRoot(this);
+
         acContent.getChildren().clear();
-        acContent.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MainApp.ALL_PROPERTIES.getURLProperty().getProductTableURL()));
+        acContent.getChildren().add(ap);
     }
 
     @FXML

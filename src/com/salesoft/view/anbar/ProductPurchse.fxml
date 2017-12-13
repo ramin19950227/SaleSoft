@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.salesoft.view.anbar.ProductPurchseController">
+   <children>
+      <GridPane layoutX="5.0" layoutY="75.0" prefHeight="416.0" prefWidth="570.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="75.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="183.0" minWidth="10.0" prefWidth="183.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="387.0" minWidth="10.0" prefWidth="258.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="293.0" minWidth="0.0" prefWidth="129.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Barcod:">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font></Label>
+            <TextField fx:id="barCodeField" onAction="#handleBarCode" GridPane.columnIndex="1" />
+            <TextField fx:id="nameField" onAction="#hanleNameField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="qtyField" onAction="#hanleQtyField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="purchasePriceField" onAction="#hanlePurchasePriceField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label text="Mehsulun adi" GridPane.rowIndex="1">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font></Label>
+            <Label text="Sayi" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font></Label>
+            <Label text="Qiymeti" GridPane.rowIndex="3">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font></Label>
+            <Label text="Qeyd" GridPane.rowIndex="4">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font></Label>
+            <TextField fx:id="noteField" onAction="#hanleNoteField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ButtonBar prefHeight="50.0" prefWidth="446.0" GridPane.columnSpan="2" GridPane.rowIndex="7">
+              <buttons>
+                  <Button fx:id="saveButton" mnemonicParsing="false" onAction="#hanleSaveButton" onKeyPressed="#hanleSaveButton" prefHeight="35.0" prefWidth="251.0" text="Yadda Saxla" />
+                  <Button mnemonicParsing="false" onAction="#hanleCanselButton" text="Legv Et" />
+              </buttons>
+            </ButtonBar>
+            <Label disable="true" text="Alış Tarixi:" GridPane.rowIndex="5">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font>
+            </Label>
+            <DatePicker disable="true" prefHeight="33.0" prefWidth="322.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>

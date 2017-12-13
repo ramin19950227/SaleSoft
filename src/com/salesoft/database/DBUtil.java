@@ -115,7 +115,7 @@ public class DBUtil {
      * @exception rs ve ya stmt ve conn her hansi birini bagliyanda rs-de
      * avtomatik baglanir ve (java.sql.SQLException: Operation not allowed after
      * ResultSet closed) Problemi cixir, Netice etibari ile her emeliyyatdan
-     * sonra dbDisconnect() metodunu ozum cagirmliyam (DIQQET!!!!!! Yalnizca rs
+     * sonra dbDisconnect() metodunu ozum cagirmaliyam (DIQQET!!!!!! Yalnizca rs
      * ile ishim bitdikden sonra)
      *
      * @throws SQLException

@@ -3,16 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.salesoft.custom;
+package com.salesoft.util;
 
-import com.salesoft.MainApp;
 import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -56,6 +55,24 @@ public class MyFXMLLoader {
             Logger.getLogger(MyFXMLLoader.class.getName()).log(Level.SEVERE, null, ex);
         }
         return anchorPane;
+    }
+
+    /**
+     * URL address alir ve hazir Parent obyekti qaytarir
+     *
+     * @param url
+     * @return
+     */
+    public static Parent getParentFromURL(URL url) {
+        Parent parent = null;
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(url);
+            parent = loader.load();
+        } catch (IOException ex) {
+            Logger.getLogger(MyFXMLLoader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return parent;
     }
 
 }

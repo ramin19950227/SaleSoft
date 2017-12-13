@@ -167,13 +167,11 @@ public class ProductUpdateDAO {
      * Product-in Barcodunu deyishir. parametrde verdiyimiz ID-ile
      *
      * @param id - deyishmek istediyimiz Product-in id-si
-     * @param barCode - Product-a vermek istediyimiz Yeni BarCode
+     * @param note
      */
     public static void updateProductNoteById(int id, String note) {
         
-        MainApp.getLogger().log(Level.SEVERE, "ProductUpdateDAO.updateProductNoteById(int id, String note)  \n"
-                + "id=: " + id
-                + "note=:" + note);
+        MainApp.getLogger().log(Level.SEVERE, "ProductUpdateDAO.updateProductNoteById(int id, String note)  \nid=: {0}note=:{1}", new Object[]{id, note});
         try {
 
             Connection con = DatabaseConnection.getConnection();

@@ -21,6 +21,8 @@ public class URLProperty {
     private final URL HomeFxmlURL; //5
     private final URL ProductTableURL; //6
     private final URL ProductSaleCartURL; //7
+    private final URL AnbarRootLayoutURL; //8
+    private final URL ProductPurchseURL; //9
 
     /**
      *
@@ -29,9 +31,11 @@ public class URLProperty {
      * @param HomeFxml - HomeFxml - 5
      * @param ProductTable - ProductTable - 6
      * @param ProductSaleCart - 7
+     * @param AnbarRootLayout
+     * @param ProductPurchse
      * @throws java.net.MalformedURLException
      */
-    public URLProperty(String LoginFxmlAddress, String ApplicationFxml, String HomeFxml, String ProductTable, String ProductSaleCart) throws MalformedURLException {
+    public URLProperty(String LoginFxmlAddress, String ApplicationFxml, String HomeFxml, String ProductTable, String ProductSaleCart, String AnbarRootLayout, String ProductPurchse) throws MalformedURLException {
         //esas paket unvanimizi aliriq
         String mainAddress = MainApp.class.getResource("").toString();
         this.MainAppURL = new URL(mainAddress);
@@ -40,6 +44,8 @@ public class URLProperty {
         this.HomeFxmlURL = new URL(mainAddress + HomeFxml);
         this.ProductTableURL = new URL(mainAddress + ProductTable);
         this.ProductSaleCartURL = new URL(mainAddress + ProductSaleCart);
+        this.AnbarRootLayoutURL = new URL(mainAddress + AnbarRootLayout);
+        this.ProductPurchseURL = new URL(mainAddress + ProductPurchse);
     }
 
     public URL getMainAppURL() {
@@ -64,6 +70,14 @@ public class URLProperty {
 
     public URL getProductSaleCartURL() {
         return ProductSaleCartURL;
+    }
+
+    public URL getAnbarRootLayoutURL() {
+        return AnbarRootLayoutURL;
+    }
+
+    public URL getProductPurchseURL() {
+        return ProductPurchseURL;
     }
 
 }

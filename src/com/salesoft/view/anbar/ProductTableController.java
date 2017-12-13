@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.salesoft.view;
+package com.salesoft.view.anbar;
 
 import com.salesoft.DAO.ProductDeleteDAO;
 import com.salesoft.DAO.ProductGetDAO;
@@ -357,7 +357,6 @@ public class ProductTableController implements Initializable {
     private void handleDelete() {
         if (selectedProduct == null) {
             Alert alert = new Alert(AlertType.ERROR);
-            alert.initOwner(mainApp.getPrimaryStage());
             alert.setTitle("Mehsulu Secin");
             alert.setHeaderText("Zehmet olmasa Mehsulu Secin");
             alert.setContentText("Zehmet Olmasa Silmek istediyiniz Mehsulu Secin");

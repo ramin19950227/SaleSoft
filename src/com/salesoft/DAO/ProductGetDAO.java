@@ -38,7 +38,7 @@ public class ProductGetDAO {
             return ToProduct.rsToProductList(DBUtil.dbExecuteQuery(SQL.PRODUCT_GET_ALL));
         } catch (SQLException ex) {
             System.out.println("SQLException");
-            System.out.println("com.salesoft.DAO.ProductGetDAO.getAllProductListR()");
+            System.out.println("com.salesoft.DAO.ProductGetDAO.getAllProductList()");
             Logger.getLogger(ProductGetDAO.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }

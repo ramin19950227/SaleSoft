@@ -69,4 +69,11 @@ public class SQL {
      */
     public static final String PRODUCT_GEL_ALL_BY_BARCODE_R = "SELECT * FROM " + TableNames.productTableName + " WHERE barcode=barcodeR";
 
+    /**
+     * *****************************************
+     *
+     * 
+     *
+     * *****************************************F
+     */
 }

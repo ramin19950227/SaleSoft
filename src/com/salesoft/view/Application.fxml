@@ -58,7 +58,7 @@
                                           <Image url="@../icon/btnBreak.png" />
                                        </image>
                                     </ImageView>
-                                    <Button fx:id="btnStore" contentDisplay="TOP" layoutY="133.0" mnemonicParsing="false" onAction="#btnStoreOnClick" prefHeight="78.0" prefWidth="127.0" text="Anbar">
+                                    <Button fx:id="btnStore" contentDisplay="TOP" layoutY="133.0" mnemonicParsing="false" onAction="#btnStockOnClick" prefHeight="78.0" prefWidth="127.0" text="Anbar">
                                        <graphic>
                                           <ImageView fx:id="imgStoreBtn" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                              <image>

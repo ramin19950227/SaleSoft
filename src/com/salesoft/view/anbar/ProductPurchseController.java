@@ -3,18 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.salesoft.view;
+package com.salesoft.view.anbar;
 
 import com.salesoft.DAO.ProductGetDAO;
 import com.salesoft.DAO.ProductUpdateDAO;
 import com.salesoft.DAO.ProductNewDAO;
 import com.salesoft.MainApp;
 import com.salesoft.model.Product;
+import com.salesoft.view.AnbarRootLayoutController;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
 /**
@@ -22,7 +24,7 @@ import javafx.scene.control.TextField;
  *
  * @author Ramin
  */
-public class ProductPurchsePanelController implements Initializable {
+public class ProductPurchseController implements Initializable {
 
     private MainApp mainApp;
 
@@ -46,6 +48,9 @@ public class ProductPurchsePanelController implements Initializable {
     @FXML
     private TextField noteField;
 
+    @FXML
+    private Button saveButton;
+
     private Product barcodeEnteredProduct = null;
 
     /**
@@ -61,7 +66,7 @@ public class ProductPurchsePanelController implements Initializable {
 
     @FXML
     private void handleBarCode() {
-        
+
         barCodeField.setStyle("-fx-border-color: white;-fx-border-width: 0;");
 
         if (barCodeField.getText() == null || barCodeField.getText().length() == 0) {
@@ -108,10 +113,15 @@ public class ProductPurchsePanelController implements Initializable {
     }
 
     @FXML
-    private void hanleSaveButton() {
-        System.out.println(isInputValid());
+    private void hanleNoteField() {
+        saveButton.requestFocus();
+    }
 
-        if (isInputValid() && barcodeEnteredProduct != null) {
+    @FXML
+    private void hanleSaveButton() {
+        boolean isValid = isInputValid();
+
+        if (isValid && barcodeEnteredProduct != null) {
             Integer id = barcodeEnteredProduct.getId();
             Integer oldQty = barcodeEnteredProduct.getQty();
             Integer enteredQty = Integer.valueOf(qtyField.getText());
@@ -123,9 +133,10 @@ public class ProductPurchsePanelController implements Initializable {
             ProductUpdateDAO.updateProductBarCodeById(id, barCodeField.getText());
             ProductUpdateDAO.updateProductNoteById(id, noteField.getText());
 
-            mainApp.showProductTable();
+            //mainApp.showProductTable();
+            AnbarRootLayoutController.appControl.btnStockOnClick();
 
-        } else if (isInputValid() && barcodeEnteredProduct == null) {
+        } else if (isValid && barcodeEnteredProduct == null) {
             String name = nameField.getText();
             Integer qty = Integer.valueOf(barCodeField.getText());
             Double purchasePrice = Double.valueOf(purchasePriceField.getText());
@@ -133,14 +144,14 @@ public class ProductPurchsePanelController implements Initializable {
             String note = noteField.getText();
 
             ProductNewDAO.createNewProduct(name, qty, purchasePrice, barCode, note);
-            mainApp.showProductTable();
-
+            AnbarRootLayoutController.appControl.btnStockOnClick();
         }
     }
 
     @FXML
     private void hanleCanselButton() {
         clearFields();
+        barcodeEnteredProduct = null;
     }
 
     /**
@@ -194,7 +205,7 @@ public class ProductPurchsePanelController implements Initializable {
             errorMessage += "Mehsulun Sayini dogru daxil edin!\n";
             qtyField.setStyle("-fx-border-color: red;-fx-border-width: 5;");
         } else {
-            // пытаемся преобразовать почтовый код в int.
+            // пытаемся преобразовать в int.
             try {
                 Integer.parseInt(qtyField.getText());
             } catch (NumberFormatException e) {
@@ -231,7 +242,6 @@ public class ProductPurchsePanelController implements Initializable {
         } else {
             // Показываем сообщение об ошибке.
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.initOwner(mainApp.getPrimaryStage());
             alert.setTitle("Dogru Daxil edin");
             alert.setHeaderText("Zehmet olmasa Mehsulun melumatlarini dogru daxil edin");
             alert.setContentText(errorMessage);

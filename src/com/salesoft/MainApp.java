@@ -1,18 +1,18 @@
 package com.salesoft;
 
+import com.salesoft.view.anbar.ProductTableController;
+import com.salesoft.view.anbar.ProductPurchseController;
 import com.salesoft.DAO.AllPropertiesGetDAO;
 import com.salesoft.Properties.AllProperties;
-import com.salesoft.custom.MyFXMLLoader;
+import com.salesoft.util.MyFXMLLoader;
 import com.salesoft.util.*;
 import com.salesoft.view.*;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
@@ -230,7 +230,7 @@ public class MainApp extends Application {
             loader.setLocation(MainApp.class.getResource("view/ProductPurchsePanel.fxml"));
             AnchorPane productSaleCart = (AnchorPane) loader.load();
             rootLayout.setCenter(productSaleCart);
-            ProductPurchsePanelController controller = loader.getController();
+            ProductPurchseController controller = loader.getController();
             controller.setMainApp(this);
         } catch (IOException ex) {
             new MyLogger("IOException in -  MainApp.showProductPurchsePanel()").getLogger().log(Level.SEVERE, "IOException", ex);
