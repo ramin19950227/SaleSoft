@@ -257,6 +257,8 @@ public class ProductTableController implements Initializable {
             //bazya sorgu edirik ve butun mehsullari isteyirik
             //varsa qaytaracaq yoxdursa null qaytaracaq
             ArrayList<Product> requestList = ProductGetDAO.getAllProductList();
+            //ArrayList<Product> requestList = ProductGetDAO.getAllProductListNew();
+
             // yoxlayiriq eger requestList bosh deyilse
             // onda if blokundaki emirleri edirik
             if (requestList != null) {

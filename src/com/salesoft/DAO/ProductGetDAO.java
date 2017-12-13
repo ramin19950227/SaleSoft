@@ -6,15 +6,18 @@
 package com.salesoft.DAO;
 
 import com.salesoft.MainApp;
+import com.salesoft.database.DBUtil;
+import com.salesoft.database.SQL;
 import com.salesoft.model.Product;
 import com.salesoft.util.MyLogger;
-import com.salesoft.util.PStoProduct;
+import com.salesoft.util.ToProduct;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * ProductDAO - bu Melumat bazasindan melumatlari almaq ucun istifade olunur.
@@ -25,32 +28,16 @@ import java.util.logging.Level;
 public class ProductGetDAO {
 
     /**
-     * Melumat bazasinda Product cedvelimizin adi
-     */
-    private static final String PRODUCT_TABLE_NAME = "product_list";
-
-    /**
-     * SQL sorgularimiz, adlarindan bilinir ne ucun istifade olunursa biraz
-     * inglis dili bilmek bes eder
-     */
-    private static final String SQL_GET_ALL_PRODUCTS = "SELECT * FROM " + PRODUCT_TABLE_NAME;
-    private static final String SQL_GET_PRODUCT_BY_ID = "SELECT * FROM " + PRODUCT_TABLE_NAME + " WHERE id=?";
-    private static final String SQL_GET_PRODUCT_BY_BARCODE = "SELECT * FROM " + PRODUCT_TABLE_NAME + " WHERE barcode=?";
-
-    private static final String SQL_GEL_ALL_PRODUCTS_BY_NAME_LIKE = "SELECT * FROM " + PRODUCT_TABLE_NAME + " WHERE ad LIKE ?";
-    private static final String SQL_GEL_ALL_PRODUCTS_BY_BARCODE = "SELECT * FROM " + PRODUCT_TABLE_NAME + " WHERE barcode=?";
-
-    /**
      * getAllProductList - Bazada olan mehsullari Product modeli obyektine yigib
-     * ArrayList kimi qaytarir
+     * ArrayList olaraq qaytarir
      *
      * @return arrayList
      */
     public static ArrayList<Product> getAllProductList() {
-        Product p = null;
+        Product p;
         try {
             Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(SQL_GET_ALL_PRODUCTS);
+            PreparedStatement ps = con.prepareStatement(SQL.PRODUCT_GET_ALL);
             ArrayList<Product> arrayList = new ArrayList<>();
             ResultSet rs = ps.executeQuery();
             boolean found = false;
@@ -81,6 +68,21 @@ public class ProductGetDAO {
     }
 
     /**
+     * Metod Bazad olan Butun mehsullari Product Tipli ArrayList qaytarir
+     * @return ArrayList - Product tipli ArrayList qaytarir
+     */
+    public static ArrayList<Product> getAllProductListNew() {
+        try {
+            return ToProduct.rsToProductList(DBUtil.dbExecuteQuery(SQL.PRODUCT_GET_ALL));
+        } catch (SQLException ex) {
+            System.out.println("SQLException");
+            System.out.println("com.salesoft.DAO.ProductGetDAO.getAllProductListR()");
+            Logger.getLogger(ProductGetDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    /**
      * getAllProductListByNameLike - Bazada axtarish kecirir ve gonderilen
      * parametre uygun butun setirleri (mehsullari) Product modeli obyektine
      * yigib ArrayList kimi qaytarir
@@ -94,7 +96,7 @@ public class ProductGetDAO {
         try {
 
             Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(SQL_GEL_ALL_PRODUCTS_BY_NAME_LIKE);
+            PreparedStatement ps = con.prepareStatement(SQL.PRODUCT_GEL_ALL_BY_NAME_LIKE_P);
             ps.setString(1, "%" + name + "%");
             ResultSet rs = ps.executeQuery();
 
@@ -147,7 +149,7 @@ public class ProductGetDAO {
         try {
 
             Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(SQL_GEL_ALL_PRODUCTS_BY_BARCODE);
+            PreparedStatement ps = con.prepareStatement(SQL.PRODUCT_GEL_ALL_BY_BARCODE_P);
             ps.setString(1, barCode);
             ResultSet rs = ps.executeQuery();
 
@@ -195,11 +197,11 @@ public class ProductGetDAO {
     public static Product getProductById(int id) {
         try {
             Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(SQL_GET_PRODUCT_BY_ID);
+            PreparedStatement ps = con.prepareStatement(SQL.PRODUCT_GET_BY_ID_P);
             ps.setInt(1, id);
             //ps.setObject(1, id);
 
-            return PStoProduct.getProduct(ps, con);
+            return ToProduct.getProduct(ps, con);
         } catch (SQLException ex) {
             new MyLogger("SQLException in - ProductGetDAO.getProductById(int id)").getLogger().log(Level.SEVERE, "SQLException - id=:" + id, ex);//LOG++++++++++++++++++++
             return (null);
@@ -209,14 +211,13 @@ public class ProductGetDAO {
     public static Product getProductByBarCode(String barCode) {
         try {
             Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(SQL_GET_PRODUCT_BY_BARCODE);
+            PreparedStatement ps = con.prepareStatement(SQL.PRODUCT_GET_BY_BARCODE_P);
             ps.setString(1, barCode);
 
-            return PStoProduct.getProduct(ps, con);
+            return ToProduct.getProduct(ps, con);
         } catch (SQLException ex) {
             new MyLogger("SQLException in - ProductGetDAO.getProductByBarCode(String barCode)").getLogger().log(Level.SEVERE, "SQLException - barCode=:" + barCode, ex);//LOG++++++++++++++++++++
             return (null);
         }
     }
-
 }
