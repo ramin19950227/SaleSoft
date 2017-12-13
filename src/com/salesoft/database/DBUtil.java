@@ -112,6 +112,12 @@ public class DBUtil {
      * Heap-dan Silinecek ve Ramda yer boshalacaq, Update: Statement ve
      * ResultSet obyektlerinide baglayir
      *
+     * @exception rs ve ya stmt ve conn her hansi birini bagliyanda rs-de
+     * avtomatik baglanir ve (java.sql.SQLException: Operation not allowed after
+     * ResultSet closed) Problemi cixir, Netice etibari ile her emeliyyatdan
+     * sonra dbDisconnect() metodunu ozum cagirmliyam (DIQQET!!!!!! Yalnizca rs
+     * ile ishim bitdikden sonra)
+     *
      * @throws SQLException
      */
     public static void dbDisconnect() throws SQLException {
@@ -166,8 +172,18 @@ public class DBUtil {
             System.out.println("Problem occurred at executeQuery operation : " + e);
             throw e;
         } finally {
+            System.out.println("com.salesoft.database.DBUtil.dbExecuteQuery()");
+            System.out.println("finally{}");
             //Close connection
-            dbDisconnect();
+            // OLMAZZZZZZ:
+            //java.sql.SQLException: Operation not allowed after ResultSet closed
+            // problem cixardir bu finally (her nedirse metod ve ya ne bilim ne)- qaytarilan
+            // ResultSet ile ishe bashlamadan evvel rs-i, conn-u, stmt-i ve ya her hansi biriin ve ya ucunude 
+            // hemen baglayir. yani bir soznen Metod ishini bitirmemish ve tam return elememish bele cixirki
+            //finally {} ishe dushur ve baglayir, etice etibari ile
+            // DIQQET: dbDisconnect()-i avtomatik cagirmaq olmaz onu rs-i qebul eden metodun icinde rs-ile
+            // ishim bitdikden sonra baglamaliyam. Cox uzun oldu ))
+            //dbDisconnect(); - Avtomatik olmaz
         }
     }
 

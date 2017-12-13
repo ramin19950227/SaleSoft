@@ -6,6 +6,8 @@
 package com.salesoft.util;
 
 import com.salesoft.DAO.DatabaseConnection;
+import com.salesoft.database.DBUtil;
+import com.salesoft.database.SQL;
 import com.salesoft.model.Product;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -62,6 +64,11 @@ public class ToProduct {
 
             Logger.getLogger(ToProduct.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
+        } finally {
+            //Rs-ile bagli problem CIXIB Rs-ile ishimz bitmeden rs.close() olurdu
+            //indi ise rs ile ishimizi btirib listimizi aliriq sonra ise baglaya bilerik
+            //indi baglaya bilerik
+            DBUtil.dbDisconnect();
         }
     }
 
@@ -72,6 +79,7 @@ public class ToProduct {
      * @param rs ResultSet SQL sorgu neticesinde elde edilen obyekt
      * @return Product - tipli obyekt qaytarir eger rs bosh deyilse, null - eger
      * Exception olubsa ve ya RS boshdursa (netice yoxdursa)
+     * @throws java.sql.SQLException
      */
     public static Product rsToProduct(ResultSet rs) throws SQLException {
         try {
@@ -94,6 +102,12 @@ public class ToProduct {
 
             Logger.getLogger(ToProduct.class.getName()).log(Level.SEVERE, null, ex);
             throw ex;
+        } finally {
+            //Rs-ile bagli problem CIXIB Rs-ile ishimz bitmeden rs.close() olurdu
+            // sebeb dbExecuteQuery biten kimi final olaraq rs-i baglayirdi
+            //indi ise rs ile ishimizi btirib listimizi aliriq sonra ise ozumuz Baglayiriq
+            //indi baglaya bilerik, cunki listimizi aldiq rs-den ve baglayaq
+            DBUtil.dbDisconnect();
         }
     }
 
