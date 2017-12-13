@@ -35,11 +35,26 @@ public class ToProduct {
         try {
             ArrayList<Product> list = new ArrayList<>();
 
+            //budur dogru metod bir dene next() etdikse Melumatlari almaliyiq 2-ci next etmemishden evvel
             while (rs.next()) {
-                Product p = ToProduct.rsToProduct(rs);
+                Product p = new Product();
+                p.setId(rs.getInt(1));
+                p.setName(rs.getString(2));
+                p.setQty(rs.getInt(3));
+                p.setPurchasePrice(rs.getDouble(4));
+                p.setBarCode(rs.getString(5));
+                p.setNote(rs.getString(6));
+
                 list.add(p);
             }
 
+            // bu yontem dogru deyil cunki burda bir defe rs.next() edirsen
+            // sonra rsToProduct(rs){ bunun icindede rs.next() edirsen buda o demekdirdki
+            // cedvelde 14 eded setirimiz var dise onlarin yarisi itecek 1,3,5 itecek 2,4,6 gelecek bize
+//            while (rs.next()) {
+//                Product p = ToProduct.rsToProduct(rs);
+//                list.add(p);
+//            }
             return list;
         } catch (SQLException ex) {
             System.err.println("SQLException");
