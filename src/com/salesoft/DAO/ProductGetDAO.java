@@ -34,44 +34,6 @@ public class ProductGetDAO {
      * @return arrayList
      */
     public static ArrayList<Product> getAllProductList() {
-        Product p;
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(SQL.PRODUCT_GET_ALL);
-            ArrayList<Product> arrayList = new ArrayList<>();
-            ResultSet rs = ps.executeQuery();
-            boolean found = false;
-            while (rs.next()) {
-                p = new Product();
-                p.setId(rs.getInt(1));
-                p.setName(rs.getString(2));
-                p.setQty(rs.getInt(3));
-                p.setPurchasePrice(rs.getDouble(4));
-                p.setBarCode(rs.getString(5));
-                p.setNote(rs.getString(6));
-
-                arrayList.add(p);
-
-                found = true;
-            }
-            DatabaseConnection.close(con);
-            DatabaseConnection.close(rs);
-            if (found) {
-                return arrayList;
-            } else {
-                return null; // no entires found
-            }
-        } catch (SQLException ex) {
-            new MyLogger("ProductDAO.getAllProductList() - SQLException").getLogger().log(Level.SEVERE, "SQLException - in metod: (ArrayList<Product> getAllProductList())", ex);//LOG++++++++++++++++++++
-            return (null);
-        }
-    }
-
-    /**
-     * Metod Bazad olan Butun mehsullari Product Tipli ArrayList qaytarir
-     * @return ArrayList - Product tipli ArrayList qaytarir
-     */
-    public static ArrayList<Product> getAllProductListNew() {
         try {
             return ToProduct.rsToProductList(DBUtil.dbExecuteQuery(SQL.PRODUCT_GET_ALL));
         } catch (SQLException ex) {
