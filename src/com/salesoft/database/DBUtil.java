@@ -52,6 +52,9 @@ public class DBUtil {
      * Connection Obyetimizi elan edirik irelideistifade edeceyik
      */
     private static Connection conn = null;
+    // Lazimi Obyektlerimizi Elan edirik ve null teyin edirik
+    private static Statement stmt;
+    private static ResultSet rs;
 
     /**
      * Driveri bundan evvel herqoshulmada teyin edirdi yada hazirlayirdi her ne
@@ -87,6 +90,8 @@ public class DBUtil {
         try {
             // Elde etdyimz Elaqe (Connection) Obyektini conn adli yuxarida elan etdiyimiz unvana yerleshdiririk;
             conn = DriverManager.getConnection(CONNECTION_URL, "" + USER + "", "" + PASSWORD);
+            rs = null;
+            stmt = null;
 
         } catch (SQLException e) {
             System.out.println("com.salesoft.database.DBUtil.dbConnect()");
@@ -125,8 +130,7 @@ public class DBUtil {
     // CachedRowSetImpl - deyilir kohnelib bu 
     // crs - evezine ResultSeti qaytarsam bu metod 
     //finally olaraq rs-i baglayir rs bagli oldugu halda onu alan metod oxumaga calishsa onda ne ola biler?
-    
-    
+    // amma rs qaytariram heleki normal ishleyir gorek ne olacaq
     /**
      * Bu Metoda SQL Soru vereceyik ve necicede ise ChachedRowSetImpl Obyekti
      * Qaytaracaq, bu obyekti ResultSet- ile alacayiq yani meselen ResultSet rs
@@ -141,9 +145,6 @@ public class DBUtil {
      */
     public static ResultSet dbExecuteQuery(String queryStmt) throws SQLException {
 
-        // Lazimi Obyektlerimizi Elan edirik ve null teyin edirik
-        Statement stmt = null;
-        ResultSet resultSet = null;
         //old
         //CachedRowSetImpl crs = new CachedRowSetImpl();
         try {
@@ -152,35 +153,16 @@ public class DBUtil {
             System.out.println("Select statement: " + queryStmt + "\n");
 
             //Create statement
-            stmt = conn.createStatement();
+            PreparedStatement ps = conn.prepareStatement(queryStmt);
 
             //Execute select (query) operation
-            resultSet = stmt.executeQuery(queryStmt);
-            
-            return resultSet;
-            //CachedRowSet Implementation
-            //In order to prevent "java.sql.SQLRecoverableException: Closed Connection: next" error
-            //We are using CachedRowSet
-            //old
-            //crs.populate(resultSet);
+            rs = ps.executeQuery();
+
+            return rs;
         } catch (SQLException e) {
             System.out.println("Problem occurred at executeQuery operation : " + e);
             throw e;
-        } finally {
-            if (resultSet != null) {
-                //Close resultSet
-                resultSet.close();
-            }
-            if (stmt != null) {
-                //Close Statement
-                stmt.close();
-            }
-            //Close connection
-            dbDisconnect();
         }
-        //old
-        //Return CachedRowSet
-        //return crs;
     }
 
     //DB Execute Update (For Update/Insert/Delete) Operation
