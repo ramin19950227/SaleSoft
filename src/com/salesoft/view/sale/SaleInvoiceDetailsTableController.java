@@ -20,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -61,6 +62,9 @@ public class SaleInvoiceDetailsTableController implements Initializable {
     //
     private ObservableList<InvoiceItem> invoicetList = FXCollections.observableArrayList();
 
+    // aldigimiz invoice obyektini burda saxlayiriq
+    Invoice invoice = null;
+
     /**
      * Initializes the controller class.
      */
@@ -81,7 +85,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
      */
     @FXML
     public void initDataById(int id) {
-        Invoice invoice = InvoiceDAO.getInvoiceById(id);
+        invoice = InvoiceDAO.getInvoiceById(id);
 
         if (invoice != null) {
             cutomerNameLabel.setText(invoice.getCustomerName());
@@ -139,6 +143,11 @@ public class SaleInvoiceDetailsTableController implements Initializable {
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void onActionPrintButton() {
+        new PrintInvoice(new Stage(), invoice).start();
     }
 
 }
