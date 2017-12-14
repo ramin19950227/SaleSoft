@@ -278,9 +278,32 @@ public class ApplicationController implements Initializable {
     @FXML
     private void btnSellOnClick(ActionEvent event) {
         sellActive();
-        acContent.getChildren().clear();
-        acContent.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MainApp.ALL_PROPERTIES.getURLProperty().getProductSaleCartURL()));
 
+        //bu Sehifemizin Controllerini almaq ucun istifade edeceyik
+        FXMLLoader loader = new FXMLLoader();
+
+        // loaderimize sehifemizin unvanini gosteririk
+        loader.setLocation(MainApp.ALL_PROPERTIES.getURLProperty().getSaleRootLayoutURL());
+
+        //sehifemizi yukleyitik
+        // ve yalniz sehifemizi yuledikden sonra Controllerimizi ala bilerik
+        // eks halda NullPointerException olacaq
+        AnchorPane ap = null;
+        try {
+            ap = loader.load();
+        } catch (IOException ex) {
+            Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        // controller obyektimizi loaderden aliriq
+        SaleRootLayoutController saleController = loader.getController();
+
+        //ve controllerimizden bize lazim olan metodu cagiririq
+        saleController.toggleButtonSaleOnAction();
+        saleController.setRoot(this);
+
+        acContent.getChildren().clear();
+        acContent.getChildren().add(ap);
     }
 
     @FXML

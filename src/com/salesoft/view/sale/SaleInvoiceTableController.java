@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.salesoft.view;
+package com.salesoft.view.sale;
 
 import com.salesoft.DAO.InvoiceDAO;
 import com.salesoft.DAO.ProductGetDAO;
@@ -65,7 +65,7 @@ public class SaleInvoiceTableController implements Initializable {
                 if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
                     Integer invoice_id = invoiceTable.getSelectionModel().getSelectedItem().getId();
                     System.out.println(invoice_id);
-                    mainApp.showSaleInvoiceDetailsTable(invoice_id);
+                    //mainApp.showSaleInvoiceDetailsTable(invoice_id);
                     //System.out.print(InvoiceDAO.getAllInvoiceItemListById(invoice_id).get(0).getName());
                 }
             }
@@ -200,7 +200,7 @@ public class SaleInvoiceTableController implements Initializable {
             alert.showAndWait();
         } else {
             Integer id = selectedInvoice.getId();
-            mainApp.showSaleInvoiceDetailsTable(id);
+            //mainApp.showSaleInvoiceDetailsTable(id);
         }
     }
 

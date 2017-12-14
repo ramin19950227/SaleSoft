@@ -23,6 +23,9 @@ public class URLProperty {
     private final URL ProductSaleCartURL; //7
     private final URL AnbarRootLayoutURL; //8
     private final URL ProductPurchseURL; //9
+    private final URL SaleRootLayoutURL; //10
+    private final URL SaleInvoiceTableURL; //11
+    private final URL SaleInvoiceDetailsTableURL;//12
 
     /**
      *
@@ -33,9 +36,24 @@ public class URLProperty {
      * @param ProductSaleCart - 7
      * @param AnbarRootLayout
      * @param ProductPurchse
+     * @param SaleRootLayout
+     * @param SaleInvoiceTable
+     * @param SaleInvoiceDetailsTable
      * @throws java.net.MalformedURLException
      */
-    public URLProperty(String LoginFxmlAddress, String ApplicationFxml, String HomeFxml, String ProductTable, String ProductSaleCart, String AnbarRootLayout, String ProductPurchse) throws MalformedURLException {
+    public URLProperty(
+            String LoginFxmlAddress,
+            String ApplicationFxml,
+            String HomeFxml,
+            String ProductTable,
+            String ProductSaleCart,
+            String AnbarRootLayout,
+            String ProductPurchse,
+            String SaleRootLayout,
+            String SaleInvoiceTable,
+            String SaleInvoiceDetailsTable
+    ) throws MalformedURLException {
+
         //esas paket unvanimizi aliriq
         String mainAddress = MainApp.class.getResource("").toString();
         this.MainAppURL = new URL(mainAddress);
@@ -46,6 +64,9 @@ public class URLProperty {
         this.ProductSaleCartURL = new URL(mainAddress + ProductSaleCart);
         this.AnbarRootLayoutURL = new URL(mainAddress + AnbarRootLayout);
         this.ProductPurchseURL = new URL(mainAddress + ProductPurchse);
+        this.SaleRootLayoutURL = new URL(mainAddress + SaleRootLayout);
+        this.SaleInvoiceTableURL = new URL(mainAddress + SaleInvoiceTable);
+        this.SaleInvoiceDetailsTableURL = new URL(mainAddress + SaleInvoiceDetailsTable);
     }
 
     public URL getMainAppURL() {
@@ -79,5 +100,19 @@ public class URLProperty {
     public URL getProductPurchseURL() {
         return ProductPurchseURL;
     }
+
+    public URL getSaleRootLayoutURL() {
+        return SaleRootLayoutURL;
+    }
+
+    public URL getSaleInvoiceTableURL() {
+        return SaleInvoiceTableURL;
+    }
+
+    public URL getSaleInvoiceDetailsTableURL() {
+        return SaleInvoiceDetailsTableURL;
+    }
+
+    
 
 }

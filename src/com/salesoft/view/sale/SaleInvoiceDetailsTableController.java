@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.salesoft.view;
+package com.salesoft.view.sale;
 
 import com.salesoft.DAO.InvoiceDAO;
 import com.salesoft.MainApp;
@@ -87,7 +87,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
             cutomerNameLabel.setText(invoice.getCustomerName());
             tarixLabel.setText(invoice.getDate());
             idField.setText(invoice.getId().toString());
-            meblegLabel.setText(invoice.getTotalPrice().toString());
+            meblegLabel.setText(invoice.getTotalPrice().toString() + " AZN");
 
             invoicetList.clear();
             if (invoice.getList() != null) {
@@ -106,7 +106,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
      */
     @FXML
     private void onActionShowInvoiceButton() {
-
+        System.err.println("com.salesoft.view.sale.SaleInvoiceDetailsTableController.onActionShowInvoiceButton()");
         if (idField.getText() == null || idField.getText().length() == 0) {
             errorAlert("Qaime nomresini daxil edin", "Qaime nomresini daxil edin", "Qaime nomresini daxil edin");
             idField.setStyle("-fx-border-color: red;-fx-border-width: 5;");

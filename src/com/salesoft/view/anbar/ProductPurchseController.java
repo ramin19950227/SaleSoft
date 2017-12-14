@@ -26,13 +26,6 @@ import javafx.scene.control.TextField;
  */
 public class ProductPurchseController implements Initializable {
 
-    private MainApp mainApp;
-
-    public void setMainApp(MainApp mainApp) {
-        this.mainApp = mainApp;
-        barCodeField.requestFocus();
-    }
-
     @FXML
     private TextField barCodeField;
 
