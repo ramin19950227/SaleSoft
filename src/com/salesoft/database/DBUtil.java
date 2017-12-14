@@ -5,6 +5,7 @@
  */
 package com.salesoft.database;
 
+import com.salesoft.Properties.DBProperties;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,42 +18,9 @@ import java.util.logging.Logger;
 public class DBUtil {
 
     /**
-     * MySql drayverimizi elan edirik
-     */
-    private static final String DRIVER_MYSQL = "com.mysql.jdbc.Driver";
-
-    /**
-     * Elaqe ucun lazim olan melumatlarimiz,Irelide meumatlari Properti
-     * faylimizda alacayiq
-     */
-    public final static String HOST = "localhost";
-    /**
-     * Elaqe ucun lazim olan melumatlarimiz
-     */
-    public final static String PORT = "3306";
-    /**
-     * Elaqe ucun lazim olan melumatlarimiz
-     */
-    public final static String DB_NAME = "testdb";
-    /**
-     * Elaqe ucun lazim olan melumatlarimiz
-     */
-    public final static String USER = "root";
-    /**
-     * Elaqe ucun lazim olan melumatlarimiz
-     */
-    public final static String PASSWORD = "password";
-
-    /**
-     * Connection url elaqe ucun laim olan melumatlarimiz
-     */
-    private static final String CONNECTION_URL = "jdbc:mysql://" + HOST + ":" + PORT + "/" + DB_NAME + "?useSSL=false";
-
-    /**
-     * Connection Obyetimizi elan edirik irelideistifade edeceyik
+     * Connection Obyetimizi elan edirik irelide istifade edeceyik
      */
     private static Connection conn = null;
-    // Lazimi Obyektlerimizi Elan edirik ve null teyin edirik
     private static Statement stmt = null;
     private static ResultSet rs = null;
 
@@ -65,7 +33,7 @@ public class DBUtil {
     static {
         // MySQL driverini hazirlayiriq teyin edirik
         try {
-            Class.forName(DRIVER_MYSQL);
+            Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             System.err.println("ClassNotFoundException");
             System.out.println("com.salesoft.database.DBUtil.static{initialization block}");
@@ -84,11 +52,13 @@ public class DBUtil {
      * @throws java.sql.SQLException
      */
     public static void dbConnect() throws SQLException {
+        
+        
 
         // CONNECTION_URL - addressimizden stifade ederek bazamizla elaqe qurmaga calishiriq;
         try {
             // Elde etdyimz Elaqe (Connection) Obyektini conn adli yuxarida elan etdiyimiz unvana yerleshdiririk;
-            conn = DriverManager.getConnection(CONNECTION_URL, "" + USER + "", "" + PASSWORD);
+            conn = DriverManager.getConnection(DBProperties.CONNECTION_URL, "" + DBProperties.USER + "", "" + DBProperties.PASSWORD);
             rs = null;
             stmt = null;
 
