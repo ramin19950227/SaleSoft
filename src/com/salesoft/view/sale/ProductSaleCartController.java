@@ -10,7 +10,7 @@
  */
 package com.salesoft.view.sale;
 
-import com.salesoft.DAO.HistoryDAO;
+import com.salesoft.DAO.InvoiceDAO;
 import com.salesoft.DAO.ProductGetDAO;
 import com.salesoft.DAO.ProductUpdateDAO;
 import com.salesoft.MainApp;
@@ -38,9 +38,6 @@ import javafx.scene.input.KeyEvent;
  * @author Ramin
  */
 public class ProductSaleCartController implements Initializable {
-
-    private Integer namedProductCounter = 0;
-    private MainApp mainApp;
 
     /**
      * -----------------------------SAG EDIT PANEL PROPERTIES
@@ -139,6 +136,7 @@ public class ProductSaleCartController implements Initializable {
 
     // barcodsuz mehsulu burda saxlayacam
     private Product nameEnteredProduct = null;
+    private Integer nameEnteredProductCounter = 0;
 
     /**
      * Initializes the controller class.
@@ -263,7 +261,7 @@ public class ProductSaleCartController implements Initializable {
         if (barCodeEnteredProduct == null && nameField.getText().length() > 0) {
 
             Product p = new Product();
-            p.setId(--namedProductCounter);
+            p.setId(--nameEnteredProductCounter);
             p.setName(nameField.getText());
             p.setQty(1000);
             p.setPurchasePrice(1.5);
@@ -447,7 +445,7 @@ public class ProductSaleCartController implements Initializable {
             if (barCodeEnteredProduct == null && nameField.getText().length() > 0) {
 
                 Product p = new Product();
-                p.setId(--namedProductCounter);
+                p.setId(--nameEnteredProductCounter);
                 p.setName(nameField.getText());
                 p.setQty(1000);
                 p.setPurchasePrice(1.5);
@@ -593,11 +591,6 @@ public class ProductSaleCartController implements Initializable {
         }
     }
 
-    public void setMainApp(MainApp mainApp) {
-        this.mainApp = mainApp;
-        barCodeField.requestFocus();
-    }
-
     /**
      * Parametr olaraq verilen Product-i set edir saxdaki Xanalara
      * (TextField-lere)
@@ -669,11 +662,12 @@ public class ProductSaleCartController implements Initializable {
         }
 
         // Qaime syahisina yaziriq ve id aliriq
-        Integer history_id = HistoryDAO.startSatishHistoryAndGetHistoryId(consumerName, totalPrice);
+        InvoiceDAO.insertNewInvoice(consumerName, totalPrice);
+        Integer history_id = InvoiceDAO.getLastIdInInvoiceTable();
 
         //Qaime nomremiz var indi satish edirik
         //mehsulumuzu dovrile bir bir satacayiq ve satish siyahimiza qeydlerimizi edeceyik
-        for (CartItem ci : cart.getArrayList()) {
+        cart.getArrayList().forEach((ci) -> {
             //barcodlu mehsulun satishi
             if (ci.getId() >= 0) {
                 System.out.println("barcodlu mehsulun satihi barcod=" + ci.getProduct().getBarCode());
@@ -690,19 +684,17 @@ public class ProductSaleCartController implements Initializable {
                 ProductUpdateDAO.updateProductQtyById(ci.getId(), qaliq_say);
 
                 //indi sayi azaltdiq satish haqqinda melumati yazaq bazaya brbir
-                HistoryDAO.insertSaleDetailsIntoSATISH_LIST(history_id, ci);
+                InvoiceDAO.insertNewInvoiceItem(history_id, ci);
 
                 //barcodsuz mehsulun satishi
             } else {
                 System.out.println("barcodSUZ mehsulun satishi id=" + ci.getId());
                 // bazamizda olmadigi ucun mehsul say hesabi da etmirik 
                 //sadece satish yaziriq ve birdi
-                HistoryDAO.insertSaleDetailsIntoSATISH_LIST(history_id, ci);
+                InvoiceDAO.insertNewInvoiceItem(history_id, ci);
 
             }
-        }
-        System.out.println("com.salesoft.view.ProductSaleCartController.saleAllProductInCart()");
-        //mainApp.showSaleInvoiceDetailsTable(history_id);
+        });
 
     }
 }

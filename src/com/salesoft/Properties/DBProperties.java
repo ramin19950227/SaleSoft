@@ -48,7 +48,7 @@ public class DBProperties {
         try {
             properties.load(inputStream);
         } catch (IOException ex) {
-            System.out.println("com.salesoft.Properties.DBProperties.methodName()");
+            System.out.println("com.salesoft.Properties.DBProperties.static{}");
             System.err.println("IOException");
             System.err.println("inputStream==null ???? ="+(inputStream==null));
             Logger.getLogger(DBProperties.class.getName()).log(Level.SEVERE, null, ex);

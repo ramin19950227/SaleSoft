@@ -1,9 +1,11 @@
 package com.salesoft.DAO;
 
 import com.salesoft.MainApp;
+import com.salesoft.database.DBUtil;
+import com.salesoft.database.SQL;
+import com.salesoft.model.CartItem;
 import com.salesoft.model.Invoice;
 import com.salesoft.model.InvoiceItem;
-import com.salesoft.model.Product;
 import com.salesoft.util.MyLogger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -136,9 +138,8 @@ public class InvoiceDAO {
             Connection con = DatabaseConnection.getConnection();
             PreparedStatement ps = con.prepareStatement(SQL_GEL_ALL_INVOICE_BY_NAME_LIKE);
             ps.setString(1, "%" + name + "%");
-            
-            ResultSet rs = ps.executeQuery();
 
+            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
 
@@ -150,5 +151,50 @@ public class InvoiceDAO {
             Logger.getLogger(InvoiceDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return list;
+    }
+
+    public static void insertNewInvoice(String customer, Double mebleg) {
+        try {
+            DBUtil.dbExecuteUpdate(
+                    SQL.Invoice.INVOICE_ADD_NEW.
+                            replaceAll("customerR", customer).
+                            replaceAll("meblegR", mebleg.toString())
+            );
+        } catch (SQLException ex) {
+            Logger.getLogger(InvoiceDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void insertNewInvoiceItem(Integer history_id, CartItem c) {
+        try {
+            DBUtil.dbExecuteUpdate(
+                    SQL.InvoiceItem.INVOICEITEM_ADD_NEW
+                            .replaceAll("history_id", history_id.toString())
+                            .replaceAll("p_id", c.getId().toString())
+                            .replaceAll("p_name", c.getName())
+                            .replaceAll("p_say", c.getQty().toString())
+                            .replaceAll("p_qiymet", c.getSalePrice().toString())
+                            .replaceAll("p_mebleg", c.getTotalPrice().toString())
+                            .replaceAll("p_barcode", c.getProduct().getBarCode())
+                            .replaceAll("p_qeyd", c.getProduct().getNote())
+                            .replaceAll("p_satishdan_evvelki_say", c.getProduct().getQty().toString())
+            );
+        } catch (SQLException ex) {
+            Logger.getLogger(InvoiceDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static Integer getLastIdInInvoiceTable() {
+        try {
+            ResultSet rs = DBUtil.dbExecuteQuery(SQL.Invoice.INVOICE_GET_LAST_ID);
+            if (rs.next()) {
+                return rs.getInt("MAX(id)");
+            } else {
+                return null;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(InvoiceDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 }

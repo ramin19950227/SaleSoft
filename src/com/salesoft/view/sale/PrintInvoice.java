@@ -36,6 +36,7 @@ public class PrintInvoice {
     CheckBox cbA5 = new CheckBox("A5");
 
     public void start() {
+        cbA4.setSelected(true);
         VBox root = new VBox(5);
 
         Label textLbl = new Label("Text:");

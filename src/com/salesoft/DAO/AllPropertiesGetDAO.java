@@ -8,6 +8,8 @@ package com.salesoft.DAO;
 import com.salesoft.Properties.AllProperties;
 import com.salesoft.Properties.UIProperty;
 import com.salesoft.Properties.URLProperty;
+import com.salesoft.database.DBUtil;
+import com.salesoft.database.SQL;
 import com.salesoft.util.MyLogger;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -27,8 +29,6 @@ import java.util.logging.Logger;
  */
 public class AllPropertiesGetDAO {
 
-    private static final String SQL_GET_PROPERTIES_BY_TYPE = "SELECT * FROM allproperties where type=?";
-
     public static AllProperties getAllProperties() {
         AllProperties AllProp = new AllProperties();
         URLProperty urlProp = getURLProperty();
@@ -44,12 +44,8 @@ public class AllPropertiesGetDAO {
     public static URLProperty getURLProperty() {
 
         URLProperty urlProp = null;
-
         try {
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(SQL_GET_PROPERTIES_BY_TYPE);
-            ps.setString(1, "url");
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = DBUtil.dbExecuteQuery(SQL.AllProperties.PROPERTIES_GET_ALL_BY_TYPE.replaceAll("typeR", "url"));
 
             if (rs.next()) {
                 urlProp = new URLProperty(

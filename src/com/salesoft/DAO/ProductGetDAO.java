@@ -35,7 +35,7 @@ public class ProductGetDAO {
      */
     public static ArrayList<Product> getAllProductList() {
         try {
-            return ToProduct.rsToProductList(DBUtil.dbExecuteQuery(SQL.PRODUCT_GET_ALL));
+            return ToProduct.rsToProductList(DBUtil.dbExecuteQuery(SQL.Product.PRODUCT_GET_ALL));
         } catch (SQLException ex) {
             System.out.println("SQLException");
             System.out.println("com.salesoft.DAO.ProductGetDAO.getAllProductList()");
@@ -58,7 +58,7 @@ public class ProductGetDAO {
         try {
 
             Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(SQL.PRODUCT_GEL_ALL_BY_NAME_LIKE_P);
+            PreparedStatement ps = con.prepareStatement(SQL.Product.PRODUCT_GEL_ALL_BY_NAME_LIKE_P);
             ps.setString(1, "%" + name + "%");
             ResultSet rs = ps.executeQuery();
 
@@ -111,7 +111,7 @@ public class ProductGetDAO {
         try {
 
             Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(SQL.PRODUCT_GEL_ALL_BY_BARCODE_P);
+            PreparedStatement ps = con.prepareStatement(SQL.Product.PRODUCT_GEL_ALL_BY_BARCODE_P);
             ps.setString(1, barCode);
             ResultSet rs = ps.executeQuery();
 
@@ -159,7 +159,7 @@ public class ProductGetDAO {
     public static Product getProductById(int id) {
         try {
             Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(SQL.PRODUCT_GET_BY_ID_P);
+            PreparedStatement ps = con.prepareStatement(SQL.Product.PRODUCT_GET_BY_ID_P);
             ps.setInt(1, id);
             //ps.setObject(1, id);
 
@@ -173,7 +173,7 @@ public class ProductGetDAO {
     public static Product getProductByBarCode(String barCode) {
         try {
             Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement(SQL.PRODUCT_GET_BY_BARCODE_P);
+            PreparedStatement ps = con.prepareStatement(SQL.Product.PRODUCT_GET_BY_BARCODE_P);
             ps.setString(1, barCode);
 
             return ToProduct.getProduct(ps, con);
