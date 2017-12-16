@@ -19,9 +19,10 @@ public class MainApp extends Application {
     //Butun datalarin alinmasi, unvanlarin, metinlerin, tercuelerin ve s.
     public static final AllProperties ALL_PROPERTIES = AllPropertiesGetDAO.getAllProperties();
 
-    private Stage primaryStage;
+    private static Stage primaryStage;
 
-    public Stage getPrimaryStage() {
+    //bunu static eledimki obiri classlardan bunu ala bilim
+    public static Stage getPrimaryStage() {
         return primaryStage;
     }
 

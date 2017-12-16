@@ -16,7 +16,7 @@
    <children>
       <TableView fx:id="invoiceTable" layoutX="15.0" layoutY="165.0" prefHeight="400.0" prefWidth="575.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="165.0" AnchorPane.topAnchor="165.0">
          <columns>
-            <TableColumn fx:id="idColumn" prefWidth="28.0" text="№" />
+            <TableColumn fx:id="barCodeColumn" prefWidth="28.0" text="BarCod" />
             <TableColumn fx:id="nameColumn" prefWidth="256.0" text="Ad" />
             <TableColumn fx:id="sayColumn" prefWidth="75.0" text="Say" />
             <TableColumn fx:id="meblegColumn" prefWidth="75.0" text="Mebleg" />

@@ -49,7 +49,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
     private TableView<InvoiceItem> invoiceTable;
 
     @FXML
-    private TableColumn<InvoiceItem, Number> idColumn;
+    private TableColumn<InvoiceItem, String> barCodeColumn;
     @FXML
     private TableColumn<InvoiceItem, String> nameColumn;
     @FXML
@@ -68,7 +68,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
     private Label meblegLabel;
 
     //
-    private ObservableList<InvoiceItem> invoicetList = FXCollections.observableArrayList();
+    private final ObservableList<InvoiceItem> invoicetList = FXCollections.observableArrayList();
 
     // aldigimiz invoice obyektini burda saxlayiriq
     Invoice invoice = null;
@@ -79,7 +79,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
+        barCodeColumn.setCellValueFactory(cellData -> cellData.getValue().productBarCodeProperty());
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         sayColumn.setCellValueFactory(cellData -> cellData.getValue().qtyProperty());
         meblegColumn.setCellValueFactory(cellData -> cellData.getValue().totalPriceProperty());
@@ -186,10 +186,6 @@ public class SaleInvoiceDetailsTableController implements Initializable {
         // heleki o olasiligi dushunmurem
         // InvoiceItemi-in satish sayini alaq ve serhed qoyaq ki ondan cox qaytarablmesin 
         Integer itemQty = selectedInvoiceItem.getQty();
-        System.out.println("itemQty: " + itemQty);
-
-        Integer itemId = selectedInvoiceItem.getId();
-        System.out.println("itemId: " + itemId);
 
         if (isInputValid()) {
             Integer enteredQty = Integer.valueOf(productReturnQty.getText());
@@ -198,11 +194,16 @@ public class SaleInvoiceDetailsTableController implements Initializable {
             if (enteredQty <= itemQty && enteredQty > 0) {
                 System.out.println("enteredQty <= itemQty && enteredQty > 0 ->> result true");
 
+                System.out.println("itemQty: " + itemQty);
+
+                Integer productId = selectedInvoiceItem.getProductId();
+                System.out.println("productId: " + productId);
+
                 //eger yoxlamani kecdise yani xanaya kecerli melumat yaiibsa yazdigi say satish sayina beraber
                 //ve ya ondan az dirsa ve eyni zamanda 0-dan coxdursa
                 //ashagidakileri ele
                 //indi mehsulumuzu alaqki sayini bilek sonra onun ustune qaytarilani yazaq
-                Product returnedProduct = ProductGetDAO.getProductById(itemId);
+                Product returnedProduct = ProductGetDAO.getProductById(productId);
 
                 //yoxlyiriq eger bu id- ile bazada mehsul varsa davam edirik 
                 //yoxdursa NullPointerException cixacaq. bu olmasin deye yoxlayiram -
@@ -230,7 +231,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
                 System.err.println("Returner Product Qty is Not Correct");
             }
         } else {
-            System.err.println("Input Not Valid");
+            System.err.println("Inputi is Not Valid");
         }
     }
 
@@ -252,7 +253,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
                 Integer qty = Integer.parseInt(productReturnQty.getText());
 
                 if (qty <= 0) {
-                    errorMessage += "Say (0) Ola bilmez!\n";
+                    errorMessage += "Say 1-dən az Ola bilmez!\n";
                 }
 
             } catch (NumberFormatException e) {

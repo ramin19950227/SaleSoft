@@ -79,8 +79,8 @@ public class InvoiceDAO {
 
     }
 
-    public static ArrayList<InvoiceItem> getAllInvoiceItemListById(int id) {
-        InvoiceItem ii;
+    public static ArrayList<InvoiceItem> getAllInvoiceItemListById(Integer id) {
+        InvoiceItem invoiceItem;
         try {
             Connection con = DatabaseConnection.getConnection();
             PreparedStatement ps = con.prepareStatement(getAllInvoiceItemById);
@@ -90,9 +90,9 @@ public class InvoiceDAO {
 
             boolean found = false;
             while (rs.next()) {
-                ii = new InvoiceItem(rs.getInt(1), rs.getString(4), rs.getInt(5), rs.getDouble(7));
+                invoiceItem = new InvoiceItem(rs.getInt(1), rs.getString(4), rs.getInt(5), rs.getDouble(7), rs.getInt(3), rs.getString(8));
 
-                arrayList.add(ii);
+                arrayList.add(invoiceItem);
 
                 found = true;
             }
@@ -169,15 +169,15 @@ public class InvoiceDAO {
         try {
             DBUtil.dbExecuteUpdate(
                     SQL.InvoiceItem.INVOICEITEM_ADD_NEW
-                            .replaceAll("history_id", history_id.toString())
-                            .replaceAll("p_id", c.getId().toString())
-                            .replaceAll("p_name", c.getName())
-                            .replaceAll("p_say", c.getQty().toString())
-                            .replaceAll("p_qiymet", c.getSalePrice().toString())
-                            .replaceAll("p_mebleg", c.getTotalPrice().toString())
-                            .replaceAll("p_barcode", c.getProduct().getBarCode())
-                            .replaceAll("p_qeyd", c.getProduct().getNote())
-                            .replaceAll("p_satishdan_evvelki_say", c.getProduct().getQty().toString())
+                            .replaceAll("history_idR", history_id.toString())
+                            .replaceAll("p_idR", c.getId().toString())
+                            .replaceAll("p_nameR", c.getName())
+                            .replaceAll("p_sayR", c.getQty().toString())
+                            .replaceAll("p_qiymetR", c.getSalePrice().toString())
+                            .replaceAll("p_meblegR", c.getTotalPrice().toString())
+                            .replaceAll("p_barcodeR", c.getProduct().getBarCode())
+                            .replaceAll("p_qeydR", "note")
+                            .replaceAll("p_satishdan_evvelki_sayR", c.getProduct().getQty().toString())
             );
         } catch (SQLException ex) {
             Logger.getLogger(InvoiceDAO.class.getName()).log(Level.SEVERE, null, ex);

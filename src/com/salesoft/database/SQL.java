@@ -109,10 +109,26 @@ public class SQL {
 
         private static final String INVOICEITEM_TABLE_NAME = "satish_list";
 
+        /**
+         * Parametrler
+         *
+         * @see 1=history_id;
+         * @see 2=p_id;
+         * @see 3=p_name;
+         * @see 4=p_say;
+         * @see 5=p_qiymet;
+         * @see 6=p_mebleg;
+         * @see 7=p_barcode;
+         * @see 8=p_qeyd;
+         * @see 9=p_satishdan_evvelki_say;
+         */
         public static final String INVOICEITEM_ADD_NEW = "INSERT INTO " + INVOICEITEM_TABLE_NAME + " (history_id,p_id,p_name,p_say,p_qiymet,p_mebleg,p_barcode,p_qeyd,p_satishdan_evvelki_say) VALUES (history_idR, p_idR, 'p_nameR', p_sayR, p_qiymetR, p_meblegR, 'p_barcodeR', 'p_qeydR', p_satishdan_evvelki_sayR)";
 
         /**
-         * @see ".replaceAll("p_sayR", invoiceItem.getQty().toString()).replaceAll("p_meblegR", invoiceItem.getTotalPrice().toString()).replaceAll("id=idR", invoiceItem.getId().toString())"
+         * @see ".replaceAll("p_sayR",
+         * invoiceItem.getQty().toString()).replaceAll("p_meblegR",
+         * invoiceItem.getTotalPrice().toString()).replaceAll("id=idR",
+         * invoiceItem.getId().toString())"
          */
         public static final String INVOICEITEM_UPDATE_BY_ID = "UPDATE " + INVOICEITEM_TABLE_NAME + " SET p_say='p_sayR', p_mebleg='p_meblegR' WHERE  id=idR;";
     }

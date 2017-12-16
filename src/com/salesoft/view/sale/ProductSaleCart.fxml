@@ -63,7 +63,7 @@
                   </Label>
                </children>
             </AnchorPane>
-            <TextField fx:id="consumerName" layoutX="71.0" layoutY="397.0" prefHeight="33.0" prefWidth="132.0" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="71.0" />
+            <TextField fx:id="customerName" layoutX="71.0" layoutY="397.0" prefHeight="33.0" prefWidth="132.0" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="71.0" />
             <Label layoutX="14.0" layoutY="405.0" text="Mushteri" AnchorPane.bottomAnchor="158.0" AnchorPane.leftAnchor="14.0" />
             <Button layoutX="16.0" layoutY="437.0" mnemonicParsing="false" onAction="#saleAllProductInCart" onKeyPressed="#saleAllProductInCart" prefHeight="25.0" prefWidth="179.0" text="Satishi Tamamla" AnchorPane.bottomAnchor="108.0" AnchorPane.rightAnchor="15.0" />
           <Button fx:id="addButton" layoutX="16.0" layoutY="281.0" mnemonicParsing="false" onAction="#onActionProductAddButton" onKeyPressed="#onActionProductAddButton" prefHeight="35.0" prefWidth="120.0" text="Elave et" />
