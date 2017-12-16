@@ -18,10 +18,10 @@ import javafx.beans.property.StringProperty;
  */
 public class InvoiceItem {
 
-    private IntegerProperty id;//1 mehsulun id-si irelide Key kimi istifade olunacaq
-    private StringProperty name;//2 mehsulun adi
-    private IntegerProperty qty;//3  mehsulun satish sayi
-    private DoubleProperty totalPrice;//4 mehsulunn satish meblegi
+    private final IntegerProperty id;//1 InvoiceItem-in id-si cedvelde olan id, mehsula hec bir aidiyyati yoxdur
+    private final StringProperty name;//2 mehsulun adi
+    private final IntegerProperty qty;//3  mehsulun satish sayi
+    private final DoubleProperty totalPrice;//4 mehsulunn satish meblegi
 
     {// inicializasiya bloku vtomatik ishe dushur
         this.id = new SimpleIntegerProperty(0);

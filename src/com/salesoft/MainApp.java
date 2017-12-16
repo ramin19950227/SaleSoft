@@ -1,22 +1,12 @@
 package com.salesoft;
 
-import com.salesoft.view.anbar.ProductTableController;
-import com.salesoft.view.anbar.ProductPurchseController;
 import com.salesoft.DAO.AllPropertiesGetDAO;
 import com.salesoft.Properties.AllProperties;
 import com.salesoft.util.MyFXMLLoader;
 import com.salesoft.util.*;
-import com.salesoft.view.*;
-import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 /**
@@ -28,8 +18,6 @@ public class MainApp extends Application {
 
     //Butun datalarin alinmasi, unvanlarin, metinlerin, tercuelerin ve s.
     public static final AllProperties ALL_PROPERTIES = AllPropertiesGetDAO.getAllProperties();
-
-    private final String loginViewTitle = ALL_PROPERTIES.getUIProperty().getApplicationTitle();
 
     private Stage primaryStage;
 
@@ -56,6 +44,9 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+
+        String loginViewTitle = ALL_PROPERTIES.getUIProperty().getApplicationTitle();
 
         primaryStage.setScene(MyFXMLLoader.getSceneFromURL(ALL_PROPERTIES.getURLProperty().getLoginFxmlURL()));
 
@@ -66,8 +57,6 @@ public class MainApp extends Application {
         primaryStage.setMinHeight(500.0);
         primaryStage.setMinWidth(850.0);
         primaryStage.show();
-
-        this.primaryStage = primaryStage;
     }
 
     public static void main(String[] args) {

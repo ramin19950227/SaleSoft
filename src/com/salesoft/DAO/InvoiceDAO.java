@@ -80,7 +80,7 @@ public class InvoiceDAO {
     }
 
     public static ArrayList<InvoiceItem> getAllInvoiceItemListById(int id) {
-        InvoiceItem ii = null;
+        InvoiceItem ii;
         try {
             Connection con = DatabaseConnection.getConnection();
             PreparedStatement ps = con.prepareStatement(getAllInvoiceItemById);
@@ -197,4 +197,21 @@ public class InvoiceDAO {
             return null;
         }
     }
+
+    public static void updateInvoiceItem(InvoiceItem invoiceItem) {
+        try {
+            DBUtil.dbExecuteUpdate(
+                    SQL.InvoiceItem.INVOICEITEM_UPDATE_BY_ID
+                            .replaceAll("p_sayR", invoiceItem.getQty().toString())
+                            .replaceAll("p_meblegR", invoiceItem.getTotalPrice().toString())
+                            .replaceAll("id=idR", invoiceItem.getId().toString())
+            );
+        } catch (SQLException ex) {
+            System.out.println("com.salesoft.DAO.InvoiceDAO.updateInvoiceItemQtyById()");
+            System.err.println("SQLException");
+            Logger.getLogger(InvoiceDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
 }

@@ -77,4 +77,21 @@ public class MyLogger {
         return logger;
     }
 
+    // bu Classi deyishmek isteyirem
+    // Loglari Bazaya yazacam eyni zamanda da TXT fayla yazacam conssolda ne bash verirse
+    // esas Izleme Baza seviyyesinde olacaq, amma baza ile elaqedar Exceptionlar cixdiqda onlar TXTfaylda qalacaq
+    // her emeliyyat gun-ay-il saat-deqiqe-saniye )) emeliyyat eden istifacedi emeliyyat tipi vesaileri her shey yazacaq.....
+    // Teyyub Muellim Duz deyir ESAS LOG-lardir, sonra niye kimese neyise subut etmeye calishasan ki, her shey ortada olduqdan sonra
+    
+    //emeliiyatlarimizin tiplerini yazaq
+    //LoginForm
+    // login
+    //
+    //  USER OPERATION TABLE
+    //  ID  TimeStamp           Type            Location        Action      Result      DATA 
+    //  1   15.12.2017 5:28:31  Login           LoginForm       Login       Succes      userName=Ramin, userPassword=123
+    //  2   15.12.2017 5:29:50  EditProduct     ProductTable    EditName    Succes      pId=54, pOldName=Baraban 12, pNewName=Barabal 12A, -> pQty=5, pPurchasePrice=1.6, pNote=Kainat
+    
+    //Product-a aid olanlar
+    // add,updateFormTable, updateFromEditPanel, deleteWithDelKey, deleteWithDeleteButton, 
 }
