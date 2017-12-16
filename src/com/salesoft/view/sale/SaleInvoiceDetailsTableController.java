@@ -1,3 +1,5 @@
+// <editor-fold defaultstate="collapsed" desc="Package declare and Import Block">
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -7,7 +9,6 @@ package com.salesoft.view.sale;
 
 import com.salesoft.DAO.InvoiceDAO;
 import com.salesoft.DAO.ProductGetDAO;
-import com.salesoft.DAO.ProductUpdateDAO;
 import com.salesoft.model.Invoice;
 import com.salesoft.model.InvoiceItem;
 import com.salesoft.model.Product;
@@ -23,14 +24,20 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+//</editor-fold>
 
 /**
- * FXML Controller class
+ * FXML Controller class Bu Class Qaime nomresi ile Qaimelere baxish ve redakte
+ * etme hemcinin cap emeleiyyatiin heyata kecirilmesi ucun istifade edilir
  *
  * @author Ramin
  */
 public class SaleInvoiceDetailsTableController implements Initializable {
 
+    // <editor-fold defaultstate="collapsed" desc="Declaration Block">
+    /**
+     * Declaration Class Properties lazim olan propertileri elan edirik
+     */
     /**
      * InvoiceItem Edit Properties
      */
@@ -73,12 +80,18 @@ public class SaleInvoiceDetailsTableController implements Initializable {
     // aldigimiz invoice obyektini burda saxlayiriq
     Invoice invoice = null;
 
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="initialize() - method Block">
     /**
-     * Initializes the controller class.
+     * Initializes the controller class. ishe bashlamazdan evvel bezi
+     * obyektlerimizi hazirlayiriq
+     *
+     * @param url = bu fxml faylimizin unvanin qaytarir URL olaraq
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+
         barCodeColumn.setCellValueFactory(cellData -> cellData.getValue().productBarCodeProperty());
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         sayColumn.setCellValueFactory(cellData -> cellData.getValue().qtyProperty());
@@ -94,11 +107,12 @@ public class SaleInvoiceDetailsTableController implements Initializable {
                         System.out.println("cartTable Selection PRODUCT NULL AUTOCALL");
                     }
                 });
-    }
+    }// </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="initDataById(int id)">
     /**
-     * mushteri history id yazacaq ve enteri basanda bu metod lazimi melumatlari
-     * lazimi xanalara dolduracaq.
+     * Bu metoda verilen id ile axtarish edecek ve qeyd tapacaqsa gosterecek
+     * cedvelde, yox eger tpa bilmese xeberdarliq cixaracaq
      *
      * @param id
      */
@@ -121,11 +135,12 @@ public class SaleInvoiceDetailsTableController implements Initializable {
             errorAlert("Bu Nomre ile Qaime Tapilmadi", "Bu Nomre ile Qaime Tapilmadi", "Bu Nomre ile Qaime Tapilmadi");
         }
 
-    }
+    }// </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="onActionShowInvoiceButton()">
     /**
-     * Goster Duymesinde enter basdiqda bu acilir ve initData ni yazilan id-ile
-     * gosterir
+     * Mushteri Qaime nomresini yazib enteri basdiqda bu Metod yazilan qaime
+     * nomresini initDataById() metoduna gonderecek
      */
     @FXML
     private void onActionShowInvoiceButton() {
@@ -147,8 +162,9 @@ public class SaleInvoiceDetailsTableController implements Initializable {
         idField.requestFocus();
         idField.selectAll();
 
-    }
+    }// </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="errorAlert(String title, String header, String content)">
     /**
      * Bu metod error xeberdarligi cixartmaq ucun istifade olunur
      *
@@ -162,13 +178,23 @@ public class SaleInvoiceDetailsTableController implements Initializable {
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
-    }
+    }// </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="onActionPrintButton()">
+    /**
+     * Qaime nomresini yazib Cap et duymesini basdiqda bu metot cap ishlemini
+     * bashladir
+     */
     @FXML
     private void onActionPrintButton() {
-        new PrintInvoice(new Stage(), invoice).start();
-    }
+        if (invoice != null) {
+            new PrintInvoice(new Stage(), invoice).start();
+        } else {
+            errorAlert("Zehmet olmasa Qaime nomresini yazin", "Zehmet olmasa Qaime nomresini yazin", "Sonra qaimeni gosterin daha sonra cap edin");
+        }
+    }// </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="onActionReturnButton()">                          
     /**
      * Geri qaytarilma duymesi basildiqda
      */
@@ -233,14 +259,29 @@ public class SaleInvoiceDetailsTableController implements Initializable {
         } else {
             System.err.println("Inputi is Not Valid");
         }
-    }
+    }//  </editor-fold> 
 
+    // <editor-fold defaultstate="collapsed" desc="setInvoiceItemEditFields(InvoiceItem invoiceItem)">                          
+    /**
+     * Aldigimiz InvoiceItem - obyektini bumetoda verdikde onu yandaki Redakte
+     * Paneline yazir
+     *
+     * @param invoiceItem
+     */
     private void setInvoiceItemEditFields(InvoiceItem invoiceItem) {
         productReturnQty.setText(invoiceItem.getQty().toString());
         productReturnQty.requestFocus();
 
-    }
+    }//  </editor-fold> 
 
+    // <editor-fold defaultstate="collapsed" desc="isInputValid()">                          
+    /**
+     * Bu Metod Xanalarimiza melumatin dogru daxil olub olmadigin yoxlayir eger
+     * melumatlar dogru daxil edilibse o zaman true qaytarir yox eger seyf varsa
+     * Alert Gosterir ve seyfleri qeyd edir
+     *
+     * @return
+     */
     private boolean isInputValid() {
         String errorMessage = "";
 
@@ -276,5 +317,5 @@ public class SaleInvoiceDetailsTableController implements Initializable {
 
             return false;
         }
-    }
+    }//  </editor-fold> 
 }
