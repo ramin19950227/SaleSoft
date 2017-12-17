@@ -58,6 +58,10 @@ public class MainApp extends Application {
         primaryStage.setMinHeight(500.0);
         primaryStage.setMinWidth(850.0);
         primaryStage.show();
+
+        System.out.println("java version: " + System.getProperty("java.version"));
+        System.out.println("javafx.version: " + System.getProperty("javafx.version"));
+
     }
 
     public static void main(String[] args) {

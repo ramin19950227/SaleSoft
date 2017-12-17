@@ -26,6 +26,7 @@ public class URLProperty {
     private final URL SaleRootLayoutURL; //10
     private final URL SaleInvoiceTableURL; //11
     private final URL SaleInvoiceDetailsTableURL;//12
+    private final URL PurchaseInvoiceTableURL; //13
 
     /**
      *
@@ -39,6 +40,7 @@ public class URLProperty {
      * @param SaleRootLayout
      * @param SaleInvoiceTable
      * @param SaleInvoiceDetailsTable
+     * @param PurchaseInvoiceTable
      * @throws java.net.MalformedURLException
      */
     public URLProperty(
@@ -51,7 +53,8 @@ public class URLProperty {
             String ProductPurchse,
             String SaleRootLayout,
             String SaleInvoiceTable,
-            String SaleInvoiceDetailsTable
+            String SaleInvoiceDetailsTable,
+            String PurchaseInvoiceTable
     ) throws MalformedURLException {
 
         //esas paket unvanimizi aliriq
@@ -67,6 +70,7 @@ public class URLProperty {
         this.SaleRootLayoutURL = new URL(mainAddress + SaleRootLayout);
         this.SaleInvoiceTableURL = new URL(mainAddress + SaleInvoiceTable);
         this.SaleInvoiceDetailsTableURL = new URL(mainAddress + SaleInvoiceDetailsTable);
+        this.PurchaseInvoiceTableURL = new URL(mainAddress + PurchaseInvoiceTable);
     }
 
     public URL getMainAppURL() {
@@ -113,6 +117,11 @@ public class URLProperty {
         return SaleInvoiceDetailsTableURL;
     }
 
+    public URL getPurchaseInvoiceTableURL() {
+        return PurchaseInvoiceTableURL;
+    }
+
+    
     
 
 }
