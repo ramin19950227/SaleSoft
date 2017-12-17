@@ -110,6 +110,13 @@ public class InvoiceDAO {
         }
     }
 
+    /**
+     * Bu metod Evvel Istifade elediyimdir bunu Silecem yaxinda
+     *
+     * @param id
+     * @param customerName
+     * @deprecated
+     */
     public static void updateInvoiceCustoemerNameById(Integer id, String customerName) {
         MainApp.getLogger().log(Level.SEVERE, "InvoiceDAO.updateInvoiceCustoemerNameById(int id, String customerName)  \n"
                 + "id=: " + id
@@ -208,6 +215,33 @@ public class InvoiceDAO {
             );
         } catch (SQLException ex) {
             System.out.println("com.salesoft.DAO.InvoiceDAO.updateInvoiceItemQtyById()");
+            System.err.println("SQLException");
+            Logger.getLogger(InvoiceDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    /**
+     * BU metod Invoice - Obyetinin ozunu yenileyir ID-esasinda, id-ni de hele
+     * obyektden alir
+     *
+     * @param invoice - yenileyeceyimiz Invoice-obyekti hele hemin obyektin
+     * ID-sini alib onunesasinda yenileyir
+     * @see
+     *
+     */
+    public static void updateInvoice(Invoice invoice) {
+
+        try {
+            //`customer`='customerR', `mebleg`='meblegR', `odenish`='', `qaliq`='' WHERE  `id`=idR;";
+            DBUtil.dbExecuteUpdate(
+                    SQL.Invoice.INVOICE_UPDATE_BY_ID
+                            .replaceAll("customerR", invoice.getCustomerName())
+                            .replaceAll("meblegR", invoice.getTotalPrice().toString())
+                            .replaceAll("idR", invoice.getId().toString())
+            );
+        } catch (SQLException ex) {
+            System.out.println("com.salesoft.DAO.InvoiceDAO.updateInvoice()");
             System.err.println("SQLException");
             Logger.getLogger(InvoiceDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

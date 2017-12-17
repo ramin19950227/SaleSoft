@@ -100,6 +100,9 @@ public class SQL {
 
         public static final String INVOICE_ADD_NEW = "INSERT INTO " + INVOICE_TABLE_NAME + " (customer,mebleg) VALUES ('customerR', meblegR)";
         public static final String INVOICE_GET_LAST_ID = "SELECT MAX(id) FROM " + INVOICE_TABLE_NAME + " LIMIT 1";
+
+        //Invoice-obyektini yenilemek ucun 
+        public static final String INVOICE_UPDATE_BY_ID = "UPDATE " + INVOICE_TABLE_NAME + " SET `customer`='customerR', `mebleg`='meblegR' WHERE  `id`=idR;";
     }
 
     /**

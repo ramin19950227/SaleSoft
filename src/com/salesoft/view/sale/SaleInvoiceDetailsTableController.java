@@ -50,16 +50,16 @@ public class SaleInvoiceDetailsTableController implements Initializable {
     //geri qaytarilma sebebinin yazilacagi xana
     @FXML
     private TextField productReturnNote;
-
+    
     @FXML
     private Button returnButton;
-
+    
     private InvoiceItem selectedInvoiceItem = null;
 
     //TABLE View Bolumu START
     @FXML
     private TableView<InvoiceItem> invoiceTable;
-
+    
     @FXML
     private TableColumn<InvoiceItem, String> barCodeColumn;
     @FXML
@@ -96,12 +96,12 @@ public class SaleInvoiceDetailsTableController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        
         barCodeColumn.setCellValueFactory(cellData -> cellData.getValue().productBarCodeProperty());
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         sayColumn.setCellValueFactory(cellData -> cellData.getValue().qtyProperty());
         meblegColumn.setCellValueFactory(cellData -> cellData.getValue().totalPriceProperty());
-
+        
         invoiceTable.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
 
@@ -109,18 +109,18 @@ public class SaleInvoiceDetailsTableController implements Initializable {
                     //gosteririk sag Redakte xanasinda
                     // cunki bezen avtomatik null gelir bura oz-ozune 
                     if (newValue != null) {
-
+                        
                         setInvoiceItemEditFields(newValue);
                         selectedInvoiceItem = newValue;
-
+                        
                     } else {
                         System.out.println("cartTable Selection PRODUCT NULL AUTOCALL");
                     }
-
+                    
                 });
         // HE Super Ishleyirrmish
         clearField();
-
+        
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="initDataById(int id)">
@@ -133,13 +133,13 @@ public class SaleInvoiceDetailsTableController implements Initializable {
     @FXML
     public void initDataById(int id) {
         invoice = InvoiceDAO.getInvoiceById(id);
-
+        
         if (invoice != null) {
             cutomerNameLabel.setText(invoice.getCustomerName());
             tarixLabel.setText(invoice.getDate());
             idField.setText(invoice.getId().toString());
             meblegLabel.setText(invoice.getTotalPrice().toString() + " AZN");
-
+            
             invoicetList.clear();
             if (invoice.getList() != null) {
                 invoicetList.addAll(invoice.getList());
@@ -148,7 +148,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
         } else {
             errorAlert("Bu Nomre ile Qaime Tapilmadi", "Bu Nomre ile Qaime Tapilmadi", "Bu Nomre ile Qaime Tapilmadi");
         }
-
+        
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="onActionShowInvoiceButton()">
@@ -175,7 +175,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
         }
         idField.requestFocus();
         idField.selectAll();
-
+        
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="errorAlert(String title, String header, String content)">
@@ -238,7 +238,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
         // heleki o olasiligi dushunmurem
         // InvoiceItemi-in satish sayini alaq ve serhed qoyaq ki ondan cox qaytarablmesin 
         Integer itemQty = selectedInvoiceItem.getQty();
-
+        
         if (isInputValid()) {
             Integer enteredQty = Integer.valueOf(productReturnQty.getText());
 
@@ -263,7 +263,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
 
                     // vee faktiki sayin ustune qaytarilan sayi yaziram neticeni bazaya yenilemeye gonderecem
                     Integer productResultQty = productCurrentQty + enteredQty;
-
+                    
                     Integer returnedProductId = returnedProduct.getId();
 
                     //aldgimiz neticeni bazaya gonderirik ki id ile uygun olan mehsulun sayini yenile
@@ -295,7 +295,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
                     // Bir problem var Item-imizide satish qiymeti yoxdur heleki
                     // CIXISH YOLU - meblegi alib bolurem evvelki saya
                     Double alishQiymeti = selectedInvoiceItem.getTotalPrice() / invoiceItemCurrentQty;
-
+                    
                     selectedInvoiceItem.setTotalPrice(selectedInvoiceItem.getQty() * alishQiymeti);
 
                     // indi ise hazir Item-obyektimizi gonderirik yenilemeye))
@@ -309,7 +309,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
                     Double ferqMeblegi = qaytarmadanEvvelkiMebleg - qaytarmadanSonrakiMebleg;
                     System.out.println("evvelki mebleg: " + qaytarmadanEvvelkiMebleg);
                     System.out.println("sonraki mebleg: " + qaytarmadanSonrakiMebleg);
-
+                    
                     System.out.println("ferq mebleg: " + ferqMeblegi);
 
                     //indi ise Invoce - obyektimizi alib onu yenilemeliyik
@@ -319,12 +319,19 @@ public class SaleInvoiceDetailsTableController implements Initializable {
                     // invoice-obyektinden ferq meblegi cixib gonderirik yenilenmeye
                     Double invoiceSonMebleg = invoiceEvvelkiMebleg - ferqMeblegi;
 
-                    // Yenileme emeliyyati yarimciq qalir DAO hazirlamaliyam
-                    //InvoiceDAO.
+                    // aldigimiz son meblegi yaziriq invoice obyektimize
+                    invoice.setTotalPrice(invoiceSonMebleg);
+
+                    // ve hazir Invoice Obyektimizi yenileyirik
+                    InvoiceDAO.updateInvoice(invoice);
+
+                    //yenilemeler bitdikden sonra indi Invoice Obyektimizi de yenilemeliyik
+                    initDataById(invoice.getId());
+                    
                 } else {
                     System.err.println("Returner Product Not Found");
                     errorAlert("XETA", "Bu barcodla Bazada Mehsul Tapilmadi", "Mehsulu Yeniden Qeydiyyatdan kecirdin");
-
+                    
                 }
             } else {
                 System.err.println("Returner Product Qty is Not Correct");
@@ -378,9 +385,9 @@ public class SaleInvoiceDetailsTableController implements Initializable {
 
             // qaytar duymesini aktiv edirik
             returnButton.setDisable(false);
-
+            
         }
-
+        
     }//  </editor-fold> 
 
     // <editor-fold defaultstate="collapsed" desc="isInputValid()">                          
@@ -393,7 +400,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
      */
     private boolean isInputValid() {
         String errorMessage = "";
-
+        
         if (productReturnQty.getText() == null || productReturnQty.getText().length() == 0) {
             errorMessage += "Mehsulun Sayini dogru daxil edin!\n";
             productReturnQty.setStyle("-fx-border-color: red;-fx-border-width: 5;");
@@ -401,7 +408,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
             // пытаемся преобразовать в int.
             try {
                 Integer qty = Integer.parseInt(productReturnQty.getText());
-
+                
                 if (qty <= 0) {
                     errorMessage += "Sayi 1-dən az Ola bilmez!\n";
                 } else if (qty > selectedInvoiceItem.getQty()) {
@@ -409,13 +416,13 @@ public class SaleInvoiceDetailsTableController implements Initializable {
                     errorMessage += "Mehsul: \t" + selectedInvoiceItem.getName() + "\n";
                     errorMessage += "Qaytara Bileceyiniz Maksimal say Say: \t " + selectedInvoiceItem.getQty() + "\n";
                 }
-
+                
             } catch (NumberFormatException e) {
                 errorMessage += "Kecərli say daxil edin (Tam eded olmalidir)!\n";
                 productReturnQty.setStyle("-fx-border-color: red;-fx-border-width: 5;");
             }
         }
-
+        
         if (errorMessage.length() == 0) {
             productReturnQty.setStyle("-fx-border-color: white;-fx-border-width: 0");
             return true;
@@ -425,9 +432,9 @@ public class SaleInvoiceDetailsTableController implements Initializable {
             alert.setTitle("Dogru Daxil edin");
             alert.setHeaderText("Zehmet olmasa Mehsulun melumatlarini dogru daxil edin");
             alert.setContentText(errorMessage);
-
+            
             alert.showAndWait();
-
+            
             return false;
         }
     }//  </editor-fold> 
@@ -453,6 +460,6 @@ public class SaleInvoiceDetailsTableController implements Initializable {
         //productReturnNote - yoc
         // noteField - sadece olsaydi bes edirdi mene ele gelir
         productReturnNote.setDisable(true);
-
+        
     }//  </editor-fold> 
 }
