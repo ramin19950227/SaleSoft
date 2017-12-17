@@ -204,7 +204,7 @@ public class InvoiceDAO {
                     SQL.InvoiceItem.INVOICEITEM_UPDATE_BY_ID
                             .replaceAll("p_sayR", invoiceItem.getQty().toString())
                             .replaceAll("p_meblegR", invoiceItem.getTotalPrice().toString())
-                            .replaceAll("id=idR", invoiceItem.getId().toString())
+                            .replaceAll("idR", invoiceItem.getId().toString())
             );
         } catch (SQLException ex) {
             System.out.println("com.salesoft.DAO.InvoiceDAO.updateInvoiceItemQtyById()");
