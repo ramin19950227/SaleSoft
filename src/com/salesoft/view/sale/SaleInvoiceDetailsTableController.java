@@ -228,8 +228,6 @@ public class SaleInvoiceDetailsTableController implements Initializable {
         // eger cedvelden mehsul secilmeyibse xeberdarliq cixaririq
         if (selectedInvoiceItem == null) {
             errorAlert("Zehmet olmasa Cedvelden Mehsul Secin", "Qaytarmaq istediyiniz Mehsulu Secin", "Mehsulu Secin");
-
-            System.err.println("Operated Item is not selected");
             return;
         }
 
@@ -243,15 +241,12 @@ public class SaleInvoiceDetailsTableController implements Initializable {
 
         if (isInputValid()) {
             Integer enteredQty = Integer.valueOf(productReturnQty.getText());
-            System.out.println("enteredQty: " + enteredQty);
 
+            //eslinde bu yoxlamaya ehtiyyac yoxdur artiq
             if (enteredQty <= itemQty && enteredQty > 0) {
-                System.out.println("enteredQty <= itemQty && enteredQty > 0 ->> result true");
 
-                System.out.println("itemQty: " + itemQty);
-
+                // mehsulun barcodunu aliriq
                 String productBarCode = selectedInvoiceItem.getProductBarCode();
-                System.out.println("productBarCode: " + productBarCode);
 
                 //eger yoxlamani kecdise yani xanaya kecerli melumat yaiibsa yazdigi say satish sayina beraber
                 //ve ya ondan az dirsa ve eyni zamanda 0-dan coxdursa
@@ -262,15 +257,12 @@ public class SaleInvoiceDetailsTableController implements Initializable {
                 //yoxlyiriq eger bu barcod- ile bazada mehsul varsa davam edirik 
                 //yoxdursa NullPointerException cixacaq. bu olmasin deye yoxlayiram -
                 if (returnedProduct != null) {
-                    System.out.println("returnedProduct.getName" + returnedProduct.getName());
 
                     // mehsulumuzun faktiki sayini aliriq
                     Integer productCurrentQty = returnedProduct.getQty();
-                    System.out.println("productCurrentQty: " + productCurrentQty);
 
                     // vee faktiki sayin ustune qaytarilan sayi yaziram neticeni bazaya yenilemeye gonderecem
                     Integer productResultQty = productCurrentQty + enteredQty;
-                    System.out.println("productResultQry: " + productResultQty);
 
                     Integer returnedProductId = returnedProduct.getId();
 
@@ -280,7 +272,9 @@ public class SaleInvoiceDetailsTableController implements Initializable {
                     // indi ise InvoiceItem-in sayini azaltmaliyiq
                     // ashagida itemimizin hal hazirdaki sayini aliriq
                     Integer invoiceItemCurrentQty = selectedInvoiceItem.getQty();
-                    System.out.println("invoiceItemCurrentQty: " + invoiceItemCurrentQty);
+
+                    //Itemimizin - indiki meblegini yazaq birqiraga
+                    Double qaytarmadanEvvelkiMebleg = selectedInvoiceItem.getTotalPrice();
 
                     // Item-imizin sayini aldiqdan sonra qaytarma sayini (daxil edilen sayi) cixiriq 
                     Integer itemQaliqSay; // inglicse qaliq ne deyilir Oyrenecem ))
@@ -292,9 +286,41 @@ public class SaleInvoiceDetailsTableController implements Initializable {
                     // o 2-nide set edirik obyektimize
                     selectedInvoiceItem.setQty(itemQaliqSay);
 
+                    //Item-in mebleginide hesablamaliyiq onu unutmushuq
+                    // mehsul 5 eded idi qiymeti 1 manatdan mebleg 5 edir
+                    // indi ise 3 qaytardiq 2 qaldi
+                    // satish qiymetini aliriq == 1 azn
+                    // qaliq sayina vururuq 2*1=2 AZN
+                    // ve aldigimiz meblegi yaziriq item-i
+                    // Bir problem var Item-imizide satish qiymeti yoxdur heleki
+                    // CIXISH YOLU - meblegi alib bolurem evvelki saya
+                    Double alishQiymeti = selectedInvoiceItem.getTotalPrice() / invoiceItemCurrentQty;
+
+                    selectedInvoiceItem.setTotalPrice(selectedInvoiceItem.getQty() * alishQiymeti);
+
                     // indi ise hazir Item-obyektimizi gonderirik yenilemeye))
                     InvoiceDAO.updateInvoiceItem(selectedInvoiceItem);
 
+                    //DIQQET: item-in meblegini hesablayiriq amma ki Invoice-nin meblegi qaldi onuda duzeltmek lazimdir
+                    //burda qaytarmadan sonraki meblegi aliriq
+                    Double qaytarmadanSonrakiMebleg = selectedInvoiceItem.getTotalPrice();
+
+                    // ve burda evvelki meblegden Sonraki meblegi cixiriq ve neticede FerqMeblegini aliriq
+                    Double ferqMeblegi = qaytarmadanEvvelkiMebleg - qaytarmadanSonrakiMebleg;
+                    System.out.println("evvelki mebleg: " + qaytarmadanEvvelkiMebleg);
+                    System.out.println("sonraki mebleg: " + qaytarmadanSonrakiMebleg);
+
+                    System.out.println("ferq mebleg: " + ferqMeblegi);
+
+                    //indi ise Invoce - obyektimizi alib onu yenilemeliyik
+                    //obyektin evvelki meblegini aliriq
+                    Double invoiceEvvelkiMebleg = invoice.getTotalPrice();
+
+                    // invoice-obyektinden ferq meblegi cixib gonderirik yenilenmeye
+                    Double invoiceSonMebleg = invoiceEvvelkiMebleg - ferqMeblegi;
+
+                    // Yenileme emeliyyati yarimciq qalir DAO hazirlamaliyam
+                    //InvoiceDAO.
                 } else {
                     System.err.println("Returner Product Not Found");
                     errorAlert("XETA", "Bu barcodla Bazada Mehsul Tapilmadi", "Mehsulu Yeniden Qeydiyyatdan kecirdin");
@@ -303,7 +329,6 @@ public class SaleInvoiceDetailsTableController implements Initializable {
             } else {
                 System.err.println("Returner Product Qty is Not Correct");
                 errorAlert("Zehmet olmasa Qaytarma Sayini dogru Daxil edin", "Qaytarmaq sayini Dogru daxil edin", "Sayi Daxil edin");
-
             }
         } else {
             System.err.println("Inputi is Not Valid");
