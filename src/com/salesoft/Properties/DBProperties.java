@@ -28,6 +28,7 @@ public class DBProperties {
     public static final String USER;
     public static final String PASSWORD;
     public static final String CONNECTION_URL;
+    public static final String CONNECTION_URL_WITHOUT_DB;
 
     /**
      * Melumatlari ilk muracietimizde yukleyirik
@@ -37,20 +38,14 @@ public class DBProperties {
         InputStream inputStream = null;
 
         try {
-            inputStream = new FileInputStream("properties/DBProperties.properties");
+            inputStream = new FileInputStream("Properties/DBProperties.properties");
         } catch (FileNotFoundException ex) {
-            System.out.println("com.salesoft.Properties.DBProperties.methodName()");
-            System.err.println("FileNotFoundException");
             Logger.getLogger(DBProperties.class.getName()).log(Level.SEVERE, null, ex);
-            createNewPropertiesFile();
         }
-        
+
         try {
             properties.load(inputStream);
         } catch (IOException ex) {
-            System.out.println("com.salesoft.Properties.DBProperties.static{}");
-            System.err.println("IOException");
-            System.err.println("inputStream==null ???? ="+(inputStream==null));
             Logger.getLogger(DBProperties.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -62,14 +57,11 @@ public class DBProperties {
         //shifremiz heleki aciq shekilde qalacaq 
         //amma irelide onuda kodlashdiracam
         PASSWORD = properties.getProperty("db.crypted.password");
-        System.out.println("PASSWORD = " + PASSWORD);
 
         CONNECTION_URL = "jdbc:mysql://" + HOST + ":" + PORT + "/" + DB_NAME + "?useSSL=false";
 
+        CONNECTION_URL_WITHOUT_DB = "jdbc:mysql://" + HOST + ":" + PORT + "/" + "?useSSL=false";
+
     }
 
-    private static void createNewPropertiesFile() {
-        System.out.println("com.salesoft.Properties.DBProperties.createNewPropertiesFile()");
-        System.exit(0);
-    }
 }

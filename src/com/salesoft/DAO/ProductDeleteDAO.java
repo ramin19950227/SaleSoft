@@ -6,7 +6,7 @@
 package com.salesoft.DAO;
 
 import com.salesoft.MainApp;
-import com.salesoft.util.MyLogger;
+import com.salesoft.util.RLogger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -30,7 +30,7 @@ public class ProductDeleteDAO {
     private static final String SQL_DELETE_PRODUCT_BY_ID = "DELETE FROM " + PRODUCT_TABLE_NAME + " WHERE id=?;";
 
     public static void deleteProductById(int id) {
-        MainApp.getLogger().log(Level.SEVERE, "ProductDeleteDAO.deleteProductById(int id)  \nid=: {0}", id);
+//        MainApp.getLogger().log(Level.SEVERE, "ProductDeleteDAO.deleteProductById(int id)  \nid=: {0}", id);
         try {
 
             Connection con = DatabaseConnection.getConnection();
@@ -40,8 +40,8 @@ public class ProductDeleteDAO {
             ps.executeUpdate();
 
         } catch (SQLException ex) {
-            new MyLogger("SQLException in - ProductDeleteDAO.deleteProductById(int id)").getLogger().log(Level.SEVERE, "\n"
-                    + "Parametr id=" + id + "\n", ex);//LOG++++++++++++++++++++
+//            new RLogger("SQLException in - ProductDeleteDAO.deleteProductById(int id)").getLogger().log(Level.SEVERE, "\n"
+//                    + "Parametr id=" + id + "\n", ex);//LOG++++++++++++++++++++
 
         }
     }

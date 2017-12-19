@@ -94,6 +94,7 @@ public class LoginController implements Initializable {
 
         btnLogin.disableProperty().bind(boolenBinding);
         userNameField.requestFocus();
+
     }
 
     @FXML
@@ -118,11 +119,11 @@ public class LoginController implements Initializable {
                             Scene scene = new Scene(root);
                             Stage stage = new Stage();
                             stage.setScene(scene);
-                            stage.setTitle("SaleSoft - a Xöş Gəlmisiniz: "+rs.getString(3));
+                            stage.setTitle("SaleSoft - a Xöş Gəlmisiniz: " + rs.getString(3));
                             stage.getIcons().add(new Image("com/salesoft/image/icon.png"));
                             stage.setMaximized(true);
                             stage.show();
-                            
+
                         } catch (IOException ex) {
                             System.out.println(ex.getLocalizedMessage());
                         }
@@ -217,34 +218,35 @@ public class LoginController implements Initializable {
     private void loadRegistration() {
         Parent root = null;
         try {
-            root = FXMLLoader.load(getClass().getResource("/view/Registration.fxml"));
+            root = FXMLLoader.load(MainApp.class.getResource("/view/Registration.fxml"));
             Scene scene = new Scene(root);
             Stage nStage = new Stage();
             nStage.setScene(scene);
             nStage.setMaximized(true);
-            nStage.setTitle("Registration -StoreKeeper");
+            nStage.setTitle("Registration - Sale Soft");
             nStage.show();
             Stage stage = (Stage) hlCreateAccount.getScene().getWindow();
             stage.close();
-        } catch (IOException e) {
-            e.getLocalizedMessage();
+        } catch (IOException ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
 
     @FXML
     private void hlDbOnAction(ActionEvent event) {
-        Parent root = null;
+        System.out.println("com.salesoft.view.LoginController.hlDbOnAction()");
+        Parent root;
         try {
-            root = FXMLLoader.load(getClass().getResource("/view/Server.fxml"));
+            root = FXMLLoader.load(MainApp.class.getResource("view/Server.fxml"));
             Scene scene = new Scene(root);
             Stage nStage = new Stage();
             nStage.setScene(scene);
             nStage.setMaximized(false);
-            nStage.setTitle("Server Status -StoreKeeper");
+            nStage.setTitle("Server Configure - Sale Soft");
             nStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

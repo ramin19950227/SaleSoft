@@ -249,22 +249,16 @@ public class ProductTableController implements Initializable {
      */
     private void updateTable(String data) {
         data = data.trim();
-        //LOG yaziriq metodun cagirilmasi ile elaqedar
-        MainApp.getLogger().log(Level.INFO, "ProductTableController.updateTable(\"*\" or \"\")(ALL) - called Parameter (String data) =:{0}", data);
 
         if (data.equals("*") || data.equals("")) {//eger daxil olan  * dursa ve ya bosh setirdirse o zaman hamsini goster
             //eger daxil olan data ULDUZ-durza (*) onda hamsini goster
             //bazya sorgu edirik ve butun mehsullari isteyirik
             //varsa qaytaracaq yoxdursa null qaytaracaq
             ArrayList<Product> requestList = ProductGetDAO.getAllProductList();
-            //ArrayList<Product> requestList = ProductGetDAO.getAllProductListNew();
 
             // yoxlayiriq eger requestList bosh deyilse
             // onda if blokundaki emirleri edirik
             if (requestList != null) {
-
-                //LOG aldigimiz Product obyektini sayini yaziriq
-                MainApp.getLogger().log(Level.SEVERE, "ProductTableController.updateTable() \nrequestList items=:{0}", requestList.size());
 
                 // Listimizi temizleyirik
                 productList.clear();
@@ -276,8 +270,6 @@ public class ProductTableController implements Initializable {
                 //cedvelimize yerleshdiririk
                 productTable.setItems(productList);
             } else {
-                //LOG 
-                MainApp.getLogger().log(Level.INFO, "ProductDAO.getAllProductList() == null");
 
             }
             //yoxlama Eger daxil edilen melumat barcoddursa o zaman songu gonderib  cavabini
@@ -285,15 +277,12 @@ public class ProductTableController implements Initializable {
         } else if (ProductGetDAO.getAllProductListByBarCode(data) != null) {// barcodla tapdisa bu blok ishe dushecek
             ArrayList<Product> requestList = ProductGetDAO.getAllProductListByBarCode(data);
 
-            MainApp.getLogger().log(Level.SEVERE, "ProductTableController.updateTable(BARCODE) \nBarCode=: {0}requestList items=:{1}", new Object[]{data, requestList.size()});
-
             productList.clear();
             productList.addAll(requestList);
             productTable.setItems(productList);
         } else if (ProductGetDAO.getAllProductListByNameLike(data) != null) {//adla axtarib tapdisa bu blok ishe dushecek
             ArrayList<Product> requestList = ProductGetDAO.getAllProductListByNameLike(data);
 
-            MainApp.getLogger().log(Level.SEVERE, "ProductTableController.updateTable(BARCODE) \nBarCode=: {0}requestList items=:{1}", new Object[]{data, requestList.size()});
 
             productList.clear();
             productList.addAll(requestList);

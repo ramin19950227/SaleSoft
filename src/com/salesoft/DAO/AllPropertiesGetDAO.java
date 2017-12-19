@@ -10,13 +10,10 @@ import com.salesoft.Properties.UIProperty;
 import com.salesoft.Properties.URLProperty;
 import com.salesoft.database.DBUtil;
 import com.salesoft.database.SQL;
-import com.salesoft.util.MyLogger;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -65,7 +62,6 @@ public class AllPropertiesGetDAO {
 
             return urlProp;
         } catch (SQLException ex) {
-            new MyLogger("SQLException in - AllPropertiesGetDAO.getURLProperty()").getLogger().log(Level.SEVERE, "SQLException", ex);
             return (null);
         } catch (MalformedURLException ex) {
             Logger.getLogger(AllPropertiesGetDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -80,7 +76,7 @@ public class AllPropertiesGetDAO {
         UIProperty up = new UIProperty();
 
         try {
-            inputStream = new FileInputStream("properties/UIProperty.properties");
+            inputStream = new FileInputStream("properties/UIProperties.properties");
             properties.load(inputStream);
 
             up.setApplicationTitle(properties.getProperty("application.Title"));
@@ -92,4 +88,8 @@ public class AllPropertiesGetDAO {
         }
 
     }
+    
+    
+    
+    
 }

@@ -6,7 +6,7 @@
 package com.salesoft.DAO;
 
 import com.salesoft.MainApp;
-import com.salesoft.util.MyLogger;
+import com.salesoft.util.RLogger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.logging.Level;
@@ -60,9 +60,9 @@ public class ProductUpdateDAO {
      * @param name - Product-a vermek istediyimiz ad
      */
     public static void updateProductNameById(int id, String name) {
-        MainApp.getLogger().log(Level.SEVERE, "ProductUpdateDAO.updateProductNameById(int id, String name)  \n"
-                + "id=: " + id
-                + "name=:" + name);
+//        MainApp.getLogger().log(Level.SEVERE, "ProductUpdateDAO.updateProductNameById(int id, String name)  \n"
+//                + "id=: " + id
+//                + "name=:" + name);
         try {
 
             Connection con = DatabaseConnection.getConnection();
@@ -73,9 +73,9 @@ public class ProductUpdateDAO {
             ps.executeUpdate();
 
         } catch (Exception ex) {
-            new MyLogger("Exception in - ProductUpdateDAO.updateProductNameById(int id, String name)").getLogger().log(Level.SEVERE, "\n"
-                    + "Parametr name=" + name + "\n"
-                    + "Parametr id=" + id + "\n", ex);//LOG++++++++++++++++++++
+//            new RLogger("Exception in - ProductUpdateDAO.updateProductNameById(int id, String name)").getLogger().log(Level.SEVERE, "\n"
+//                    + "Parametr name=" + name + "\n"
+//                    + "Parametr id=" + id + "\n", ex);//LOG++++++++++++++++++++
 
         }
     }
@@ -88,9 +88,9 @@ public class ProductUpdateDAO {
      * @param qty - Product-a vermek istediyimiz Say
      */
     public static void updateProductQtyById(int id, int qty) {
-        MainApp.getLogger().log(Level.SEVERE, "ProductUpdateDAO.updateProductQtyById(int id, int qty)  \n"
-                + "id=: " + id
-                + "qty=:" + qty);
+//        MainApp.getLogger().log(Level.SEVERE, "ProductUpdateDAO.updateProductQtyById(int id, int qty)  \n"
+//                + "id=: " + id
+//                + "qty=:" + qty);
         try {
 
             Connection con = DatabaseConnection.getConnection();
@@ -101,9 +101,9 @@ public class ProductUpdateDAO {
             ps.executeUpdate();
 
         } catch (Exception ex) {
-            new MyLogger("Exception in - ProductUpdateDAO.updateProductQtyById(int id, int qty)").getLogger().log(Level.SEVERE, "\n"
-                    + "Parametr qty=" + qty + "\n"
-                    + "Parametr id=" + id + "\n", ex);//LOG++++++++++++++++++++
+//            new RLogger("Exception in - ProductUpdateDAO.updateProductQtyById(int id, int qty)").getLogger().log(Level.SEVERE, "\n"
+//                    + "Parametr qty=" + qty + "\n"
+//                    + "Parametr id=" + id + "\n", ex);//LOG++++++++++++++++++++
 
         }
     }
@@ -116,9 +116,9 @@ public class ProductUpdateDAO {
      * @param qty - Product-a vermek istediyimiz Say
      */
     public static void updateProductPurchasePriceById(int id, double purchasePrice) {
-        MainApp.getLogger().log(Level.SEVERE, "ProductUpdateDAO.updateProductPurchasePriceById(int id, double purchasePrice)  \n"
-                + "id=: " + id
-                + "purchasePrice=:" + purchasePrice);
+//        MainApp.getLogger().log(Level.SEVERE, "ProductUpdateDAO.updateProductPurchasePriceById(int id, double purchasePrice)  \n"
+//                + "id=: " + id
+//                + "purchasePrice=:" + purchasePrice);
         try {
 
             Connection con = DatabaseConnection.getConnection();
@@ -129,9 +129,9 @@ public class ProductUpdateDAO {
             ps.executeUpdate();
 
         } catch (Exception ex) {
-            new MyLogger("Exception in - ProductUpdateDAO.updateProductPurchasePriceById(int id, double purchasePrice)").getLogger().log(Level.SEVERE, "\n"
-                    + "Parametr purchasePrice=" + purchasePrice + "\n"
-                    + "Parametr id=" + id + "\n", ex);//LOG++++++++++++++++++++
+//            new RLogger("Exception in - ProductUpdateDAO.updateProductPurchasePriceById(int id, double purchasePrice)").getLogger().log(Level.SEVERE, "\n"
+//                    + "Parametr purchasePrice=" + purchasePrice + "\n"
+//                    + "Parametr id=" + id + "\n", ex);//LOG++++++++++++++++++++
 
         }
     }
@@ -143,9 +143,9 @@ public class ProductUpdateDAO {
      * @param barCode - Product-a vermek istediyimiz Yeni BarCode
      */
     public static void updateProductBarCodeById(int id, String barCode) {
-        MainApp.getLogger().log(Level.SEVERE, "ProductUpdateDAO.updateProductBarCodeById(int id, String barCode)  \n"
-                + "id=: " + id
-                + "barCode=:" + barCode);
+//        MainApp.getLogger().log(Level.SEVERE, "ProductUpdateDAO.updateProductBarCodeById(int id, String barCode)  \n"
+//                + "id=: " + id
+//                + "barCode=:" + barCode);
         try {
 
             Connection con = DatabaseConnection.getConnection();
@@ -156,9 +156,9 @@ public class ProductUpdateDAO {
             ps.executeUpdate();
 
         } catch (Exception ex) {
-            new MyLogger("Exception in - ProductUpdateDAO.updateProductBarCodeById(int id, String barCode)").getLogger().log(Level.SEVERE, "\n"
-                    + "Parametr barCode=" + barCode + "\n"
-                    + "Parametr id=" + id + "\n", ex);//LOG++++++++++++++++++++
+//            new RLogger("Exception in - ProductUpdateDAO.updateProductBarCodeById(int id, String barCode)").getLogger().log(Level.SEVERE, "\n"
+//                    + "Parametr barCode=" + barCode + "\n"
+//                    + "Parametr id=" + id + "\n", ex);//LOG++++++++++++++++++++
 
         }
     }
@@ -171,7 +171,7 @@ public class ProductUpdateDAO {
      */
     public static void updateProductNoteById(int id, String note) {
         
-        MainApp.getLogger().log(Level.SEVERE, "ProductUpdateDAO.updateProductNoteById(int id, String note)  \nid=: {0}note=:{1}", new Object[]{id, note});
+//        MainApp.getLogger().log(Level.SEVERE, "ProductUpdateDAO.updateProductNoteById(int id, String note)  \nid=: {0}note=:{1}", new Object[]{id, note});
         try {
 
             Connection con = DatabaseConnection.getConnection();
@@ -182,9 +182,9 @@ public class ProductUpdateDAO {
             ps.executeUpdate();
 
         } catch (Exception ex) {
-            new MyLogger("Exception in - ProductUpdateDAO.updateProductNoteById(int id, String note)").getLogger().log(Level.SEVERE, "\n"
-                    + "Parametr note=" + note + "\n"
-                    + "Parametr id=" + id + "\n", ex);//LOG++++++++++++++++++++
+//            new RLogger("Exception in - ProductUpdateDAO.updateProductNoteById(int id, String note)").getLogger().log(Level.SEVERE, "\n"
+//                    + "Parametr note=" + note + "\n"
+//                    + "Parametr id=" + id + "\n", ex);//LOG++++++++++++++++++++
 
         }
     }

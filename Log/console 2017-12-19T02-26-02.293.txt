@@ -1,0 +1,7 @@
+com.salesoft.MainApp.start()
+selectSQLQuery: SELECT * FROM allproperties where type='url'
+
+com.salesoft.database.DBUtil.dbExecuteQuery()
+finally{}
+дек 19, 2017 2:26:03 AM javafx.fxml.FXMLLoader$ValueElement processValue
+WARNING: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.131

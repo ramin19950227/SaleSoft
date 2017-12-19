@@ -4,7 +4,6 @@ import com.salesoft.DAO.AllPropertiesGetDAO;
 import com.salesoft.Properties.AllProperties;
 import com.salesoft.util.MyFXMLLoader;
 import com.salesoft.util.*;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -16,8 +15,17 @@ import javafx.stage.Stage;
  */
 public class MainApp extends Application {
 
+    //Consolumuzu Fayla yazmaq ucun bu obyektden istifade edeceyik
+    //PrintStream out = RLogger.logConsoleToFile();
+    // ilk Hazirliqlarimizi Inicializasiyamizi edek
+    // qovluqlarimizi yoxlayaq her shey yolundadirmi deye
+    // hele bunun Obyektin construktorunda Baza ile elaqenide yoxlayaq
+    // yoxdursa Server Ayarlamasehifesini gosterek ki Dogru ayarlari ordan daxil edek
+    // birde girib properties faylini deyishmeyek
+    FirstStartInitialization initialization = new FirstStartInitialization();
+
     //Butun datalarin alinmasi, unvanlarin, metinlerin, tercuelerin ve s.
-    public static final AllProperties ALL_PROPERTIES = AllPropertiesGetDAO.getAllProperties();
+    public static AllProperties ALL_PROPERTIES;
 
     private static Stage primaryStage;
 
@@ -26,26 +34,11 @@ public class MainApp extends Application {
         return primaryStage;
     }
 
-    /**
-     * MyLogger Obyektini elan edirik ve yaradiriq, adini XXXXXXX-AppLog.txt
-     * qoyuruq static ve final edirik eks teqdirde error cixirdi bilmedim niye
-     */
-    private static final Logger logger = new MyLogger("AppLog").getLogger();
-
-    /**
-     * MyLogger - Proqramimizin esas MyLogger obyektinin linkini almaq ucun
-     * istifade olunur bunun sayesinde esas AppLog faylina qeydlerimizi ede
-     * bilerik proqram baglanana qeder ne ish gorulecekse qeyd ede bilerk
-     *
-     * @return
-     */
-    public static Logger getLogger() {
-        return logger;
-    }
-
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
+
+        ALL_PROPERTIES = AllPropertiesGetDAO.getAllProperties();
 
         String loginViewTitle = ALL_PROPERTIES.getUIProperty().getApplicationTitle();
 
@@ -58,13 +51,10 @@ public class MainApp extends Application {
         primaryStage.setMinHeight(500.0);
         primaryStage.setMinWidth(850.0);
         primaryStage.show();
-
-        System.out.println("java version: " + System.getProperty("java.version"));
-        System.out.println("javafx.version: " + System.getProperty("javafx.version"));
-
     }
 
     public static void main(String[] args) {
         launch(args);
     }
+
 }

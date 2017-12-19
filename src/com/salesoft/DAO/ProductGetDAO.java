@@ -9,7 +9,7 @@ import com.salesoft.MainApp;
 import com.salesoft.database.DBUtil;
 import com.salesoft.database.SQL;
 import com.salesoft.model.Product;
-import com.salesoft.util.MyLogger;
+import com.salesoft.util.RLogger;
 import com.salesoft.util.ToProduct;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -53,7 +53,7 @@ public class ProductGetDAO {
      * @return arrayList
      */
     public static ArrayList<Product> getAllProductListByNameLike(String name) {
-        MainApp.getLogger().info("SEARCH By Name: " + name);//LOG++++++++++++++++++++
+//        MainApp.getLogger().info("SEARCH By Name: " + name);//LOG++++++++++++++++++++
         Product p = null;
         try {
 
@@ -81,18 +81,18 @@ public class ProductGetDAO {
             DatabaseConnection.close(con);
             DatabaseConnection.close(rs);
             if (found) {
-                MainApp.getLogger().info("\nSEARCH result size:" + arrayList.size() + "\n");//LOG++++++++++++++++++++
-                for (Product product : arrayList) {
-                    MainApp.getLogger().info("SEARCH items:" + "\n ");//LOG++++++++++++++++++++
-                    MainApp.getLogger().info(product.getId() + "\n");//LOG++++++++++++++++++++
-                    MainApp.getLogger().info(product.getName() + "\n");//LOG++++++++++++++++++++
-                }
+//                MainApp.getLogger().info("\nSEARCH result size:" + arrayList.size() + "\n");//LOG++++++++++++++++++++
+//                for (Product product : arrayList) {
+////                    MainApp.getLogger().info("SEARCH items:" + "\n ");//LOG++++++++++++++++++++
+////                    MainApp.getLogger().info(product.getId() + "\n");//LOG++++++++++++++++++++
+////                    MainApp.getLogger().info(product.getName() + "\n");//LOG++++++++++++++++++++
+//                }
                 return arrayList;
             } else {
                 return null; // no entires found
             }
         } catch (SQLException ex) {
-            new MyLogger("ProductDAO.getAllProductListByNameLike(String name) - SQLException").getLogger().log(Level.SEVERE, "SQLException - Search word(name)=:" + name, ex);//LOG++++++++++++++++++++
+//            new RLogger("ProductDAO.getAllProductListByNameLike(String name) - SQLException").getLogger().log(Level.SEVERE, "SQLException - Search word(name)=:" + name, ex);//LOG++++++++++++++++++++
             return (null);
         }
     }
@@ -106,7 +106,7 @@ public class ProductGetDAO {
      * @return arrayList
      */
     public static ArrayList<Product> getAllProductListByBarCode(String barCode) {
-        MainApp.getLogger().info("SEARCH By barCode: " + barCode);//LOG++++++++++++++++++++
+//        MainApp.getLogger().info("SEARCH By barCode: " + barCode);//LOG++++++++++++++++++++
         Product p = null;
         try {
 
@@ -134,18 +134,18 @@ public class ProductGetDAO {
             DatabaseConnection.close(con);
             DatabaseConnection.close(rs);
             if (found) {
-                MainApp.getLogger().info("\n FIND result size:" + arrayList.size() + "\n");//LOG++++++++++++++++++++
-                for (Product product : arrayList) {
-                    MainApp.getLogger().info("FIND items:" + "\n ");//LOG++++++++++++++++++++
-                    MainApp.getLogger().info(product.getId() + "\n");//LOG++++++++++++++++++++
-                    MainApp.getLogger().info(product.getName() + "\n");//LOG++++++++++++++++++++
-                }
+//                MainApp.getLogger().info("\n FIND result size:" + arrayList.size() + "\n");//LOG++++++++++++++++++++
+//                for (Product product : arrayList) {
+//                    MainApp.getLogger().info("FIND items:" + "\n ");//LOG++++++++++++++++++++
+//                    MainApp.getLogger().info(product.getId() + "\n");//LOG++++++++++++++++++++
+//                    MainApp.getLogger().info(product.getName() + "\n");//LOG++++++++++++++++++++
+//                }
                 return arrayList;
             } else {
                 return null; // no entires found
             }
         } catch (SQLException ex) {
-            new MyLogger("ProductDAO.getAllProductListByBarCode(String BarCode) - SQLException").getLogger().log(Level.SEVERE, "SQLException - Search word(BarCode)=:" + barCode, ex);//LOG++++++++++++++++++++
+//            new RLogger("ProductDAO.getAllProductListByBarCode(String BarCode) - SQLException").getLogger().log(Level.SEVERE, "SQLException - Search word(BarCode)=:" + barCode, ex);//LOG++++++++++++++++++++
             return (null);
         }
     }
@@ -165,7 +165,7 @@ public class ProductGetDAO {
 
             return ToProduct.getProduct(ps, con);
         } catch (SQLException ex) {
-            new MyLogger("SQLException in - ProductGetDAO.getProductById(int id)").getLogger().log(Level.SEVERE, "SQLException - id=:" + id, ex);//LOG++++++++++++++++++++
+//            new RLogger("SQLException in - ProductGetDAO.getProductById(int id)").getLogger().log(Level.SEVERE, "SQLException - id=:" + id, ex);//LOG++++++++++++++++++++
             return (null);
         }
     }
@@ -178,7 +178,7 @@ public class ProductGetDAO {
 
             return ToProduct.getProduct(ps, con);
         } catch (SQLException ex) {
-            new MyLogger("SQLException in - ProductGetDAO.getProductByBarCode(String barCode)").getLogger().log(Level.SEVERE, "SQLException - barCode=:" + barCode, ex);//LOG++++++++++++++++++++
+//            new RLogger("SQLException in - ProductGetDAO.getProductByBarCode(String barCode)").getLogger().log(Level.SEVERE, "SQLException - barCode=:" + barCode, ex);//LOG++++++++++++++++++++
             return (null);
         }
     }

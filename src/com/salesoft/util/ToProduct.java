@@ -141,7 +141,7 @@ public class ToProduct {
                 return null; // no entires found
             }
         } catch (SQLException ex) {
-            new MyLogger("SQLException in - com.salesof.util.PStoProduct").getLogger().log(Level.SEVERE, null, ex);
+//            new RLogger("SQLException in - com.salesof.util.PStoProduct").getLogger().log(Level.SEVERE, null, ex);
             return (null);
         }
     }

@@ -6,7 +6,7 @@ import com.salesoft.database.SQL;
 import com.salesoft.model.CartItem;
 import com.salesoft.model.Invoice;
 import com.salesoft.model.InvoiceItem;
-import com.salesoft.util.MyLogger;
+import com.salesoft.util.RLogger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -105,7 +105,7 @@ public class InvoiceDAO {
                 return null; // no entires found
             }
         } catch (SQLException ex) {
-            new MyLogger("ProductDAO.getAllProductList() - SQLException").getLogger().log(Level.SEVERE, "SQLException - in metod: (ArrayList<Product> getAllProductList())", ex);//LOG++++++++++++++++++++
+//            new RLogger("ProductDAO.getAllProductList() - SQLException").getLogger().log(Level.SEVERE, "SQLException - in metod: (ArrayList<Product> getAllProductList())", ex);//LOG++++++++++++++++++++
             return (null);
         }
     }
@@ -118,9 +118,9 @@ public class InvoiceDAO {
      * @deprecated
      */
     public static void updateInvoiceCustoemerNameById(Integer id, String customerName) {
-        MainApp.getLogger().log(Level.SEVERE, "InvoiceDAO.updateInvoiceCustoemerNameById(int id, String customerName)  \n"
-                + "id=: " + id
-                + "customerName=:" + customerName);
+//        MainApp.getLogger().log(Level.SEVERE, "InvoiceDAO.updateInvoiceCustoemerNameById(int id, String customerName)  \n"
+//                + "id=: " + id
+//                + "customerName=:" + customerName);
         try {
 
             Connection con = DatabaseConnection.getConnection();
@@ -131,9 +131,9 @@ public class InvoiceDAO {
             ps.executeUpdate();
 
         } catch (Exception ex) {
-            new MyLogger("Exception in - InvoiceDAO.updateInvoiceCustoemerNameById(int id, String customerName)").getLogger().log(Level.SEVERE, "\n"
-                    + "Parametr customerName=" + customerName + "\n"
-                    + "Parametr id=" + id + "\n", ex);//LOG++++++++++++++++++++
+//            new RLogger("Exception in - InvoiceDAO.updateInvoiceCustoemerNameById(int id, String customerName)").getLogger().log(Level.SEVERE, "\n"
+//                    + "Parametr customerName=" + customerName + "\n"
+//                    + "Parametr id=" + id + "\n", ex);//LOG++++++++++++++++++++
 
         }
     }

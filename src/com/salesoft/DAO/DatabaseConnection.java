@@ -1,6 +1,6 @@
 package com.salesoft.DAO;
 
-import com.salesoft.util.MyLogger;
+import com.salesoft.util.RLogger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -41,13 +41,13 @@ public class DatabaseConnection {
             con = DriverManager.getConnection(connectionURL, "" + USER + "", "" + PASSWORD + "");
 
         } catch (SQLException ex) {
-            new MyLogger("DatabaseConnection - SQLException").getLogger().log(Level.SEVERE, "SQLException", ex);
+            //new RLogger("DatabaseConnection - SQLException").getLogger().log(Level.SEVERE, "SQLException", ex);
         } catch (ClassNotFoundException ex) {
-            new MyLogger("DatabaseConnection - ClassNotFoundException").getLogger().log(Level.SEVERE, "ClassNotFoundException", ex);
+//            new RLogger("DatabaseConnection - ClassNotFoundException").getLogger().log(Level.SEVERE, "ClassNotFoundException", ex);
         } catch (InstantiationException ex) {
-            new MyLogger("DatabaseConnection - InstantiationException").getLogger().log(Level.SEVERE, "InstantiationException", ex);
+//            new RLogger("DatabaseConnection - InstantiationException").getLogger().log(Level.SEVERE, "InstantiationException", ex);
         } catch (IllegalAccessException ex) {
-            new MyLogger("DatabaseConnection - IllegalAccessException").getLogger().log(Level.SEVERE, "IllegalAccessException", ex);
+//            new RLogger("DatabaseConnection - IllegalAccessException").getLogger().log(Level.SEVERE, "IllegalAccessException", ex);
         }
         return con;
     }
@@ -70,7 +70,7 @@ public class DatabaseConnection {
             try {
                 con.close();
             } catch (SQLException ex) {
-                new MyLogger("DatabaseConnection.close(con) - SQLException").getLogger().log(Level.SEVERE, "SQLException : Error in DatabaseConnection.close(Connection con)", ex);
+//                new RLogger("DatabaseConnection.close(con) - SQLException").getLogger().log(Level.SEVERE, "SQLException : Error in DatabaseConnection.close(Connection con)", ex);
             }
 
         }
@@ -90,7 +90,7 @@ public class DatabaseConnection {
             try {
                 rs.close();
             } catch (SQLException ex) {
-                new MyLogger("DatabaseConnection.close(rs) - SQLException").getLogger().log(Level.SEVERE, "SQLException : Error in DatabaseConnection.close(ResultSet rs)", ex);
+//                new RLogger("DatabaseConnection.close(rs) - SQLException").getLogger().log(Level.SEVERE, "SQLException : Error in DatabaseConnection.close(ResultSet rs)", ex);
             }
         }
 
@@ -101,7 +101,7 @@ public class DatabaseConnection {
             try {
                 ps.close();
             } catch (SQLException ex) {
-                new MyLogger("SQLException in - DatabaseConnection.close(ps) - ").getLogger().log(Level.SEVERE, "ps.close()", ex);
+//                new RLogger("SQLException in - DatabaseConnection.close(ps) - ").getLogger().log(Level.SEVERE, "ps.close()", ex);
             }
         }
     }
