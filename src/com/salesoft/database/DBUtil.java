@@ -6,6 +6,7 @@
 package com.salesoft.database;
 
 import com.salesoft.Properties.DBProperties;
+import com.salesoft.util.RLogger;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,15 +35,11 @@ public class DBUtil {
         // MySQL driverini hazirlayiriq teyin edirik
         try {
             Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException ex) {
-            System.err.println("ClassNotFoundException");
-            System.out.println("com.salesoft.database.DBUtil.static{initialization block}");
+        } catch (ClassNotFoundException e) {
+            RLogger.logException("ClassNotFoundException", e);
 
-            System.out.println("Where is You MySql JDBC Driver? ;) ");
-            Logger.getLogger(DBUtil.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Where is You MySql JDBC Driver? ;) " + e);
         }
-
-        System.out.println("MySQL JDBC Driver = OK!");
     }
 
     /**
@@ -52,8 +49,6 @@ public class DBUtil {
      * @throws java.sql.SQLException
      */
     public static void dbConnect() throws SQLException {
-        
-        
 
         // CONNECTION_URL - addressimizden stifade ederek bazamizla elaqe qurmaga calishiriq;
         try {
@@ -63,10 +58,8 @@ public class DBUtil {
             stmt = null;
 
         } catch (SQLException e) {
-            System.out.println("com.salesoft.database.DBUtil.dbConnect()");
             System.out.println("Elaqe Ugursuz alindi! " + e);
-            String message = e.getMessage();
-            System.out.println(message);
+            RLogger.logException("DBUtil.dbConnect() - SQLException", e);
             throw e;
         }
         // ve Bitdi. Bize lazim olan bu qeder idi elaqe qurduq ve yerleshdirdik conn adli unvana
@@ -106,6 +99,7 @@ public class DBUtil {
         } catch (SQLException e) {
             System.out.println("com.salesoft.database.DBUtil.dbDisconnect()");
             System.out.println("SQLException details is: " + e.getLocalizedMessage());
+
             throw e;
         }
     }
@@ -140,10 +134,9 @@ public class DBUtil {
             return rs;
         } catch (SQLException e) {
             System.out.println("Problem occurred at executeQuery operation : " + e);
+            RLogger.logException("DBUtil.dbExecuteQuery() - SQLException", e);
             throw e;
         } finally {
-            System.out.println("com.salesoft.database.DBUtil.dbExecuteQuery()");
-            System.out.println("finally{}");
             //Close connection
             // OLMAZZZZZZ:
             //java.sql.SQLException: Operation not allowed after ResultSet closed
@@ -182,6 +175,16 @@ public class DBUtil {
         } finally {
             //Close connection
             dbDisconnect();
+        }
+    }
+
+    public static boolean hasConnetion() throws SQLException {
+        try {
+            conn = DriverManager.getConnection(DBProperties.CONNECTION_URL_WITHOUT_DB, "" + DBProperties.USER + "", "" + DBProperties.PASSWORD);
+            dbDisconnect();
+            return true;
+        } catch (SQLException ex) {
+            throw ex;
         }
     }
 }
