@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.salesoft.view;
+package com.salesoft.controller;
 
+import com.salesoft.controller.ApplicationController;
 import com.salesoft.MainApp;
 import com.salesoft.util.MyFXMLLoader;
 import java.net.URL;

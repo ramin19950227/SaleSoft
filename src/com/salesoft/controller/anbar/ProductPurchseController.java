@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.salesoft.view.anbar;
+package com.salesoft.controller.anbar;
 
 import com.salesoft.DAO.ProductGetDAO;
 import com.salesoft.DAO.ProductUpdateDAO;
 import com.salesoft.DAO.ProductNewDAO;
 import com.salesoft.MainApp;
 import com.salesoft.model.Product;
-import com.salesoft.view.AnbarRootLayoutController;
+import com.salesoft.controller.AnbarRootLayoutController;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;

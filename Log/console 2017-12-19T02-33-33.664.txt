@@ -1,3 +1,0 @@
-com.salesoft.MainApp.start()
-дек 19, 2017 2:33:33 AM javafx.fxml.FXMLLoader$ValueElement processValue
-WARNING: Loading FXML document with JavaFX API of version 9.0.1 by JavaFX runtime of version 8.0.131

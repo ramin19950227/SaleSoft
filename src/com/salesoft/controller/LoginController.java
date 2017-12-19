@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.salesoft.view;
+package com.salesoft.controller;
 
 import com.salesoft.DAO.DatabaseConnection;
 import com.salesoft.MainApp;

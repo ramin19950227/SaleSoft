@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.salesoft.view;
+package com.salesoft.controller.anbar;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -14,7 +14,7 @@ import javafx.fxml.Initializable;
  *
  * @author Ramin
  */
-public class HOMEController implements Initializable {
+public class PurchaseInvoiceTableController implements Initializable {
 
     /**
      * Initializes the controller class.

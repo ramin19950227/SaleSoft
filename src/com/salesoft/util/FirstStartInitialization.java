@@ -128,7 +128,7 @@ public class FirstStartInitialization {
 
             try {
                 output = new FileOutputStream("Properties/UIProperties.properties");
-                properties.setProperty("application.Title", "SaleSoft - a Xos G\\u0259lmisiniz - Login Bolumu");
+                properties.setProperty("application.Title", "SaleSoft - a Xos G\u0259lmisiniz - Login Bolumu");
                 properties.store(output, null);
                 output.close();
             } catch (FileNotFoundException ex) {

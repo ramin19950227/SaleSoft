@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.salesoft.view.anbar;
+package com.salesoft.controller.anbar;
 
 import com.salesoft.DAO.ProductDeleteDAO;
 import com.salesoft.DAO.ProductGetDAO;
