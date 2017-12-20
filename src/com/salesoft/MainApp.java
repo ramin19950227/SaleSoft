@@ -15,15 +15,20 @@ import javafx.stage.Stage;
  */
 public class MainApp extends Application {
 
+    public MainApp() {
+
+        // ilk Hazirliqlarimizi Inicializasiyamizi edek
+        // qovluqlarimizi yoxlayaq her shey yolundadirmi deye
+        Initializator.initMyProperties();
+
+        Initializator.initFoldersAndFiles();
+
+        Initializator.initDataBase();
+
+    }
+
     //Consolumuzu Fayla yazmaq ucun bu obyektden istifade edeceyik
     //PrintStream out = RLogger.logConsoleToFile();
-    // ilk Hazirliqlarimizi Inicializasiyamizi edek
-    // qovluqlarimizi yoxlayaq her shey yolundadirmi deye
-    // hele bunun Obyektin construktorunda Baza ile elaqenide yoxlayaq
-    // yoxdursa Server Ayarlamasehifesini gosterek ki Dogru ayarlari ordan daxil edek
-    // birde girib properties faylini deyishmeyek
-    FirstStartInitialization initialization = new FirstStartInitialization();
-
     //Butun datalarin alinmasi, unvanlarin, metinlerin, tercuelerin ve s.
     public static AllProperties ALL_PROPERTIES;
 

@@ -9,7 +9,7 @@ import com.salesoft.MainApp;
 import com.salesoft.database.DBUtil;
 import com.salesoft.database.SQL;
 import com.salesoft.model.Product;
-import com.salesoft.util.RLogger;
+import com.salesoft.util.MyLogger;
 import com.salesoft.util.ToProduct;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -92,7 +92,7 @@ public class ProductGetDAO {
                 return null; // no entires found
             }
         } catch (SQLException ex) {
-//            new RLogger("ProductDAO.getAllProductListByNameLike(String name) - SQLException").getLogger().log(Level.SEVERE, "SQLException - Search word(name)=:" + name, ex);//LOG++++++++++++++++++++
+//            new MyLogger("ProductDAO.getAllProductListByNameLike(String name) - SQLException").getLogger().log(Level.SEVERE, "SQLException - Search word(name)=:" + name, ex);//LOG++++++++++++++++++++
             return (null);
         }
     }
@@ -145,7 +145,7 @@ public class ProductGetDAO {
                 return null; // no entires found
             }
         } catch (SQLException ex) {
-//            new RLogger("ProductDAO.getAllProductListByBarCode(String BarCode) - SQLException").getLogger().log(Level.SEVERE, "SQLException - Search word(BarCode)=:" + barCode, ex);//LOG++++++++++++++++++++
+//            new MyLogger("ProductDAO.getAllProductListByBarCode(String BarCode) - SQLException").getLogger().log(Level.SEVERE, "SQLException - Search word(BarCode)=:" + barCode, ex);//LOG++++++++++++++++++++
             return (null);
         }
     }
@@ -165,7 +165,7 @@ public class ProductGetDAO {
 
             return ToProduct.getProduct(ps, con);
         } catch (SQLException ex) {
-//            new RLogger("SQLException in - ProductGetDAO.getProductById(int id)").getLogger().log(Level.SEVERE, "SQLException - id=:" + id, ex);//LOG++++++++++++++++++++
+//            new MyLogger("SQLException in - ProductGetDAO.getProductById(int id)").getLogger().log(Level.SEVERE, "SQLException - id=:" + id, ex);//LOG++++++++++++++++++++
             return (null);
         }
     }
@@ -178,7 +178,7 @@ public class ProductGetDAO {
 
             return ToProduct.getProduct(ps, con);
         } catch (SQLException ex) {
-//            new RLogger("SQLException in - ProductGetDAO.getProductByBarCode(String barCode)").getLogger().log(Level.SEVERE, "SQLException - barCode=:" + barCode, ex);//LOG++++++++++++++++++++
+//            new MyLogger("SQLException in - ProductGetDAO.getProductByBarCode(String barCode)").getLogger().log(Level.SEVERE, "SQLException - barCode=:" + barCode, ex);//LOG++++++++++++++++++++
             return (null);
         }
     }

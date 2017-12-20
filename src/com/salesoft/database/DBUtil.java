@@ -5,8 +5,9 @@
  */
 package com.salesoft.database;
 
-import com.salesoft.Properties.DBProperties;
-import com.salesoft.util.RLogger;
+import com.salesoft.Properties.DBProperties3;
+import com.salesoft.util.MyLogger;
+import com.salesoft.util.MyProperties;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,7 +37,7 @@ public class DBUtil {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            RLogger.logException("ClassNotFoundException", e);
+            MyLogger.logException("ClassNotFoundException", e);
 
             System.out.println("Where is You MySql JDBC Driver? ;) " + e);
         }
@@ -53,15 +54,17 @@ public class DBUtil {
         // CONNECTION_URL - addressimizden stifade ederek bazamizla elaqe qurmaga calishiriq;
         try {
             // Elde etdyimz Elaqe (Connection) Obyektini conn adli yuxarida elan etdiyimiz unvana yerleshdiririk;
-            conn = DriverManager.getConnection(DBProperties.CONNECTION_URL, "" + DBProperties.USER + "", "" + DBProperties.PASSWORD);
+            conn = DriverManager.getConnection(DBProperties3.CONNECTION_URL, "" + DBProperties3.USER + "", "" + DBProperties3.PASSWORD);
             rs = null;
             stmt = null;
 
         } catch (SQLException e) {
             System.out.println("Elaqe Ugursuz alindi! " + e);
-            RLogger.logException("DBUtil.dbConnect() - SQLException", e);
+            MyLogger.logException("DBUtil.dbConnect() - SQLException", e);
             throw e;
         }
+        // ve Bitdi. Bize lazim olan bu qeder idi elaqe qurduq ve yerleshdirdik conn adli unvana
+        // ve Obyektimiz artiq istifadeye hazirdir. ishimiz bitirdikden sonra baglamagi unutmayin
         // ve Bitdi. Bize lazim olan bu qeder idi elaqe qurduq ve yerleshdirdik conn adli unvana
         // ve Obyektimiz artiq istifadeye hazirdir. ishimiz bitirdikden sonra baglamagi unutmayin
     }
@@ -134,7 +137,7 @@ public class DBUtil {
             return rs;
         } catch (SQLException e) {
             System.out.println("Problem occurred at executeQuery operation : " + e);
-            RLogger.logException("DBUtil.dbExecuteQuery() - SQLException", e);
+            MyLogger.logException("DBUtil.dbExecuteQuery() - SQLException", e);
             throw e;
         } finally {
             //Close connection
@@ -178,13 +181,12 @@ public class DBUtil {
         }
     }
 
-    public static boolean hasConnetion() throws SQLException {
+    public static boolean hasConnetion() {
         try {
-            conn = DriverManager.getConnection(DBProperties.CONNECTION_URL_WITHOUT_DB, "" + DBProperties.USER + "", "" + DBProperties.PASSWORD);
-            dbDisconnect();
+            conn = DriverManager.getConnection(MyProperties.DB.getDirectUrl());
             return true;
         } catch (SQLException ex) {
-            throw ex;
+            return false;
         }
     }
 }

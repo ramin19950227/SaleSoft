@@ -6,7 +6,7 @@
 package com.salesoft.controller;
 
 import com.salesoft.MainApp;
-import com.salesoft.util.RAlert;
+import com.salesoft.util.MyAlert;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -159,7 +159,7 @@ public class ServerController implements Initializable {
             Logger.getLogger(ServerController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             lablServerStatus.setText("Server is NOT running");
-            RAlert.alertContent(Integer.SIZE, "SERVER Sonuludur");
+            MyAlert.alertContent(Integer.SIZE, "SERVER Sonuludur");
         }
     }
 

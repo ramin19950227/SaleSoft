@@ -5,14 +5,17 @@
  */
 package com.salesoft.util;
 
+import java.util.Optional;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 /**
  *
  * @author Ramin
  */
-public class RAlert {
+public class MyAlert {
 
     public static void alertAndExitByCode(Integer kod) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -48,6 +51,17 @@ public class RAlert {
         alert.initStyle(StageStyle.UNIFIED);
 
         alert.showAndWait();
+    }
+
+    public static Optional<ButtonType> alertOptionalContent(Integer kod, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Server connect successfully");
+        alert.setHeaderText("Login now");
+        alert.setContentText(content);
+        alert.initStyle(StageStyle.DECORATED);
+        Optional<ButtonType> result = alert.showAndWait();
+
+        return result;
     }
 
 }

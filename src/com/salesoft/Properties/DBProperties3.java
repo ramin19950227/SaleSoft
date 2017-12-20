@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author Ramin
  */
-public class DBProperties {
+public class DBProperties3 {
 
     /**
      * Elaqe ucun lazim olan melumatlarimiz
@@ -40,13 +40,13 @@ public class DBProperties {
         try {
             inputStream = new FileInputStream("Properties/DBProperties.properties");
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(DBProperties.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DBProperties3.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         try {
             properties.load(inputStream);
         } catch (IOException ex) {
-            Logger.getLogger(DBProperties.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DBProperties3.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         HOST = properties.getProperty("db.host");
@@ -60,7 +60,7 @@ public class DBProperties {
 
         CONNECTION_URL = "jdbc:mysql://" + HOST + ":" + PORT + "/" + DB_NAME + "?useSSL=false";
 
-        CONNECTION_URL_WITHOUT_DB = "jdbc:mysql://" + HOST + ":" + PORT + "/" + "?useSSL=false";
+        CONNECTION_URL_WITHOUT_DB = "jdbc:mysql://" + HOST + ":" + PORT + "/?useSSL=false&user=" + USER + "&password=" + PASSWORD + "";
 
     }
 

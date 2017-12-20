@@ -1,6 +1,5 @@
 package com.salesoft.util;
 
-import com.salesoft.MainApp;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -16,7 +15,7 @@ import java.util.logging.Logger;
  *
  * @author Ramin
  */
-public class RLogger {
+public class MyLogger {
 
     // Bu obyekt ile Biz faylimiza setirleri yaza bileceyik ve Consolu yazmaq ucun
     // System -e bu obyekti vereceyik
@@ -40,7 +39,7 @@ public class RLogger {
             System.err.println("message" + message);
 
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(RLogger.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MyLogger.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (out != null) {
                 out.close();
@@ -50,7 +49,7 @@ public class RLogger {
 
     public static PrintStream logConsoleToFile() {
         try {
-            
+
             //her ehtimal burdada yoxlayiram loggovlugunu
             File f = new File("Log\\Exceptions\\");
             if (!f.exists()) {
@@ -66,7 +65,31 @@ public class RLogger {
             System.setErr(out);
 
         } catch (FileNotFoundException ex) {
-            RAlert.alertAndExitByCodeAndContent(1, "Consol fayli ile Elaqedar Problem");
+            MyAlert.alertAndExitByCodeAndContent(1, "Consol fayli ile Elaqedar Problem");
+            return null;
+        }
+        return out;
+    }
+
+    public static PrintStream logExceptionFromConsole() {
+        try {
+
+            //her ehtimal burdada yoxlayiram loggovlugunu
+            File f = new File("Log\\Exceptions\\");
+            if (!f.exists()) {
+                System.err.println("Creating Folder for Exception Logs ");
+                f.mkdirs();
+            }
+
+            LocalDateTime timePoint = LocalDateTime.now();
+
+            // TODO code application logic here
+            out = new PrintStream(new FileOutputStream("Log/Exceptions/consoleException " + (timePoint.format(DateTimeFormatter.ISO_DATE_TIME).replaceAll(":", "-")) + ".txt"));
+            System.setOut(out);
+            System.setErr(out);
+
+        } catch (FileNotFoundException ex) {
+            MyAlert.alertAndExitByCodeAndContent(1, "Consol fayli ile Elaqedar Problem");
             return null;
         }
         return out;

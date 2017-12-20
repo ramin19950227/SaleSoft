@@ -6,7 +6,7 @@
 package com.salesoft.DAO;
 
 import com.salesoft.MainApp;
-import com.salesoft.util.RLogger;
+import com.salesoft.util.MyLogger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.logging.Level;
@@ -73,7 +73,7 @@ public class ProductUpdateDAO {
             ps.executeUpdate();
 
         } catch (Exception ex) {
-//            new RLogger("Exception in - ProductUpdateDAO.updateProductNameById(int id, String name)").getLogger().log(Level.SEVERE, "\n"
+//            new MyLogger("Exception in - ProductUpdateDAO.updateProductNameById(int id, String name)").getLogger().log(Level.SEVERE, "\n"
 //                    + "Parametr name=" + name + "\n"
 //                    + "Parametr id=" + id + "\n", ex);//LOG++++++++++++++++++++
 
@@ -101,7 +101,7 @@ public class ProductUpdateDAO {
             ps.executeUpdate();
 
         } catch (Exception ex) {
-//            new RLogger("Exception in - ProductUpdateDAO.updateProductQtyById(int id, int qty)").getLogger().log(Level.SEVERE, "\n"
+//            new MyLogger("Exception in - ProductUpdateDAO.updateProductQtyById(int id, int qty)").getLogger().log(Level.SEVERE, "\n"
 //                    + "Parametr qty=" + qty + "\n"
 //                    + "Parametr id=" + id + "\n", ex);//LOG++++++++++++++++++++
 
@@ -129,7 +129,7 @@ public class ProductUpdateDAO {
             ps.executeUpdate();
 
         } catch (Exception ex) {
-//            new RLogger("Exception in - ProductUpdateDAO.updateProductPurchasePriceById(int id, double purchasePrice)").getLogger().log(Level.SEVERE, "\n"
+//            new MyLogger("Exception in - ProductUpdateDAO.updateProductPurchasePriceById(int id, double purchasePrice)").getLogger().log(Level.SEVERE, "\n"
 //                    + "Parametr purchasePrice=" + purchasePrice + "\n"
 //                    + "Parametr id=" + id + "\n", ex);//LOG++++++++++++++++++++
 
@@ -156,7 +156,7 @@ public class ProductUpdateDAO {
             ps.executeUpdate();
 
         } catch (Exception ex) {
-//            new RLogger("Exception in - ProductUpdateDAO.updateProductBarCodeById(int id, String barCode)").getLogger().log(Level.SEVERE, "\n"
+//            new MyLogger("Exception in - ProductUpdateDAO.updateProductBarCodeById(int id, String barCode)").getLogger().log(Level.SEVERE, "\n"
 //                    + "Parametr barCode=" + barCode + "\n"
 //                    + "Parametr id=" + id + "\n", ex);//LOG++++++++++++++++++++
 
@@ -182,7 +182,7 @@ public class ProductUpdateDAO {
             ps.executeUpdate();
 
         } catch (Exception ex) {
-//            new RLogger("Exception in - ProductUpdateDAO.updateProductNoteById(int id, String note)").getLogger().log(Level.SEVERE, "\n"
+//            new MyLogger("Exception in - ProductUpdateDAO.updateProductNoteById(int id, String note)").getLogger().log(Level.SEVERE, "\n"
 //                    + "Parametr note=" + note + "\n"
 //                    + "Parametr id=" + id + "\n", ex);//LOG++++++++++++++++++++
 
