@@ -16,8 +16,8 @@ import com.salesoft.model.Users;
 //import dataBase.DBProperties;
 import com.salesoft.DAO.DatabaseConnection;
 import com.salesoft.MainApp;
-import static com.salesoft.MainApp.ALL_PROPERTIES;
 import com.salesoft.util.MyFXMLLoader;
+import com.salesoft.util.MyProperties;
 import com.sun.javaws.Main;
 import java.io.IOException;
 import java.net.URL;
@@ -252,7 +252,7 @@ public class ApplicationController implements Initializable {
         FXMLLoader loader = new FXMLLoader();
 
         // loaderimize sehifemizin unvanini gosteririk
-        loader.setLocation(MainApp.ALL_PROPERTIES.getURLProperty().getAnbarRootLayoutURL());
+        loader.setLocation(MyProperties.getURLProperties().getAnbarRootLayoutURL());
 
         //sehifemizi yukleyitik
         // ve yalniz sehifemizi yuledikden sonra Controllerimizi ala bilerik
@@ -283,7 +283,7 @@ public class ApplicationController implements Initializable {
         FXMLLoader loader = new FXMLLoader();
 
         // loaderimize sehifemizin unvanini gosteririk
-        loader.setLocation(MainApp.ALL_PROPERTIES.getURLProperty().getSaleRootLayoutURL());
+        loader.setLocation(MyProperties.getURLProperties().getSaleRootLayoutURL());
 
         //sehifemizi yukleyitik
         // ve yalniz sehifemizi yuledikden sonra Controllerimizi ala bilerik

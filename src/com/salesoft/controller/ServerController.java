@@ -7,7 +7,7 @@ package com.salesoft.controller;
 
 import com.salesoft.MainApp;
 import com.salesoft.database.DBUtil;
-import com.salesoft.model.DBProperties;
+import com.salesoft.model.Properties.DBProperties;
 import com.salesoft.util.Initializator;
 import com.salesoft.util.MyProperties;
 import java.io.FileInputStream;

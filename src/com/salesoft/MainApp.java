@@ -1,10 +1,10 @@
 package com.salesoft;
 
-import com.salesoft.DAO.AllPropertiesGetDAO;
-import com.salesoft.Properties.AllProperties;
 import com.salesoft.util.MyFXMLLoader;
 import com.salesoft.util.*;
+import java.net.URL;
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -35,8 +35,7 @@ public class MainApp extends Application {
 
     //Consolumuzu Fayla yazmaq ucun bu obyektden istifade edeceyik
     //PrintStream out = RLogger.logConsoleToFile();
-    //Butun datalarin alinmasi, unvanlarin, metinlerin, tercuelerin ve s.
-    public static AllProperties ALL_PROPERTIES;
+
 
     private static Stage primaryStage;
 
@@ -47,13 +46,23 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        this.primaryStage = primaryStage;
+        MainApp.primaryStage = primaryStage;
 
-        ALL_PROPERTIES = AllPropertiesGetDAO.getAllProperties();
+        //ALL_PROPERTIES = AllPropertiesGetDAO.getAllProperties();
 
-        String loginViewTitle = ALL_PROPERTIES.getUIProperty().getApplicationTitle();
+        String loginViewTitle = MyProperties.getUIProperties().getApplicationTitle();
 
-        primaryStage.setScene(MyFXMLLoader.getSceneFromURL(ALL_PROPERTIES.getURLProperty().getLoginFxmlURL()));
+        /**
+         * Login Sehifemizin URL addressi
+         */
+        URL loginViewURL = MyProperties.getURLProperties().getLoginFxmlURL();
+        
+        /**
+         * Login Sehifemizin Scene obyekti
+         */
+        Scene loginViewScene = MyFXMLLoader.getSceneFromURL(loginViewURL);
+
+        primaryStage.setScene(loginViewScene);
 
         primaryStage.setTitle(loginViewTitle);
 

@@ -6,7 +6,7 @@
 package com.salesoft.database;
 
 import com.salesoft.MainApp;
-import com.salesoft.model.DBProperties;
+import com.salesoft.model.Properties.DBProperties;
 import com.salesoft.util.*;
 import java.io.IOException;
 import java.net.ConnectException;

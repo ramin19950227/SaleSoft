@@ -5,8 +5,12 @@
  */
 package com.salesoft.util;
 
-import com.salesoft.DAO.MyPropertiesDAO;
-import com.salesoft.model.DBProperties;
+import com.salesoft.DAO.Properties.DBPropertiesDAO;
+import com.salesoft.DAO.Properties.UIPropertiesDAO;
+import com.salesoft.DAO.Properties.URLPropertiesDAO;
+import com.salesoft.model.Properties.DBProperties;
+import com.salesoft.model.Properties.UIProperties;
+import com.salesoft.model.Properties.URLProperties;
 
 /**
  * Bu Class- ile Properties Obyektlerimizle Oxuma ve Yazma emeliyyatlari
@@ -21,45 +25,75 @@ import com.salesoft.model.DBProperties;
 public class MyProperties {
 
     private static DBProperties DBProperties;
+    private static URLProperties URLProperties;
+    private static UIProperties UIProperties;
 
     public static void init() {
         updateDBProperties();
+        updateURLProperties();
+        updateUIProperties();
     }
 
     /**
-     * Metod DBProperties obyektimizi yenileyir, Yenileme ishini MyPropertiesDAO
+     * Metod dBProperties obyektimizi yenileyir, Yenileme ishini DBPropertiesDAO
      * edir, Yenileme - yani properties faylini yeniden oxuyur ve yeni
-     * melumatlarla doldurur DBProperties Obyektimizi
+     * melumatlarla doldurur dBProperties Obyektimizi
      */
     public static void updateDBProperties() {
-        DBProperties = MyPropertiesDAO.loadDbPropertyFromFile();
+        DBProperties = DBPropertiesDAO.loadDbPropertiesFromFile();
+    }
+
+    public static void updateURLProperties() {
+        URLProperties = URLPropertiesDAO.loadURLPropertiesFromFile();
+    }
+
+    public static void updateUIProperties() {
+        UIProperties = UIPropertiesDAO.loadUIPropertiesFromFile();
     }
 
     /**
-     * Metod Parametr olaraq verilen DBProperties Obyektini gonderir DAO ya
+     * Metod Parametr olaraq verilen dBProperties Obyektini gonderir DAO ya
      * Fayla yazmaq ucun ve Avtomatik olaraq MyProperties-in icinde olan
-     * DBProperties OByektini yenileyir
+     * dBProperties OByektini yenileyir
      *
      * @param dbp
      */
     public static void saveDBProperties(DBProperties dbp) {
 
         // aldigimiz obyekti gonderek DAO-ya
-        MyPropertiesDAO.saveDBPropertiesToFile(dbp);
+        DBPropertiesDAO.saveDBPropertiesToFile(dbp);
 
         // yaddasha yazdiqdan sonra yeni melumatlari almaq ucun Obyektimizi yenileyek
         updateDBProperties();
     }
 
+    public static void saveURLProperties(URLProperties urlp) {
+        URLPropertiesDAO.saveURLPropertiesToFile(urlp);
+        updateURLProperties();
+    }
+
+    public static void saveUIProperties(UIProperties uip) {
+        UIPropertiesDAO.saveUIPropertiesToFile(uip);
+        updateURLProperties();
+    }
+
     /**
      * Bu metod Bu Class-in init() funksiyasi ishe dushdukden sonra elde edilen
-     * DBProperties obyektini qaytarir, bu obyekti yenilemek ucun
+     * dBProperties obyektini qaytarir, bu obyekti yenilemek ucun
      * updateDBProperties() - funksiyasini cagirmaq lazimdir
      *
      * @return
      */
     public static DBProperties getDBProperties() {
         return DBProperties;
+    }
+
+    public static URLProperties getURLProperties() {
+        return URLProperties;
+    }
+
+    public static UIProperties getUIProperties() {
+        return UIProperties;
     }
 
 }

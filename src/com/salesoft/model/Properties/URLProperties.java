@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.salesoft.Properties;
+package com.salesoft.model.Properties;
 
 import com.salesoft.MainApp;
 import java.net.MalformedURLException;
@@ -13,28 +13,28 @@ import java.net.URL;
  *
  * @author Ramin
  */
-public class URLProperty {
+public class URLProperties {
 
     private final URL MainAppURL;
-    private final URL LoginFxmlURL; // 3 in DB table
-    private final URL ApplicationFxmlURL; //4 DB table
-    private final URL HomeFxmlURL; //5
-    private final URL ProductTableURL; //6
-    private final URL ProductSaleCartURL; //7
-    private final URL AnbarRootLayoutURL; //8
-    private final URL ProductPurchseURL; //9
-    private final URL SaleRootLayoutURL; //10
-    private final URL SaleInvoiceTableURL; //11
-    private final URL SaleInvoiceDetailsTableURL;//12
-    private final URL PurchaseInvoiceTableURL; //13
+    private final URL LoginFxmlURL;
+    private final URL ApplicationFxmlURL;
+    private final URL HomeFxmlURL;
+    private final URL ProductTableURL;
+    private final URL ProductSaleCartURL;
+    private final URL AnbarRootLayoutURL;
+    private final URL ProductPurchseURL;
+    private final URL SaleRootLayoutURL;
+    private final URL SaleInvoiceTableURL;
+    private final URL SaleInvoiceDetailsTableURL;
+    private final URL PurchaseInvoiceTableURL;
 
     /**
      *
-     * @param LoginFxmlAddress - LoginFxml 3-in table
-     * @param ApplicationFxml - ApplicationFxml 4-in table
-     * @param HomeFxml - HomeFxml - 5
-     * @param ProductTable - ProductTable - 6
-     * @param ProductSaleCart - 7
+     * @param LoginFxmlAddress
+     * @param ApplicationFxml
+     * @param HomeFxml
+     * @param ProductTable
+     * @param ProductSaleCart
      * @param AnbarRootLayout
      * @param ProductPurchse
      * @param SaleRootLayout
@@ -43,7 +43,7 @@ public class URLProperty {
      * @param PurchaseInvoiceTable
      * @throws java.net.MalformedURLException
      */
-    public URLProperty(
+    public URLProperties(
             String LoginFxmlAddress,
             String ApplicationFxml,
             String HomeFxml,
@@ -120,8 +120,5 @@ public class URLProperty {
     public URL getPurchaseInvoiceTableURL() {
         return PurchaseInvoiceTableURL;
     }
-
-    
-    
 
 }

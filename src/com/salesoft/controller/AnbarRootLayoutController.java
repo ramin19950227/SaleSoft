@@ -5,9 +5,8 @@
  */
 package com.salesoft.controller;
 
-import com.salesoft.controller.ApplicationController;
-import com.salesoft.MainApp;
 import com.salesoft.util.MyFXMLLoader;
+import com.salesoft.util.MyProperties;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -61,7 +60,7 @@ public class AnbarRootLayoutController implements Initializable {
         headLabel.setText("Anbar");
 
         stackPaneCenter.getChildren().clear();
-        stackPaneCenter.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MainApp.ALL_PROPERTIES.getURLProperty().getProductTableURL()));
+        stackPaneCenter.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MyProperties.getURLProperties().getProductTableURL()));
     }
 
     @FXML
@@ -69,7 +68,7 @@ public class AnbarRootLayoutController implements Initializable {
         headLabel.setText("Məhsul Alışı");
 
         stackPaneCenter.getChildren().clear();
-        stackPaneCenter.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MainApp.ALL_PROPERTIES.getURLProperty().getProductPurchseURL()));
+        stackPaneCenter.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MyProperties.getURLProperties().getProductPurchseURL()));
 
     }
 
@@ -82,7 +81,7 @@ public class AnbarRootLayoutController implements Initializable {
         headLabel.setText("Alış Tarıxçəsi");
 
         stackPaneCenter.getChildren().clear();
-        stackPaneCenter.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MainApp.ALL_PROPERTIES.getURLProperty().getPurchaseInvoiceTableURL()));
+        stackPaneCenter.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MyProperties.getURLProperties().getPurchaseInvoiceTableURL()));
     }
 
 }

@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.salesoft.DAO;
+package com.salesoft.DAO.Properties;
 
-import com.salesoft.model.DBProperties;
+import com.salesoft.model.Properties.DBProperties;
 import com.salesoft.util.MyAlert;
 import com.salesoft.util.MyLogger;
 import java.io.FileInputStream;
@@ -20,7 +20,7 @@ import java.util.*;
  *
  * @author Ramin
  */
-public class MyPropertiesDAO {
+public class DBPropertiesDAO {
 
     /**
      * Metod DBProperties Modelini Melumat Bazasi .properties - faylinda olan
@@ -28,7 +28,7 @@ public class MyPropertiesDAO {
      *
      * @return DBProperties
      */
-    public static DBProperties loadDbPropertyFromFile() {
+    public static DBProperties loadDbPropertiesFromFile() {
 
         Properties properties = new Properties();
         InputStream inputStream = null;
@@ -114,5 +114,7 @@ public class MyPropertiesDAO {
             MyLogger.logException("IOException - MyPropertiesDAO.saveDBPropertiesToFile(DBProperties dbp)", ex);
         }
     }
+    
+    
 
 }
