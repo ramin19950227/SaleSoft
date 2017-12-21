@@ -68,7 +68,7 @@ public class ToProduct {
             //Rs-ile bagli problem CIXIB Rs-ile ishimz bitmeden rs.close() olurdu
             //indi ise rs ile ishimizi btirib listimizi aliriq sonra ise baglaya bilerik
             //indi baglaya bilerik
-            DBUtil.dbDisconnect();
+            DBUtil.allDisconnect();
         }
     }
 
@@ -107,7 +107,7 @@ public class ToProduct {
             // sebeb dbExecuteQuery biten kimi final olaraq rs-i baglayirdi
             //indi ise rs ile ishimizi btirib listimizi aliriq sonra ise ozumuz Baglayiriq
             //indi baglaya bilerik, cunki listimizi aldiq rs-den ve baglayaq
-            DBUtil.dbDisconnect();
+            DBUtil.allDisconnect();
         }
     }
 

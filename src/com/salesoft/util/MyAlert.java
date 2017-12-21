@@ -53,10 +53,10 @@ public class MyAlert {
         alert.showAndWait();
     }
 
-    public static Optional<ButtonType> alertOptionalContent(Integer kod, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Server connect successfully");
-        alert.setHeaderText("Login now");
+    public static Optional<ButtonType> alertOptionalConfirmation(Integer kod, String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
         alert.setContentText(content);
         alert.initStyle(StageStyle.DECORATED);
         Optional<ButtonType> result = alert.showAndWait();

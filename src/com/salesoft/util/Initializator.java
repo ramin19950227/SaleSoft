@@ -12,10 +12,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.stage.Stage;
+import javafx.scene.control.ButtonType;
 
 /**
  * Bu Class Proqramimizin ishlemesi ucun lazim olan Temel Fayllari ve Obyektleri
@@ -28,7 +31,6 @@ import javafx.stage.Stage;
 public class Initializator {
 
     public static void initFoldersAndFiles() {
-        System.out.println("com.salesoft.util.Initializator.initFoldersAndFiles()");
         //qovluqlarimizi yoxlayaq her shey yerindedirse
         initFolders();
 
@@ -38,21 +40,18 @@ public class Initializator {
     }
 
     private static void initFolders() {
-        System.out.println("com.salesoft.util.Initializator.initFolders()");
         initLogFolders();
         initPropertiesFolders();
 
     }
 
     private static void initProperties() {
-        System.out.println("com.salesoft.util.Initializator.initProperties()");
         initDBProperties();
         initUIProperties();
 
     }
 
     private static void initLogFolders() {
-        System.out.println("com.salesoft.util.Initializator.initLogFolders()");
         File f = new File("Log\\Exceptions\\");
         if (!f.exists()) {
             System.err.println("Creating Folder for Exception Logs ");
@@ -61,7 +60,6 @@ public class Initializator {
     }
 
     private static void initPropertiesFolders() {
-        System.out.println("com.salesoft.util.Initializator.initPropertiesFolders()");
         File folder = new File("Properties\\");
         if (!folder.exists()) {
             System.err.println("Creating Folder for Properties");
@@ -71,13 +69,12 @@ public class Initializator {
 
     /**
      * DBProperties.properties - faylimiz eger yoxdursa onu hazirlayir, Bu
-     * Proqrami ilk defe ishe salanda olur
+     * Proqrami ilk defe ishe salanda olur, ve ilkin melumatlari yazir fayla
      */
     private static void initDBProperties() {
-        System.out.println("com.salesoft.util.Initializator.initDBProperties()");
         File propertiesFile = new File("Properties\\DBProperties.properties");
         if (!propertiesFile.exists()) {
-            System.err.println("Creating 'DBProperties.properties'  in 'Properties' folder");
+            System.err.println("Creating 'DBProperties.properties' - file  in 'Properties' folder");
 
             OutputStream output;
             Properties properties = new Properties();
@@ -92,11 +89,14 @@ public class Initializator {
                 properties.store(output, null);
                 output.close();
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
-                System.out.println("");
+                System.out.println("FileNotFoundException -  Initializator.initDBProperties(): " + ex);
+                MyLogger.logException("FileNotFoundException - Initializator.initDBProperties()", ex);
+
                 MyAlert.alertAndExitByCodeAndContent(0, "FirstStartInitialization.initDBProperties() - FileNotFoundException");
             } catch (IOException ex) {
-                Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("IOException -  Initializator.initDBProperties(): " + ex);
+                MyLogger.logException("IOException - Initializator.initDBProperties()", ex);
+
                 MyAlert.alertAndExitByCodeAndContent(0, "FirstStartInitialization.initDBProperties() - IOException");
 
             }
@@ -109,7 +109,6 @@ public class Initializator {
      * UIProperties initialize
      */
     private static void initUIProperties() {
-        System.out.println("com.salesoft.util.Initializator.initUIProperties()");
 
         File propertiesFile = new File("Properties\\UIProperties.properties");
         if (!propertiesFile.exists()) {
@@ -137,32 +136,129 @@ public class Initializator {
 
     }
 
+    public static void initMyProperties() {
+        MyProperties.init();
+
+    }
+
+    /**
+     * Metod Serverin Veziyyetini yoxlayir sonra Serverle elaqe qurmaga
+     * calishir, daha sonra ise Melumat bazasinin varligini yoxlayir Eger
+     * yoxdursa Qurmagi teklif edir.
+     */
     public static void initDataBase() {
-        System.out.println("com.salesoft.util.Initializator.initDataBase()");
 
-        //baza ile elaqeni yoxlayaq varsa davam edek
-        //yoxdursa ayarlama penceresini acacaq
-        while (!DBUtil.hasConnetion()) {
+        // 1- ci Serverimizin Ishlek veziyyetde olub olmadigini yoxlayaq
+        checkServer();
 
-            MyAlert.alertContent(134, "Baza Ayarlari Dogru Deyil, Zehmet Olmasa Dogru ayarlari Daxil Edin");
+        // 2-ci Serverimizle Elaqe Qurmaga calishaq
+        checkConnetion();
 
-            Stage nStage = new Stage();
-            nStage.setScene(MyFXMLLoader.getSceneFromURL(MainApp.class.getResource("view/Server.fxml")));
-            nStage.setMaximized(false);
-            nStage.setTitle("Servere Qoshulma Ayarlari - Sale Soft");
-            nStage.showAndWait();
+        //3-ci Melumat Bazamiza qoshulmaga calishaq Baza Adini istifade ederek
+        checkDBConnetion();
 
-            // bu metodu cagiraraq Istifadecinin daxil etdiyi properties faylindaki yeni melumatlari yukleyirik
-            // ki, yeni melumatlarla yeniden qoshulmaga calishaq
-            MyProperties.loadDBProperties();
+    }
 
+    public static void checkServer() {
+
+        if (DBUtil.isServerRunning()) {
+            System.out.println("Initializator.initDataBase() - Server Is Running");
+
+        } else {
+            System.out.println("Initializator.initDataBase() - Server Is NOT Running");
+            Optional<ButtonType> result = MyAlert.alertOptionalConfirmation(150,
+                    "DBUtil.isServerRunning() = false",
+                    "Server ile Elaqe Qura Bilmirem",
+                    "Problemi Hell etmek ucun Serveri ishe salin eger bununla hell olmursa"
+                    + "\nAyarlari Redakte etmek ucun OK duymesine tiklayin");
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                System.out.println("ok");
+                DBUtil.showServerConfigView();
+
+                //Bu sebebden Yoxlamalar metoda kecirtdim
+                // yoxsa initDataBase() metodunun icinde hele if else ile hell ede bilirdim
+                // amma bele bir mesele var 
+                //serverle elaqe yoxdur ve istifadeciye ya cixmagi yada ob basib ayarlamagi teklfi edirem
+                // adam cixanda problem yoxdur X-basr yada cancell
+                //ammaadamok basanda Server ayarlama penceresi acilir
+                // adam ayarlari daxil etdikden sonra tekrar yoxlamaq lazimdir axi
+                //aydaa indi aglima gelir bu metodun yerine gorum hele
+                // initDataBase()-in ozunu cagirsaydim nece olardi?
+                checkServer();
+
+            } else {
+                System.exit(271);
+            }
         }
-        // Elaqe Quruldu Deye
-        MyAlert.alertAndExitByCodeAndContent(134, "Baza Qoshuldu OK");
+    }
 
-        String db = "CREATE DATABASE IF NOT EXISTS `testdb`.`testdb` DEFAULT CHARACTER SET utf8;";
+    public static void checkConnetion() {
 
-        String table1 = "CREATE TABLE IF NOT EXISTS `testdb`.`alish_list` (\n"
+        if (DBUtil.hasConnetion()) {
+            System.out.println("Initializator.initDataBase() - Connection is Correct");
+
+        } else {
+            System.out.println("Initializator.initDataBase() - Connection is NOT Correct");
+
+            Optional<ButtonType> result = MyAlert.alertOptionalConfirmation(164,
+                    "DBUtil.hasConnetion() = false",
+                    "Server ishlek veziyyetdedir, Amma baglanti Qurmaq olmur",
+                    "Ayarlari Control etmek ucun OK duymesine tiklayin");
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                DBUtil.showServerConfigView();
+                checkConnetion();
+
+            } else {
+                System.exit(305);
+            }
+        }
+    }
+
+    public static void checkDBConnetion() {
+
+        if (DBUtil.hasDBConnetion()) {
+            System.out.println("Initializator.initDataBase() - DBConnection is Correct");
+
+        } else {
+            System.out.println("Initializator.initDataBase() - DBConnection is NOT Correct");
+
+            Optional<ButtonType> result = MyAlert.alertOptionalConfirmation(164,
+                    "DBUtil.hasDBConnetion() = false",
+                    "Server ishlek veziyyetdedir, Ve Serverle Baglanti Qurulub",
+                    "AMMA Melumat Bazasi Qurulmayib "
+                    + "\nMelumat bazasini Qurmaq ucun OK duymesini basin"
+                    + "\nAyatlar Penceresini acmaq ucun Cancell duymesini basin"
+                    + "\nEger Proqramnan cixmaq Isteyirsinizse Cancell duymesini basdiqdan sonra acilan pencereni baglayin");
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                // OK duymesini basdiqda BAzani QUR
+                setupDataBase();
+                System.exit(233);
+
+            } else if (result.isPresent() && result.get() == ButtonType.CANCEL) {
+
+                //bu metod Acilan pencerede X-i basaraq baglandiqda true qaytarir
+                Boolean isClosed = DBUtil.showServerConfigView();
+                if (isClosed) {
+                    System.exit(241);
+                }
+
+                checkDBConnetion();
+            }
+        }
+    }
+
+    private static void setupDataBase() {
+        String dbName = MyProperties.getDBProperties().getDbName();
+        System.err.println("DB Name: " + dbName);
+
+        ArrayList<String> queryList = new ArrayList();
+
+        queryList.add("CREATE DATABASE IF NOT EXISTS `" + dbName + "` DEFAULT CHARACTER SET utf8;");
+
+        queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`alish_list` (\n"
                 + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
                 + "  `p_id` int(11) DEFAULT NULL,\n"
                 + "  `p_name` text,\n"
@@ -172,9 +268,9 @@ public class Initializator {
                 + "  `p_note` text,\n"
                 + "  PRIMARY KEY (`id`),\n"
                 + "  UNIQUE KEY `id` (`id`)\n"
-                + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;";
+                + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
 
-        String table2 = "CREATE TABLE IF NOT EXISTS `testdb`.`allproperties` (\n"
+        queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`allproperties` (\n"
                 + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
                 + "  `type` text,\n"
                 + "  `3` text,\n"
@@ -190,13 +286,13 @@ public class Initializator {
                 + "  `13` text,\n"
                 + "  PRIMARY KEY (`id`),\n"
                 + "  UNIQUE KEY `id` (`id`)\n"
-                + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;";
+                + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
 
-        String table2i = "INSERT INTO `testdb`.`allproperties` (`id`, `type`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, `13`) VALUES\n"
+        queryList.add("INSERT INTO `" + dbName + "`.`allproperties` (`id`, `type`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, `13`) VALUES\n"
                 + "	(1, 'urlKey', 'Login Form', 'ApplicationForm', 'HomeForm', 'ProductTable', 'ProductSaleCart', 'AnbarRootLayout', 'ProductPurchse', 'SaleRootLayout', 'SaleInvoiceTable', 'SaleInvoiceDetailsTable', NULL),\n"
-                + "	(2, 'url', 'view/Login.fxml', 'view/Application.fxml', 'view/HOME.fxml', 'view/anbar/ProductTable.fxml', 'view/sale/ProductSaleCart.fxml', 'view/AnbarRootLayout.fxml', 'view/anbar/ProductPurchse.fxml', 'view/SaleRootLayout.fxml', 'view/sale/SaleInvoiceTable.fxml', 'view/sale/SaleInvoiceDetailsTable.fxml', 'view/anbar/PurchaseInvoiceTable.fxml');";
+                + "	(2, 'url', 'view/Login.fxml', 'view/Application.fxml', 'view/HOME.fxml', 'view/anbar/ProductTable.fxml', 'view/sale/ProductSaleCart.fxml', 'view/AnbarRootLayout.fxml', 'view/anbar/ProductPurchse.fxml', 'view/SaleRootLayout.fxml', 'view/sale/SaleInvoiceTable.fxml', 'view/sale/SaleInvoiceDetailsTable.fxml', 'view/anbar/PurchaseInvoiceTable.fxml');");
 
-        String table3 = "CREATE TABLE IF NOT EXISTS `testdb`.`product_list` (\n"
+        queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`product_list` (\n"
                 + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
                 + "  `ad` text NOT NULL,\n"
                 + "  `say` int(11) DEFAULT NULL,\n"
@@ -206,9 +302,9 @@ public class Initializator {
                 + "  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
                 + "  PRIMARY KEY (`id`),\n"
                 + "  UNIQUE KEY `id` (`id`)\n"
-                + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;";
+                + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
 
-        String table4 = "CREATE TABLE IF NOT EXISTS `testdb`.`satish_history` (\n"
+        queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`satish_history` (\n"
                 + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
                 + "  `customer` text,\n"
                 + "  `mebleg` double DEFAULT NULL,\n"
@@ -217,9 +313,9 @@ public class Initializator {
                 + "  `timeStamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,\n"
                 + "  PRIMARY KEY (`id`),\n"
                 + "  UNIQUE KEY `id` (`id`)\n"
-                + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;";
+                + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
 
-        String table5 = "CREATE TABLE IF NOT EXISTS `testdb`.`satish_list` (\n"
+        queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`satish_list` (\n"
                 + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
                 + "  `history_id` int(11) DEFAULT NULL,\n"
                 + "  `p_id` int(11) DEFAULT NULL,\n"
@@ -234,9 +330,9 @@ public class Initializator {
                 + "  `updateTimeStamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
                 + "  PRIMARY KEY (`id`),\n"
                 + "  UNIQUE KEY `id` (`id`)\n"
-                + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;";
+                + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
 
-        String table6 = "CREATE TABLE IF NOT EXISTS `testdb`.`user` (\n"
+        queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`user` (\n"
                 + "  `Id` int(11) NOT NULL AUTO_INCREMENT,\n"
                 + "  `UsrName` varchar(20) NOT NULL,\n"
                 + "  `FullName` varchar(100) DEFAULT NULL,\n"
@@ -251,13 +347,17 @@ public class Initializator {
                 + "  `CreatorId` int(11) DEFAULT NULL,\n"
                 + "  PRIMARY KEY (`Id`),\n"
                 + "  UNIQUE KEY `Id` (`Id`)\n"
-                + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;";
+                + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
 
-    }
-
-    public static void initMyProperties() {
-        System.out.println("com.salesoft.util.Initializator.initMyProperties()");
-        MyProperties.init();
+        //Sorgularimizi ArrayListe yigib Sonra tek tek Gonderirem Sorgularimi ))
+        queryList.forEach((query) -> {
+            try {
+                DBUtil.directExecuteUpdate(query);
+            } catch (SQLException ex) {
+                System.out.println("SQLException -  Initializator.setupDataBase(): " + ex);
+                MyLogger.logException("SQLException - Initializator.setupDataBase()", ex);
+            }
+        });
 
     }
 }

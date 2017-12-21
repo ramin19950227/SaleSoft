@@ -12,30 +12,54 @@ import com.salesoft.model.DBProperties;
  * Bu Class- ile Properties Obyektlerimizle Oxuma ve Yazma emeliyyatlari
  * aparacayiq, MyPopertiesDAO - ile bu Class eyni ishi gorecek amma Bu Class
  * ABALOCKA olacaq yani Layer olacaq, Cunki Burda Fayl seviyyesinde hec bir
- * emeliyyat aparilmayacaq
+ * emeliyyat aparilmayacaq, ve alinan Properties obyektleri bunun icinde birge
+ * saxlanacaq ve her defe hansisa melumat lazim olanda DAO-dan yeni obyekt
+ * alinmayacaq, obyekt bir defe alinacaq ve lazim olanda ise yenilenecek
  *
  * @author Ramin
  */
 public class MyProperties {
 
-    public static DBProperties DB;
+    private static DBProperties DBProperties;
 
     public static void init() {
-        System.out.println("com.salesoft.util.MyProperties.init()");
-        loadDBProperties();
+        updateDBProperties();
     }
 
     /**
-     * Metod DB obyektimizi yenileyir, Yenileme ishini MyPropertiesDAO edir
+     * Metod DBProperties obyektimizi yenileyir, Yenileme ishini MyPropertiesDAO
+     * edir, Yenileme - yani properties faylini yeniden oxuyur ve yeni
+     * melumatlarla doldurur DBProperties Obyektimizi
      */
-    public static void loadDBProperties() {
-        System.out.println("com.salesoft.util.MyProperties.loadDBProperties()");
-        DB = MyPropertiesDAO.getDbProperty();
+    public static void updateDBProperties() {
+        DBProperties = MyPropertiesDAO.loadDbPropertyFromFile();
     }
 
-    public static void saveDBProperties(DBProperties properties) {
-        System.out.println("com.salesoft.util.MyProperties.saveDBProperties()");
-        System.err.println("TODO");
+    /**
+     * Metod Parametr olaraq verilen DBProperties Obyektini gonderir DAO ya
+     * Fayla yazmaq ucun ve Avtomatik olaraq MyProperties-in icinde olan
+     * DBProperties OByektini yenileyir
+     *
+     * @param dbp
+     */
+    public static void saveDBProperties(DBProperties dbp) {
+
+        // aldigimiz obyekti gonderek DAO-ya
+        MyPropertiesDAO.saveDBPropertiesToFile(dbp);
+
+        // yaddasha yazdiqdan sonra yeni melumatlari almaq ucun Obyektimizi yenileyek
+        updateDBProperties();
+    }
+
+    /**
+     * Bu metod Bu Class-in init() funksiyasi ishe dushdukden sonra elde edilen
+     * DBProperties obyektini qaytarir, bu obyekti yenilemek ucun
+     * updateDBProperties() - funksiyasini cagirmaq lazimdir
+     *
+     * @return
+     */
+    public static DBProperties getDBProperties() {
+        return DBProperties;
     }
 
 }

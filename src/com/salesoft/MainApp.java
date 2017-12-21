@@ -19,10 +19,16 @@ public class MainApp extends Application {
 
         // ilk Hazirliqlarimizi Inicializasiyamizi edek
         // qovluqlarimizi yoxlayaq her shey yolundadirmi deye
-        Initializator.initMyProperties();
-
+        //1-ci Fayl ve Qovluqlarimizi Hazirlayaq
         Initializator.initFoldersAndFiles();
 
+        //2 - ci ise Properties Fayllarimizi hazirlayaq, artiq emin ola bilerik ki FileNotFoundException CIXMAYACAQ
+        Initializator.initMyProperties();
+
+        //3-cu olaraq ise, S
+        // Server ile elaqe Qurmaga Calishaq, 
+        // Sonuludurse Bildirek, 
+        // Melumat bazasinin qurulu olub olmadigini yoxlayaq ve deyilse Qurmagi teklif edek
         Initializator.initDataBase();
 
     }

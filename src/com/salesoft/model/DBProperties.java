@@ -48,6 +48,7 @@ public class DBProperties {
     private final String directUrl;
 
     public DBProperties(String user, String password, String host, Integer port, String dbName) {
+        System.out.println("com.salesoft.model.DBProperties.<init>() - Constructor");
         this.user = user;
         this.password = password;
         this.host = host;
