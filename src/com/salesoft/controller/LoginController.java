@@ -9,6 +9,7 @@ import com.salesoft.DAO.DatabaseConnection;
 import com.salesoft.MainApp;
 import com.salesoft.custom.CustomPf;
 import com.salesoft.custom.CustomTf;
+import com.salesoft.util.MyProperties;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -100,7 +101,7 @@ public class LoginController implements Initializable {
     @FXML
     private void btnLogin(ActionEvent event) throws IOException {
         con = DatabaseConnection.getConnection();
-        String db = DatabaseConnection.DB_NAME;
+        String db = MyProperties.getDBProperties().getDbName();
 
         if (con != null) {
             if (isValidCondition()) {
