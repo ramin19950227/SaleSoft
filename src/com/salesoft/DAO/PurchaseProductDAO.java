@@ -27,7 +27,7 @@ public class PurchaseProductDAO extends AbstractDAO<PurchaseProduct, Integer> {
     }
 
     @Override
-    public PurchaseProduct update(PurchaseProduct entity) {
+    public boolean update(PurchaseProduct entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -40,7 +40,7 @@ public class PurchaseProductDAO extends AbstractDAO<PurchaseProduct, Integer> {
     public PurchaseProduct getById(Integer id) {
 
         try {
-            ResultSet rs = DBUtil.directExecuteQuery(SQL.PurchaseProduct.GET(id));
+            ResultSet rs = DBUtil.directExecuteQuery(SQL.PurchaseProductSQL.GET(id));
 
             return RsToModel.rsToPurchaseProduct(rs);
 
@@ -56,7 +56,7 @@ public class PurchaseProductDAO extends AbstractDAO<PurchaseProduct, Integer> {
         ArrayList<PurchaseProduct> list = new ArrayList<>();
 
         try {
-            ResultSet rs = DBUtil.directExecuteQuery(SQL.PurchaseProduct.GET_ALL());
+            ResultSet rs = DBUtil.directExecuteQuery(SQL.PurchaseProductSQL.GET_ALL());
 
             list = RsToModel.rsToPurchaseProductList(rs);
 

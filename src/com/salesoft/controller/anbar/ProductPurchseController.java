@@ -7,7 +7,6 @@ package com.salesoft.controller.anbar;
 
 import com.salesoft.DAO.ProductDAO;
 import com.salesoft.DAO.ProductGetDAO;
-import com.salesoft.DAO.ProductUpdateDAO;
 import com.salesoft.model.Product;
 import com.salesoft.controller.AnbarRootLayoutController;
 import java.net.URL;
@@ -44,6 +43,7 @@ public class ProductPurchseController implements Initializable {
     private Button saveButton;
 
     private Product barcodeEnteredProduct = null;
+    private final ProductDAO ProductDAO = new ProductDAO();
 
     /**
      * Initializes the controller class.
@@ -114,18 +114,26 @@ public class ProductPurchseController implements Initializable {
         boolean isValid = isInputValid();
 
         if (isValid && barcodeEnteredProduct != null) {
-            Integer id = barcodeEnteredProduct.getId();
+
+            // bu mehsulumuzun kohne sayi
             Integer oldQty = barcodeEnteredProduct.getQty();
+
+            //bu yeni daxil edilen say
             Integer enteredQty = Integer.valueOf(qtyField.getText());
-            Integer newQty = oldQty + enteredQty;
 
-            ProductUpdateDAO.updateProductNameById(id, nameField.getText());
-            ProductUpdateDAO.updateProductQtyById(id, newQty);
-            ProductUpdateDAO.updateProductPurchasePriceById(id, Double.valueOf(purchasePriceField.getText()));
-            ProductUpdateDAO.updateProductBarCodeById(id, barCodeField.getText());
-            ProductUpdateDAO.updateProductNoteById(id, noteField.getText());
+            //buda netice son say yani CEMI
+            Integer sumQty = oldQty + enteredQty;
 
-            //mainApp.showProductTable();
+            barcodeEnteredProduct.setName(nameField.getText());
+            barcodeEnteredProduct.setQty(sumQty);
+            barcodeEnteredProduct.setPurchasePrice(Double.valueOf(purchasePriceField.getText()));
+            barcodeEnteredProduct.setBarCode(barCodeField.getText());
+            barcodeEnteredProduct.setNote(noteField.getText());
+
+            //indi yenileyek
+            ProductDAO.update(barcodeEnteredProduct);
+
+            // sonra ise Anbari gosteririk
             AnbarRootLayoutController.appControl.btnStockOnClick();
 
         } else if (isValid && barcodeEnteredProduct == null) {
@@ -140,7 +148,7 @@ public class ProductPurchseController implements Initializable {
 
             // Yeni DAO-muza Yeni Sorgu Gonderek )) Bele Cox Gozel Gorsenir
             // yeni obyektimizi hazirlayiriq ve gonderirik metodumuza
-            new ProductDAO().create(product);
+            ProductDAO.create(product);
 
             AnbarRootLayoutController.appControl.btnStockOnClick();
         }

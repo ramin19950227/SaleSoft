@@ -22,12 +22,7 @@ public class ProductDAO extends AbstractDAO<Product, Integer> {
     public boolean create(Product entity) {
 
         try {
-            DBUtil.directExecuteUpdate(SQL.Product.CREATE(
-                    entity.getName(),
-                    entity.getQty().toString(),
-                    entity.getPurchasePrice().toString(),
-                    entity.getBarCode(),
-                    entity.getNote()));
+            DBUtil.directExecuteUpdate(SQL.ProductSQL.CREATE(entity));
             return true;
 
         } catch (SQLException ex) {
@@ -39,8 +34,16 @@ public class ProductDAO extends AbstractDAO<Product, Integer> {
     }
 
     @Override
-    public Product update(Product entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean update(Product entity) {
+        try {
+            DBUtil.directExecuteUpdate(SQL.ProductSQL.UPDATE(entity));
+            return true;
+
+        } catch (SQLException ex) {
+            System.out.println("SQLException -  DAO.ProductDAO.update(): " + ex);
+            MyLogger.logException("SQLException - DAO.ProductDAO.update()", ex);
+            return false;
+        }
     }
 
     @Override

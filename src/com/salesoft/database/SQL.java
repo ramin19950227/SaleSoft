@@ -5,6 +5,7 @@
  */
 package com.salesoft.database;
 
+import com.salesoft.model.Product;
 import com.salesoft.util.MyProperties;
 import java.util.ArrayList;
 
@@ -38,9 +39,9 @@ public class SQL {
     }
 
     /**
-     * PurchaseProduct - Obyektimizin SQL Sorgulari
+     * PurchaseProductSQL - Obyektimizin SQL Sorgulari
      */
-    public static class PurchaseProduct {
+    public static class PurchaseProductSQL {
 
         public static String CREATE(String purchaseDate, String totalPrice, String product_id, String product_name, String product_qty, String product_purchasePrice, String product_barCode, String product_note) {
             return "INSERT INTO `" + dbName + "`.PurchaseProduct (`purchaseDate`, `totalPrice`, `product_id`, `product_name`, `product_qty`, `product_purchasePrice`, `product_barCode`, `product_note`) "
@@ -82,11 +83,11 @@ public class SQL {
             queryList.add("CREATE DATABASE IF NOT EXISTS `" + dbName + "` DEFAULT CHARACTER SET utf8;");
 
             queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`PurchaseProduct` (\n"
-                    // Ilk 3 Sutun PurchaseProduct - Obyektine Mexsusdur
+                    // Ilk 3 Sutun PurchaseProductSQL - Obyektine Mexsusdur
                     + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
                     + "  `purchaseDate` text,\n"
                     + "  `totalPrice` double DEFAULT NULL,\n"
-                    // Qalan Propertiler ise PurchaseProduct - un icinde olan Product obyektine mexsusdur
+                    // Qalan Propertiler ise PurchaseProductSQL - un icinde olan ProductSQL obyektine mexsusdur
                     + "  `product_id` int(11) DEFAULT NULL,\n"
                     + "  `product_name` text,\n"
                     + "  `product_qty` int(11) DEFAULT NULL,\n"
@@ -165,17 +166,17 @@ public class SQL {
     }
 
     /**
-     * Product Modeli ile aparilan emeliyatlarin SQL-sorgulari
+     * ProductSQL Modeli ile aparilan emeliyatlarin SQL-sorgulari
      */
-    public static class Product {
+    public static class ProductSQL {
 
-        public static String CREATE(String ad, String say, String alishqiymeti, String barcode, String qeyd) {
+        public static String CREATE(Product product) {
             return "INSERT INTO `" + dbName + "`.`Product` (ad, say, alishqiymeti, barcode, qeyd) "
-                    + "VALUES ('" + ad + "', '" + say + "', '" + alishqiymeti + "', '" + barcode + "', '" + qeyd + "')";
+                    + "VALUES ('" + product.getName() + "', '" + product.getQty().toString() + "', '" + product.getPurchasePrice().toString() + "', '" + product.getBarCode() + "', '" + product.getNote() + "')";
         }
 
-        public static String UPDATE() {
-            return "";
+        public static String UPDATE(Product product) {
+            return "UPDATE `" + dbName + "`.`Product` SET `ad`='" + product.getName() + "', `say`='" + product.getQty().toString() + "', `alishqiymeti`='" + product.getPurchasePrice().toString() + "', `barcode`='" + product.getBarCode() + "', `qeyd`='" + product.getNote() + "' WHERE  `id`=" + product.getId()+ ";";
         }
 
         public static String DELETE(Integer id) {

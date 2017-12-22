@@ -18,7 +18,7 @@ public abstract class AbstractDAO<E, K> {
 
     public abstract boolean create(E entity);
 
-    public abstract E update(E entity);
+    public abstract boolean update(E entity);
 
     public abstract boolean delete(K id);
 
