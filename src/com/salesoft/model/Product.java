@@ -114,4 +114,15 @@ public class Product {
         return note;
     }
 
+    @Override
+    public String toString() {
+        return "Product{" + "id=" + id + ", name=" + name + ", qty=" + qty + ", purchasePrice=" + purchasePrice + ", barCode=" + barCode + ", note=" + note + '}';
+    }
+    
+    public void println(){
+        System.out.println(toString());
+    }
+    
+    
+
 }
