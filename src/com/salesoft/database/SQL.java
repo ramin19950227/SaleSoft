@@ -101,16 +101,18 @@ public class SQL {
                     + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
 
             queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`Product` (\n"
+                    //Bunlar Product - Obyektinin Propertileridir 
                     + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
-                    + "  `ad` text NOT NULL,\n"
-                    + "  `say` int(11) DEFAULT NULL,\n"
-                    + "  `alishqiymeti` double DEFAULT NULL,\n"
-                    + "  `barcode` text,\n"
-                    + "  `qeyd` text,\n"
-                    + "  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
+                    + "  `name` text,\n"
+                    + "  `qty` int(11) DEFAULT NULL,\n"
+                    + "  `purchasePrice` double DEFAULT NULL,\n"
+                    + "  `barCode` text,\n"
+                    + "  `note` text,\n"
+                    //Bunun ise Obyektle hec bir elaqesi yoxdur ))
+                    + "  `timeStamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
                     + "  PRIMARY KEY (`id`),\n"
                     + "  UNIQUE KEY `id` (`id`)\n"
-                    + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
+                    + ") ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;");
 
             queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`satish_history` (\n"
                     + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
@@ -171,12 +173,12 @@ public class SQL {
     public static class ProductSQL {
 
         public static String CREATE(Product product) {
-            return "INSERT INTO `" + dbName + "`.`Product` (ad, say, alishqiymeti, barcode, qeyd) "
+            return "INSERT INTO `" + dbName + "`.`Product` (name, qty, purchasePrice, barCode, note) "
                     + "VALUES ('" + product.getName() + "', '" + product.getQty().toString() + "', '" + product.getPurchasePrice().toString() + "', '" + product.getBarCode() + "', '" + product.getNote() + "')";
         }
 
         public static String UPDATE(Product product) {
-            return "UPDATE `" + dbName + "`.`Product` SET `ad`='" + product.getName() + "', `say`='" + product.getQty().toString() + "', `alishqiymeti`='" + product.getPurchasePrice().toString() + "', `barcode`='" + product.getBarCode() + "', `qeyd`='" + product.getNote() + "' WHERE  `id`=" + product.getId()+ ";";
+            return "UPDATE `" + dbName + "`.`Product` SET `name`='" + product.getName() + "', `qty`='" + product.getQty().toString() + "', `purchasePrice`='" + product.getPurchasePrice().toString() + "', `barCode`='" + product.getBarCode() + "', `note`='" + product.getNote() + "' WHERE  `id`=" + product.getId() + ";";
         }
 
         public static String DELETE(Integer id) {
