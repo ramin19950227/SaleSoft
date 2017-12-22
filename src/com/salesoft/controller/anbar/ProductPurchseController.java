@@ -5,10 +5,9 @@
  */
 package com.salesoft.controller.anbar;
 
+import com.salesoft.DAO.ProductDAO;
 import com.salesoft.DAO.ProductGetDAO;
 import com.salesoft.DAO.ProductUpdateDAO;
-import com.salesoft.DAO.ProductNewDAO;
-import com.salesoft.MainApp;
 import com.salesoft.model.Product;
 import com.salesoft.controller.AnbarRootLayoutController;
 import java.net.URL;
@@ -130,13 +129,19 @@ public class ProductPurchseController implements Initializable {
             AnbarRootLayoutController.appControl.btnStockOnClick();
 
         } else if (isValid && barcodeEnteredProduct == null) {
+
             String name = nameField.getText();
             Integer qty = Integer.valueOf(barCodeField.getText());
             Double purchasePrice = Double.valueOf(purchasePriceField.getText());
             String barCode = barCodeField.getText();
             String note = noteField.getText();
 
-            ProductNewDAO.createNewProduct(name, qty, purchasePrice, barCode, note);
+            Product product = new Product(0, name, qty, purchasePrice, barCode, note);
+
+            // Yeni DAO-muza Yeni Sorgu Gonderek )) Bele Cox Gozel Gorsenir
+            // yeni obyektimizi hazirlayiriq ve gonderirik metodumuza
+            new ProductDAO().create(product);
+
             AnbarRootLayoutController.appControl.btnStockOnClick();
         }
     }

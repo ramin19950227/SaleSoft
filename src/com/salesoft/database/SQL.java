@@ -99,7 +99,7 @@ public class SQL {
                     + "  UNIQUE KEY `id` (`id`)\n"
                     + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
 
-            queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`product_list` (\n"
+            queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`Product` (\n"
                     + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
                     + "  `ad` text NOT NULL,\n"
                     + "  `say` int(11) DEFAULT NULL,\n"
@@ -169,50 +169,71 @@ public class SQL {
      */
     public static class Product {
 
+        public static String CREATE(String ad, String say, String alishqiymeti, String barcode, String qeyd) {
+            return "INSERT INTO `" + dbName + "`.`Product` (ad, say, alishqiymeti, barcode, qeyd) "
+                    + "VALUES ('" + ad + "', '" + say + "', '" + alishqiymeti + "', '" + barcode + "', '" + qeyd + "')";
+        }
+
+        public static String UPDATE() {
+            return "";
+        }
+
+        public static String DELETE(Integer id) {
+            return "";
+        }
+
+        public static String GET(Integer id) {
+            return "SELECT * FROM `" + dbName + "`.Product WHERE id=" + id;
+        }
+
+        public static String GET_ALL() {
+            return "SELECT * FROM `" + dbName + "`.Product ORDER BY `id` DESC LIMIT 1000";
+        }
+
         /**
          * Butun mehsullari almaq ucun istifade olunur (SELECT * ...)
          */
-        public static final String PRODUCT_GET_ALL = "SELECT * FROM `" + dbName + "`." + TableNames.productTableName;
+        public static final String PRODUCT_GET_ALL = "SELECT * FROM `" + dbName + "`.`Product`";
 
         /**
          * SQL For PreparedStatement, id=? (SELECT * ... WHERE id=?)
          */
-        public static final String PRODUCT_GET_BY_ID_P = "SELECT * FROM " + TableNames.productTableName + " WHERE id=?";
+        public static final String PRODUCT_GET_BY_ID_P = "SELECT * FROM `" + dbName + "`.`Product` WHERE id=?";
 
         /**
          * SQL For ReplaceAll, id=idR (SELECT * ... WHERE id=idR)
          */
-        public static final String PRODUCT_GET_BY_ID_R = "SELECT * FROM " + TableNames.productTableName + " WHERE id=idR";
+        public static final String PRODUCT_GET_BY_ID_R = "SELECT * FROM `" + dbName + "`.`Product` WHERE id=idR";
 
         /**
          * SQL For PreparedStatement, barcode=?
          */
-        public static final String PRODUCT_GET_BY_BARCODE_P = "SELECT * FROM " + TableNames.productTableName + " WHERE barcode=?";
+        public static final String PRODUCT_GET_BY_BARCODE_P = "SELECT * FROM `" + dbName + "`.`Product` WHERE barcode=?";
 
         /**
          * SQL For ReplaceAll, barcode=barcodeR
          */
-        public static final String PRODUCT_GET_BY_BARCODE_R = "SELECT * FROM " + TableNames.productTableName + " WHERE barcode='barcodeR'";
+        public static final String PRODUCT_GET_BY_BARCODE_R = "SELECT * FROM `" + dbName + "`.`Product` WHERE barcode='barcodeR'";
 
         /**
          * SQL For PreparedStatement, ad LIKE=?
          */
-        public static final String PRODUCT_GEL_ALL_BY_NAME_LIKE_P = "SELECT * FROM " + TableNames.productTableName + " WHERE ad LIKE ?";
+        public static final String PRODUCT_GEL_ALL_BY_NAME_LIKE_P = "SELECT * FROM `" + dbName + "`.`Product` WHERE ad LIKE ?";
 
         /**
          * SQL For ReplaceAll, ad LIKE=adR
          */
-        public static final String PRODUCT_GEL_ALL_BY_NAME_LIKE_R = "SELECT * FROM " + TableNames.productTableName + " WHERE ad LIKE 'adR'";
+        public static final String PRODUCT_GEL_ALL_BY_NAME_LIKE_R = "SELECT * FROM `" + dbName + "`.`Product` WHERE ad LIKE 'adR'";
 
         /**
          * SQL For PreparedStatement, barcode=?
          */
-        public static final String PRODUCT_GEL_ALL_BY_BARCODE_P = "SELECT * FROM " + TableNames.productTableName + " WHERE barcode=?";
+        public static final String PRODUCT_GEL_ALL_BY_BARCODE_P = "SELECT * FROM `" + dbName + "`.`Product` WHERE barcode=?";
 
         /**
          * SQL For ReplaceAll, barcode=barcodeR
          */
-        public static final String PRODUCT_GEL_ALL_BY_BARCODE_R = "SELECT * FROM " + TableNames.productTableName + " WHERE barcode=barcodeR";
+        public static final String PRODUCT_GEL_ALL_BY_BARCODE_R = "SELECT * FROM `" + dbName + "`.`Product` WHERE barcode=barcodeR";
     }
 
     /**
