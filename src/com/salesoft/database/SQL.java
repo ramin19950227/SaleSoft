@@ -5,6 +5,9 @@
  */
 package com.salesoft.database;
 
+import com.salesoft.util.MyProperties;
+import java.util.ArrayList;
+
 /**
  * Bu Class-da SQL sorgularimi saxlayacam Cox Gozel Bir shekilde, her iki novde
  * biri PreparedStatement-ucun digeri ise, oz yontemim ile yani
@@ -23,6 +26,98 @@ package com.salesoft.database;
  * @author Ramin
  */
 public class SQL {
+
+    /**
+     * Class - Bazamizi Qurmaq ucun istifade olunan Sorgular burda yer alir
+     */
+    public static class SetubDB {
+
+        /**
+         * Class-imizin Esas Sorgulari qaytarma Funksiyasidir
+         *
+         * @return
+         */
+        public static ArrayList<String> getQueriesList() {
+            String dbName = MyProperties.getDBProperties().getDbName();
+            System.err.println("Setuping DB Name: " + dbName);
+
+            ArrayList<String> queryList = new ArrayList();
+
+            queryList.add("CREATE DATABASE IF NOT EXISTS `" + dbName + "` DEFAULT CHARACTER SET utf8;");
+
+            queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`alish_list` (\n"
+                    + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
+                    + "  `p_id` int(11) DEFAULT NULL,\n"
+                    + "  `p_name` text,\n"
+                    + "  `p_qty` int(11) DEFAULT NULL,\n"
+                    + "  `p_purchasePrice` double DEFAULT NULL,\n"
+                    + "  `p_totalPrice` double DEFAULT NULL,\n"
+                    + "  `p_note` text,\n"
+                    + "  PRIMARY KEY (`id`),\n"
+                    + "  UNIQUE KEY `id` (`id`)\n"
+                    + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
+
+            queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`product_list` (\n"
+                    + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
+                    + "  `ad` text NOT NULL,\n"
+                    + "  `say` int(11) DEFAULT NULL,\n"
+                    + "  `alishqiymeti` double DEFAULT NULL,\n"
+                    + "  `barcode` text,\n"
+                    + "  `qeyd` text,\n"
+                    + "  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
+                    + "  PRIMARY KEY (`id`),\n"
+                    + "  UNIQUE KEY `id` (`id`)\n"
+                    + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
+
+            queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`satish_history` (\n"
+                    + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
+                    + "  `customer` text,\n"
+                    + "  `mebleg` double DEFAULT NULL,\n"
+                    + "  `odenish` double DEFAULT NULL,\n"
+                    + "  `qaliq` double DEFAULT NULL,\n"
+                    + "  `timeStamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                    + "  PRIMARY KEY (`id`),\n"
+                    + "  UNIQUE KEY `id` (`id`)\n"
+                    + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
+
+            queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`satish_list` (\n"
+                    + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
+                    + "  `history_id` int(11) DEFAULT NULL,\n"
+                    + "  `p_id` int(11) DEFAULT NULL,\n"
+                    + "  `p_name` text,\n"
+                    + "  `p_say` int(11) DEFAULT NULL,\n"
+                    + "  `p_qiymet` double DEFAULT NULL,\n"
+                    + "  `p_mebleg` double DEFAULT NULL,\n"
+                    + "  `p_barcode` text,\n"
+                    + "  `p_qeyd` text,\n"
+                    + "  `p_satishdan_evvelki_say` int(11) DEFAULT NULL,\n"
+                    + "  `timeStamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                    + "  `updateTimeStamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
+                    + "  PRIMARY KEY (`id`),\n"
+                    + "  UNIQUE KEY `id` (`id`)\n"
+                    + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
+
+            queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`user` (\n"
+                    + "  `Id` int(11) NOT NULL AUTO_INCREMENT,\n"
+                    + "  `UsrName` varchar(20) NOT NULL,\n"
+                    + "  `FullName` varchar(100) DEFAULT NULL,\n"
+                    + "  `EmailAddress` varchar(100) DEFAULT NULL,\n"
+                    + "  `ContactNumber` varchar(100) DEFAULT NULL,\n"
+                    + "  `Salary` double DEFAULT NULL,\n"
+                    + "  `Address` text,\n"
+                    + "  `Password` varchar(45) DEFAULT NULL,\n"
+                    + "  `Status` tinyint(1) NOT NULL DEFAULT '0',\n"
+                    + "  `UserImage` mediumblob,\n"
+                    + "  `Date` date NOT NULL,\n"
+                    + "  `CreatorId` int(11) DEFAULT NULL,\n"
+                    + "  PRIMARY KEY (`Id`),\n"
+                    + "  UNIQUE KEY `Id` (`Id`)\n"
+                    + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
+
+            return queryList;
+        }
+
+    }
 
     /**
      * Product Modeli ile aparilan emeliyatlarin SQL-sorgulari

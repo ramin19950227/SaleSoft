@@ -7,6 +7,7 @@ package com.salesoft.util;
 
 import com.salesoft.MainApp;
 import com.salesoft.database.DBUtil;
+import com.salesoft.database.SQL;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -251,103 +252,9 @@ public class Initializator {
     }
 
     private static void setupDataBase() {
-        String dbName = MyProperties.getDBProperties().getDbName();
-        System.err.println("DB Name: " + dbName);
 
-        ArrayList<String> queryList = new ArrayList();
-
-        queryList.add("CREATE DATABASE IF NOT EXISTS `" + dbName + "` DEFAULT CHARACTER SET utf8;");
-
-        queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`alish_list` (\n"
-                + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
-                + "  `p_id` int(11) DEFAULT NULL,\n"
-                + "  `p_name` text,\n"
-                + "  `p_qty` int(11) DEFAULT NULL,\n"
-                + "  `p_purchasePrice` double DEFAULT NULL,\n"
-                + "  `p_totalPrice` double DEFAULT NULL,\n"
-                + "  `p_note` text,\n"
-                + "  PRIMARY KEY (`id`),\n"
-                + "  UNIQUE KEY `id` (`id`)\n"
-                + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
-
-        queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`allproperties` (\n"
-                + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
-                + "  `type` text,\n"
-                + "  `3` text,\n"
-                + "  `4` text,\n"
-                + "  `5` text,\n"
-                + "  `6` text,\n"
-                + "  `7` text,\n"
-                + "  `8` text,\n"
-                + "  `9` text,\n"
-                + "  `10` text,\n"
-                + "  `11` text,\n"
-                + "  `12` text,\n"
-                + "  `13` text,\n"
-                + "  PRIMARY KEY (`id`),\n"
-                + "  UNIQUE KEY `id` (`id`)\n"
-                + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
-
-        queryList.add("INSERT INTO `" + dbName + "`.`allproperties` (`id`, `type`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `10`, `11`, `12`, `13`) VALUES\n"
-                + "	(1, 'urlKey', 'Login Form', 'ApplicationForm', 'HomeForm', 'ProductTable', 'ProductSaleCart', 'AnbarRootLayout', 'ProductPurchse', 'SaleRootLayout', 'SaleInvoiceTable', 'SaleInvoiceDetailsTable', NULL),\n"
-                + "	(2, 'url', 'view/Login.fxml', 'view/Application.fxml', 'view/HOME.fxml', 'view/anbar/ProductTable.fxml', 'view/sale/ProductSaleCart.fxml', 'view/AnbarRootLayout.fxml', 'view/anbar/ProductPurchse.fxml', 'view/SaleRootLayout.fxml', 'view/sale/SaleInvoiceTable.fxml', 'view/sale/SaleInvoiceDetailsTable.fxml', 'view/anbar/PurchaseInvoiceTable.fxml');");
-
-        queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`product_list` (\n"
-                + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
-                + "  `ad` text NOT NULL,\n"
-                + "  `say` int(11) DEFAULT NULL,\n"
-                + "  `alishqiymeti` double DEFAULT NULL,\n"
-                + "  `barcode` text,\n"
-                + "  `qeyd` text,\n"
-                + "  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
-                + "  PRIMARY KEY (`id`),\n"
-                + "  UNIQUE KEY `id` (`id`)\n"
-                + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
-
-        queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`satish_history` (\n"
-                + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
-                + "  `customer` text,\n"
-                + "  `mebleg` double DEFAULT NULL,\n"
-                + "  `odenish` double DEFAULT NULL,\n"
-                + "  `qaliq` double DEFAULT NULL,\n"
-                + "  `timeStamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                + "  PRIMARY KEY (`id`),\n"
-                + "  UNIQUE KEY `id` (`id`)\n"
-                + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
-
-        queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`satish_list` (\n"
-                + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
-                + "  `history_id` int(11) DEFAULT NULL,\n"
-                + "  `p_id` int(11) DEFAULT NULL,\n"
-                + "  `p_name` text,\n"
-                + "  `p_say` int(11) DEFAULT NULL,\n"
-                + "  `p_qiymet` double DEFAULT NULL,\n"
-                + "  `p_mebleg` double DEFAULT NULL,\n"
-                + "  `p_barcode` text,\n"
-                + "  `p_qeyd` text,\n"
-                + "  `p_satishdan_evvelki_say` int(11) DEFAULT NULL,\n"
-                + "  `timeStamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,\n"
-                + "  `updateTimeStamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
-                + "  PRIMARY KEY (`id`),\n"
-                + "  UNIQUE KEY `id` (`id`)\n"
-                + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
-
-        queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`user` (\n"
-                + "  `Id` int(11) NOT NULL AUTO_INCREMENT,\n"
-                + "  `UsrName` varchar(20) NOT NULL,\n"
-                + "  `FullName` varchar(100) DEFAULT NULL,\n"
-                + "  `EmailAddress` varchar(100) DEFAULT NULL,\n"
-                + "  `ContactNumber` varchar(100) DEFAULT NULL,\n"
-                + "  `Salary` double DEFAULT NULL,\n"
-                + "  `Address` text,\n"
-                + "  `Password` varchar(45) DEFAULT NULL,\n"
-                + "  `Status` tinyint(1) NOT NULL DEFAULT '0',\n"
-                + "  `UserImage` mediumblob,\n"
-                + "  `Date` date NOT NULL,\n"
-                + "  `CreatorId` int(11) DEFAULT NULL,\n"
-                + "  PRIMARY KEY (`Id`),\n"
-                + "  UNIQUE KEY `Id` (`Id`)\n"
-                + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
+        //sorgularimiz olan ArrayList-i aliriq
+        ArrayList<String> queryList = SQL.SetubDB.getQueriesList();
 
         //Sorgularimizi ArrayListe yigib Sonra tek tek Gonderirem Sorgularimi ))
         queryList.forEach((query) -> {
