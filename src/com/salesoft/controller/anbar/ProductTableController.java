@@ -6,11 +6,9 @@
 package com.salesoft.controller.anbar;
 
 import com.salesoft.DAO.ProductDAO;
-import com.salesoft.DAO.ProductDeleteDAO;
 import com.salesoft.DAO.ProductGetDAO;
 import com.salesoft.MainApp;
 import com.salesoft.model.Product;
-import com.salesoft.util.MyAlert;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -338,15 +336,14 @@ public class ProductTableController implements Initializable {
 
         if (isValid && selectedProduct != null) {
 
-            
             selectedProduct.setName(nameField.getText());
             selectedProduct.setQty(Integer.valueOf(qtyField.getText()));
             selectedProduct.setPurchasePrice(Double.valueOf(purchasePriceField.getText()));
             selectedProduct.setBarCode(barCodeField.getText());
             selectedProduct.setNote(noteField.getText());
-            
+
             ProductDAO.update(selectedProduct);
-            
+
             updateTable("");
 
         } else if (isValid && selectedProduct == null) {
@@ -382,18 +379,17 @@ public class ProductTableController implements Initializable {
 
             alert.showAndWait();
         } else {
-            String name = selectedProduct.getName();
-            Integer id = selectedProduct.getId();
 
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Mehsulun Bazadan Silinmesi");
-            alert.setHeaderText(null);
-            alert.setContentText("( " + name + " ) - Bu Mehsulu Bazadan silmek isteyirsiniz?");
+            alert.setHeaderText("Adi: " + selectedProduct.getName() + " - Sayi: "+selectedProduct.getQty());
+            alert.setContentText(" - Bu Mehsulu Bazadan silmek isteyirsiniz?");
             Optional<ButtonType> action = alert.showAndWait();
 
             if (action.get() == ButtonType.OK) {
-                ProductDeleteDAO.deleteProductById(id);
+                ProductDAO.delete(selectedProduct.getId());
             }
+
             updateTable("");
         }
     }

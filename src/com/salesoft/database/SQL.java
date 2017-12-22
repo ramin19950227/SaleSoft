@@ -182,7 +182,7 @@ public class SQL {
         }
 
         public static String DELETE(Integer id) {
-            return "";
+            return "DELETE FROM `" + dbName + "`.`Product` WHERE id=" + id;
         }
 
         public static String GET(Integer id) {

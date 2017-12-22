@@ -48,7 +48,16 @@ public class ProductDAO extends AbstractDAO<Product, Integer> {
 
     @Override
     public boolean delete(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            DBUtil.directExecuteUpdate(SQL.ProductSQL.DELETE(id));
+            return true;
+
+        } catch (SQLException ex) {
+            System.out.println("SQLException -  DAO.ProductDAO.delete(): " + ex);
+            MyLogger.logException("SQLException - DAO.ProductDAO.delete()", ex);
+            return false;
+        }
+
     }
 
     @Override
