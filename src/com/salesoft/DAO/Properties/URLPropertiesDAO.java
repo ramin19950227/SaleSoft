@@ -31,7 +31,7 @@ public class URLPropertiesDAO {
                     "view/SaleRootLayout.fxml",
                     "view/sale/SaleInvoiceTable.fxml",
                     "view/sale/SaleInvoiceDetailsTable.fxml",
-                    "view/anbar/PurchaseInvoiceTable.fxml");
+                    "view/anbar/PurchaseProductTable.fxml");
 
         } catch (MalformedURLException ex) {
             Logger.getLogger(URLPropertiesDAO.class.getName()).log(Level.SEVERE, null, ex);
