@@ -5,12 +5,10 @@
  */
 package com.salesoft.DAO;
 
-import com.salesoft.MainApp;
 import com.salesoft.database.DBUtil;
 import com.salesoft.database.SQL;
 import com.salesoft.model.Product;
-import com.salesoft.util.MyLogger;
-import com.salesoft.util.ToProduct;
+import com.salesoft.util.RsToModel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,7 +33,7 @@ public class ProductGetDAO {
      */
     public static ArrayList<Product> getAllProductList() {
         try {
-            return ToProduct.rsToProductList(DBUtil.dbExecuteQuery(SQL.Product.PRODUCT_GET_ALL));
+            return RsToModel.rsToProductList(DBUtil.directExecuteQuery(SQL.Product.PRODUCT_GET_ALL));
         } catch (SQLException ex) {
             System.out.println("SQLException");
             System.out.println("com.salesoft.DAO.ProductGetDAO.getAllProductList()");
@@ -163,7 +161,9 @@ public class ProductGetDAO {
             ps.setInt(1, id);
             //ps.setObject(1, id);
 
-            return ToProduct.getProduct(ps, con);
+            ResultSet rs = ps.executeQuery();
+
+            return RsToModel.rsToProduct(rs);
         } catch (SQLException ex) {
 //            new MyLogger("SQLException in - ProductGetDAO.getProductById(int id)").getLogger().log(Level.SEVERE, "SQLException - id=:" + id, ex);//LOG++++++++++++++++++++
             return (null);
@@ -176,7 +176,9 @@ public class ProductGetDAO {
             PreparedStatement ps = con.prepareStatement(SQL.Product.PRODUCT_GET_BY_BARCODE_P);
             ps.setString(1, barCode);
 
-            return ToProduct.getProduct(ps, con);
+            ResultSet rs = ps.executeQuery();
+
+            return RsToModel.rsToProduct(rs);
         } catch (SQLException ex) {
 //            new MyLogger("SQLException in - ProductGetDAO.getProductByBarCode(String barCode)").getLogger().log(Level.SEVERE, "SQLException - barCode=:" + barCode, ex);//LOG++++++++++++++++++++
             return (null);

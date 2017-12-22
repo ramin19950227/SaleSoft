@@ -5,30 +5,65 @@
  */
 package com.salesoft.DAO;
 
-import com.salesoft.model.Product;
+import com.salesoft.database.DBUtil;
+import com.salesoft.database.SQL;
 import com.salesoft.model.PurchaseProduct;
+import com.salesoft.util.MyLogger;
+import com.salesoft.util.RsToModel;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
+ * Product - Obyektimizle Melumat Bazasi arasindaki Emeliyyatlar
  *
  * @author Ramin
  */
-public class PurchaseProductDAO {
+public class PurchaseProductDAO extends AbstractDAO<PurchaseProduct, Integer> {
 
-    public static ArrayList<PurchaseProduct> getAllList() {
+    @Override
+    public boolean create(PurchaseProduct entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
+    @Override
+    public PurchaseProduct update(PurchaseProduct entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean delete(Integer id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public PurchaseProduct getById(Integer id) {
+
+        try {
+            ResultSet rs = DBUtil.directExecuteQuery(SQL.PurchaseProduct.GET(id));
+
+            return RsToModel.rsToPurchaseProduct(rs);
+
+        } catch (SQLException ex) {
+            System.out.println("SQLException -  PurchaseProductDAO.getAllList(): " + ex);
+            MyLogger.logException("SQLException - PurchaseProductDAO.getAllList()", ex);
+            return null;
+        }
+    }
+
+    @Override
+    public ArrayList<PurchaseProduct> getAll() {
         ArrayList<PurchaseProduct> list = new ArrayList<>();
-        
-        Product p = new Product();
-        
-        p.setBarCode("987654321");
-        p.setName("pName Tests");
-        p.setId(0);
-        p.setNote("note");
-        p.setPurchasePrice(1.4);
-        p.setQty(10);
-        
-        list.add(new PurchaseProduct(1, p));
+
+        try {
+            ResultSet rs = DBUtil.directExecuteQuery(SQL.PurchaseProduct.GET_ALL());
+
+            list = RsToModel.rsToPurchaseProductList(rs);
+
+        } catch (SQLException ex) {
+            System.out.println("SQLException -  PurchaseProductDAO.getAllList(): " + ex);
+            MyLogger.logException("SQLException - PurchaseProductDAO.getAllList()", ex);
+        }
 
         return list;
     }

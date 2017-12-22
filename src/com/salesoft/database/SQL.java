@@ -27,8 +27,46 @@ import java.util.ArrayList;
  */
 public class SQL {
 
+    private static String dbName;
+
+    static {
+        //ilk Muracietde Melumat Bazamizin adini alaq
+        dbName = MyProperties.getDBProperties().getDbName();
+        System.err.println("DB Name: " + dbName);
+        //istifade Yontemi 
+        //      `" + dbName + "`.
+    }
+
     /**
-     * Class - Bazamizi Qurmaq ucun istifade olunan Sorgular burda yer alir
+     * PurchaseProduct - Obyektimizin SQL Sorgulari
+     */
+    public static class PurchaseProduct {
+
+        public static String CREATE(String purchaseDate, String totalPrice, String product_id, String product_name, String product_qty, String product_purchasePrice, String product_barCode, String product_note) {
+            return "INSERT INTO `" + dbName + "`.PurchaseProduct (`purchaseDate`, `totalPrice`, `product_id`, `product_name`, `product_qty`, `product_purchasePrice`, `product_barCode`, `product_note`) "
+                    + "VALUES ('" + purchaseDate + "', '" + totalPrice + "', '" + product_id + "', '" + product_name + "', '" + product_qty + "', '" + product_purchasePrice + "', '" + product_barCode + "','" + product_note + "');";
+        }
+
+        public static String UPDATE() {
+            return "";
+        }
+
+        public static String DELETE(Integer id) {
+            return "";
+        }
+
+        public static String GET(Integer id) {
+            return "SELECT * FROM `" + dbName + "`.PurchaseProduct WHERE id=" + id;
+        }
+
+        public static String GET_ALL() {
+            return "SELECT * FROM `" + dbName + "`.PurchaseProduct ORDER BY `id` DESC LIMIT 1000";
+        }
+
+    }
+
+    /**
+     * Bazamizi Qurmaq ucun istifade olunan Sorgular
      */
     public static class SetubDB {
 
@@ -38,27 +76,25 @@ public class SQL {
          * @return
          */
         public static ArrayList<String> getQueriesList() {
-            String dbName = MyProperties.getDBProperties().getDbName();
-            System.err.println("Setuping DB Name: " + dbName);
 
             ArrayList<String> queryList = new ArrayList();
 
             queryList.add("CREATE DATABASE IF NOT EXISTS `" + dbName + "` DEFAULT CHARACTER SET utf8;");
 
-            queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`alish_list` (\n"
+            queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`PurchaseProduct` (\n"
+                    // Ilk 3 Sutun PurchaseProduct - Obyektine Mexsusdur
                     + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
+                    + "  `purchaseDate` text,\n"
                     + "  `totalPrice` double DEFAULT NULL,\n"
-                    + "  `purchase_date` datetime DEFAULT NULL,\n"
-                    + "  `timeStamp` timestamp NULL DEFAULT NULL,\n"
-                    + "  `p_id` int(11) DEFAULT NULL,\n"
-                    + "  `p_name` text,\n"
-                    + "  `p_qty` int(11) DEFAULT NULL,\n"
-                    + "  `p_purchasePrice` double DEFAULT NULL,\n"
-                    + "  `p_barCode` text,\n"
-                    + "  `p_note` text,\n"
-                    + "  `totalPrice` double DEFAULT NULL,\n"
-                    + "  `purchase_date` datetime DEFAULT NULL,\n"
-                    + "  `timeStamp` timestamp NULL DEFAULT NULL,\n"
+                    // Qalan Propertiler ise PurchaseProduct - un icinde olan Product obyektine mexsusdur
+                    + "  `product_id` int(11) DEFAULT NULL,\n"
+                    + "  `product_name` text,\n"
+                    + "  `product_qty` int(11) DEFAULT NULL,\n"
+                    + "  `product_purchasePrice` double DEFAULT NULL,\n"
+                    + "  `product_barCode` text,\n"
+                    + "  `product_note` text,\n"
+                    // Bu Sutun ise Obyektle hec bir elaqesi yoxdur ve Cedvele Melumatin yazilma Vaxtini Yadda saxlayir
+                    + "  `timeStamp` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
                     + "  PRIMARY KEY (`id`),\n"
                     + "  UNIQUE KEY `id` (`id`)\n"
                     + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
@@ -120,6 +156,9 @@ public class SQL {
                     + "  UNIQUE KEY `Id` (`Id`)\n"
                     + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
 
+            queryList.add("INSERT INTO `" + dbName + "`.`user` (`Id`, `UsrName`, `FullName`, `EmailAddress`, `ContactNumber`, `Salary`, `Address`, `Password`, `Status`, `UserImage`, `Date`, `CreatorId`) VALUES\n"
+                    + "	(1, '1', 'Ramin', NULL, NULL, NULL, NULL, '1', 1, NULL, '2017-12-10', NULL);");
+
             return queryList;
         }
 
@@ -133,7 +172,7 @@ public class SQL {
         /**
          * Butun mehsullari almaq ucun istifade olunur (SELECT * ...)
          */
-        public static final String PRODUCT_GET_ALL = "SELECT * FROM " + TableNames.productTableName;
+        public static final String PRODUCT_GET_ALL = "SELECT * FROM `" + dbName + "`." + TableNames.productTableName;
 
         /**
          * SQL For PreparedStatement, id=? (SELECT * ... WHERE id=?)
@@ -174,22 +213,6 @@ public class SQL {
          * SQL For ReplaceAll, barcode=barcodeR
          */
         public static final String PRODUCT_GEL_ALL_BY_BARCODE_R = "SELECT * FROM " + TableNames.productTableName + " WHERE barcode=barcodeR";
-    }
-
-    /**
-     * AllProperties Modeli ile aparilan emeliyatlarin SQL-sorgulari
-     */
-    public static class AllProperties {
-
-        /**
-         * SQL for PreparedStatement
-         */
-        public static final String PROPERTIES_GET_ALL_BY_TYPE_P = "SELECT * FROM allproperties where type=?";
-
-        /**
-         * SQL for ReplaceAll
-         */
-        public static final String PROPERTIES_GET_ALL_BY_TYPE = "SELECT * FROM allproperties where type='typeR'";
     }
 
     /**

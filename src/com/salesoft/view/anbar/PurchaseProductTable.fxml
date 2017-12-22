@@ -37,6 +37,7 @@
                 <TableColumn fx:id="productQtyColumn" prefWidth="75.0" text="Alish Sayi" />
                 <TableColumn fx:id="productPurchasePriceColumn" prefWidth="75.0" text="AlishQiymeti" />
                 <TableColumn fx:id="totalPriceColumn" prefWidth="75.0" text="Mebleg" />
+            <TableColumn fx:id="purchaseDateColumn" prefWidth="75.0" text="Alish Tarixi" />
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
