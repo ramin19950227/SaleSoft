@@ -51,8 +51,11 @@ public class SQL {
                     + "  `p_name` text,\n"
                     + "  `p_qty` int(11) DEFAULT NULL,\n"
                     + "  `p_purchasePrice` double DEFAULT NULL,\n"
-                    + "  `p_totalPrice` double DEFAULT NULL,\n"
+                    + "  `p_barCode` text,\n"
                     + "  `p_note` text,\n"
+                    + "  `totalPrice` double DEFAULT NULL,\n"
+                    + "  `purchase_date` datetime DEFAULT NULL,\n"
+                    + "  `timeStamp` timestamp NULL DEFAULT NULL,\n"
                     + "  PRIMARY KEY (`id`),\n"
                     + "  UNIQUE KEY `id` (`id`)\n"
                     + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
