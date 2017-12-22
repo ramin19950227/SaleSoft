@@ -38,44 +38,17 @@ public class CartItem {
     }
 
     public CartItem(Product product, int qty, double salePrice) {
-        System.out.println("product == null () " + (product == null));
-        System.out.println("product.getName () " + (product.getName()));
-        
+
         id.set(product.getId());
         this.setName(product.getName());
         this.setSalePrice(salePrice);
         this.setQty(qty);
-        this.setProduct(product);
+        this.product = product;
         this.setTotalPrice(salePrice * qty);
     }
 
     public Product getProduct() {
         return product;
-    }
-
-    /**
-     * Bu Mehsul bolumudur bunu set Etmek olmaz deyishmek olmaz cunki product
-     * obyeti Construktora verilir ve bitdi, tesevvur edin ish esnasinda bashqa
-     * proqramci mehsulu deyishir ne olacaqsa yaxshi sheyler olmayacaq id-ler
-     * ferqli olacaq birinin id-si ile bashqa mal satilacaq alma yazilacaq
-     * armuddan say azalacaq almanida armud qiymetine satacaq BIYABIRCILIQ
-     * :)))))
-     *
-     * @param product
-     */
-    private void setProduct(Product product) {
-        this.product = product;
-    }
-
-    /**
-     * ID unikaldir deyishmek olmaz construktor product verilende onnan alir ve
-     * KEY-kimi yani acar kimi istifade olunur bunu deyishmek olmaz
-     *
-     * @param value
-     */
-    public final void setId(Integer value) {
-        System.out.println(value);
-        id.set(value);
     }
 
     public final Integer getId() {
@@ -132,6 +105,15 @@ public class CartItem {
 
     public final DoubleProperty totalPriceProperty() {
         return totalPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "CartItem{" + "id=" + id + ", name=" + name + ", qty=" + qty + ", salePrice=" + salePrice + ", totalPrice=" + totalPrice + ", product=" + product + '}';
+    }
+
+    public void println() {
+        System.out.println(toString());
     }
 
 }

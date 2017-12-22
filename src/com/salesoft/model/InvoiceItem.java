@@ -13,6 +13,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
+ * @deprecated
  *
  * @author Ramin
  */
@@ -109,6 +110,15 @@ public class InvoiceItem {
 
     public final StringProperty productBarCodeProperty() {
         return productBarCode;
+    }
+
+    @Override
+    public String toString() {
+        return "InvoiceItem{" + "id=" + id + ", name=" + name + ", qty=" + qty + ", totalPrice=" + totalPrice + ", productId=" + productId + ", productBarCode=" + productBarCode + '}';
+    }
+
+    public void println() {
+        System.out.println(toString());
     }
 
 }

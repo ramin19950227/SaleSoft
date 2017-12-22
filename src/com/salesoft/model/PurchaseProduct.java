@@ -81,4 +81,13 @@ public class PurchaseProduct {
         return totalPrice;
     }
 
+    @Override
+    public String toString() {
+        return "PurchaseProduct{" + "id=" + id + ", purchaseDate=" + purchaseDate + ", totalPrice=" + totalPrice + ", product=" + product + '}';
+    }
+
+    public void println() {
+        System.out.println(toString());
+    }
+
 }
