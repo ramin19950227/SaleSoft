@@ -47,6 +47,9 @@ public class SQL {
 
             queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`alish_list` (\n"
                     + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
+                    + "  `totalPrice` double DEFAULT NULL,\n"
+                    + "  `purchase_date` datetime DEFAULT NULL,\n"
+                    + "  `timeStamp` timestamp NULL DEFAULT NULL,\n"
                     + "  `p_id` int(11) DEFAULT NULL,\n"
                     + "  `p_name` text,\n"
                     + "  `p_qty` int(11) DEFAULT NULL,\n"
