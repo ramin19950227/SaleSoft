@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.salesoft.util;
 
 import com.salesoft.MainApp;
@@ -90,15 +85,13 @@ public class Initializator {
                 properties.store(output, null);
                 output.close();
             } catch (FileNotFoundException ex) {
-                System.out.println("FileNotFoundException -  Initializator.initDBProperties(): " + ex);
                 MyLogger.logException("FileNotFoundException - Initializator.initDBProperties()", ex);
 
-                MyAlert.alertAndExitByCodeAndContent(0, "FirstStartInitialization.initDBProperties() - FileNotFoundException");
+                MyAlert.alertAndExitByCodeAndContent(90, "FileNotFoundException - Initializator.initDBProperties()");
             } catch (IOException ex) {
-                System.out.println("IOException -  Initializator.initDBProperties(): " + ex);
                 MyLogger.logException("IOException - Initializator.initDBProperties()", ex);
 
-                MyAlert.alertAndExitByCodeAndContent(0, "FirstStartInitialization.initDBProperties() - IOException");
+                MyAlert.alertAndExitByCodeAndContent(94, "IOException - Initializator.initDBProperties()");
 
             }
 
@@ -169,23 +162,15 @@ public class Initializator {
             System.out.println("Initializator.initDataBase() - Server Is NOT Running");
             Optional<ButtonType> result = MyAlert.alertOptionalConfirmation(150,
                     "DBUtil.isServerRunning() = false",
-                    "Server ile Elaqe Qura Bilmirem",
-                    "Problemi Hell etmek ucun Serveri ishe salin eger bununla hell olmursa"
-                    + "\nAyarlari Redakte etmek ucun OK duymesine tiklayin");
+                    "Server ilə Əlaqə Qura Bilmirəm",
+                    "Problemi Həll etmək üçün Serveri işə salın əgər bununla Problem həll olmursa - Ayarlari Yoxlayin"
+                    + "\nAyarları Redaktə etmək üçün OK düyməsinə tıklayın");
 
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                System.out.println("ok");
+                // Bu metod Serveri ayarlamaq ucun Ayarlar Penceresini acir
                 DBUtil.showServerConfigView();
-
-                //Bu sebebden Yoxlamalar metoda kecirtdim
-                // yoxsa initDataBase() metodunun icinde hele if else ile hell ede bilirdim
-                // amma bele bir mesele var 
-                //serverle elaqe yoxdur ve istifadeciye ya cixmagi yada ob basib ayarlamagi teklfi edirem
-                // adam cixanda problem yoxdur X-basr yada cancell
-                //ammaadamok basanda Server ayarlama penceresi acilir
-                // adam ayarlari daxil etdikden sonra tekrar yoxlamaq lazimdir axi
-                //aydaa indi aglima gelir bu metodun yerine gorum hele
-                // initDataBase()-in ozunu cagirsaydim nece olardi?
+                
+                //Ayarlari Yaddasha yazdiqdan sonra Tekrar Yoxlayaq
                 checkServer();
 
             } else {
