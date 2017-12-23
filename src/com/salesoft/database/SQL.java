@@ -38,6 +38,14 @@ public class SQL {
         //      `" + dbName + "`.
     }
 
+    public static class UserSQL {
+
+        public static String LOGIN(String UsrName, String Password) {
+            return "SELECT * FROM `" + dbName + "`.User where UsrName='" + UsrName + "' and Password='" + Password + "' and Status=1";
+        }
+
+    }
+
     /**
      * PurchaseProductSQL - Obyektimizin SQL Sorgulari
      */

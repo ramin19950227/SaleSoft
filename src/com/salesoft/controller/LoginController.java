@@ -6,9 +6,11 @@
 package com.salesoft.controller;
 
 import com.salesoft.DAO.DatabaseConnection;
+import com.salesoft.DAO.UserDAO;
 import com.salesoft.MainApp;
 import com.salesoft.custom.CustomPf;
 import com.salesoft.custom.CustomTf;
+import com.salesoft.util.MyFXMLLoader;
 import com.salesoft.util.MyProperties;
 import java.io.IOException;
 import java.net.URL;
@@ -80,6 +82,8 @@ public class LoginController implements Initializable {
     CustomTf cTF = new CustomTf();
     CustomPf cPF = new CustomPf();
 
+    UserDAO UserDAO = new UserDAO();
+
     /**
      * Initializes the controller class.
      *
@@ -100,70 +104,45 @@ public class LoginController implements Initializable {
 
     @FXML
     private void btnLogin(ActionEvent event) throws IOException {
-        con = DatabaseConnection.getConnection();
-        String db = MyProperties.getDBProperties().getDbName();
 
-        if (con != null) {
-            if (isValidCondition()) {
-                try {
-                    pst = con.prepareStatement("select * from " + db + ".User where UsrName=? and Password=? and Status=1");
-                    pst.setString(1, userNameField.getText());
-                    pst.setString(2, userPasswordField.getText());
-                    rs = pst.executeQuery();
-                    if (rs.next()) {
+        if (isInputValid()) {
 
-                        try {
-                            FXMLLoader loader = new FXMLLoader();
-                            loader.setLocation(MainApp.class.getResource("view/Application.fxml"));
+            boolean isUserValid = UserDAO.login(userNameField.getText(), userPasswordField.getText());
 
-                            Parent root = (Parent) loader.load();
-                            Scene scene = new Scene(root);
-                            Stage stage = new Stage();
-                            stage.setScene(scene);
-                            stage.setTitle("SaleSoft - a Xöş Gəlmisiniz: " + rs.getString(3));
-                            stage.getIcons().add(new Image("com/salesoft/image/icon.png"));
-                            stage.setMaximized(true);
-                            stage.show();
+            if (isUserValid) {
 
-                        } catch (IOException ex) {
-                            System.out.println(ex.getLocalizedMessage());
-                        }
+                Stage stage = new Stage();
+                stage.centerOnScreen();
+                stage.setScene(MyFXMLLoader.getSceneFromURL(MyProperties.getURLProperties().getApplicationFxmlURL()));
+                stage.setTitle("SaleSoft - a Xöş Gəlmisiniz: ");
+                stage.getIcons().add(new Image("com/salesoft/image/icon.png"));
+                stage.setMaximized(true);
+                stage.show();
 
-                        Stage stage = (Stage) btnLogin.getScene().getWindow();
-                        stage.close();
-                    } else {
-                        System.out.println("Password Not Match");
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Password Not Match");
-                        alert.setHeaderText("Error : Name or Pass Not matched");
-                        alert.setContentText("User Name or Password not matched \ntry Again");
-                        alert.initStyle(StageStyle.UNDECORATED);
-                        alert.showAndWait();
-                    }
+                Stage oldStage = (Stage) btnLogin.getScene().getWindow();
+                oldStage.close();
 
-                } catch (SQLException ex) {
-                    Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            } else {
+                System.out.println("");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("İstifadəçi adı və ya Şifrə Yanlışdır");
+                alert.setHeaderText("Xəta : İstifadəçi adı və ya Şifrə Yanlışdır");
+                alert.setContentText("İstifadəçi adı və ya Şifrə Yanlışdır \nYenidən cəhd edin");
+                alert.initStyle(StageStyle.UNDECORATED);
+                alert.showAndWait();
             }
-        } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error : Server Not Found");
-            alert.setContentText("Make sure your mysql is Start properly, \n");
-            alert.initStyle(StageStyle.UNDECORATED);
-            alert.showAndWait();
-        }
 
+        }
     }
 
-    private boolean isValidCondition() {
+    private boolean isInputValid() {
         boolean validCondition;
         if (userNameField.getText().trim().isEmpty()
                 || userPasswordField.getText().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("WARNING :");
-            alert.setHeaderText("WARNING !!");
-            alert.setContentText("Please Fill Text Field And Password Properly");
+            alert.setTitle("Xəta :");
+            alert.setHeaderText("Xəta !!");
+            alert.setContentText("Zəhmət Olmasa İstifadəçi adı və Şifrəni Daxil edin");
             alert.initStyle(StageStyle.UNDECORATED);
             alert.showAndWait();
 
