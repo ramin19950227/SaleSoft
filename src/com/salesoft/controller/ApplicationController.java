@@ -128,8 +128,6 @@ public class ApplicationController implements Initializable {
     PreparedStatement pst;
     ResultSet rs;
 
-    //DBProperties dBProperties = new DBProperties();
-    String db = DatabaseConnection.DB_NAME;
 
     //Users users = new Users();
 //    UsersGetway usersGetway = new UsersGetway();

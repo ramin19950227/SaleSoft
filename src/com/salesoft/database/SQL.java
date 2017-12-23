@@ -44,6 +44,10 @@ public class SQL {
             return "SELECT * FROM `" + dbName + "`.User where UsrName='" + UsrName + "' and Password='" + Password + "' and Status=1";
         }
 
+        public static String REGISTRATON(String userName, String userPassword, String fullName, Integer status) {
+            return "INSERT INTO `" + dbName + "`.User (`UsrName`, `FullName`, `Password`, `Status`) VALUES ('" + userName + "', '" + fullName + "', '" + userPassword + "', '" + status + "');";
+        }
+
     }
 
     /**
@@ -150,26 +154,18 @@ public class SQL {
                     + "  UNIQUE KEY `id` (`id`)\n"
                     + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
 
-            queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`user` (\n"
+            queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`User` (\n"
                     + "  `Id` int(11) NOT NULL AUTO_INCREMENT,\n"
-                    + "  `UsrName` varchar(20) NOT NULL,\n"
-                    + "  `FullName` varchar(100) DEFAULT NULL,\n"
-                    + "  `EmailAddress` varchar(100) DEFAULT NULL,\n"
-                    + "  `ContactNumber` varchar(100) DEFAULT NULL,\n"
-                    + "  `Salary` double DEFAULT NULL,\n"
-                    + "  `Address` text,\n"
-                    + "  `Password` varchar(45) DEFAULT NULL,\n"
-                    + "  `Status` tinyint(1) NOT NULL DEFAULT '0',\n"
-                    + "  `UserImage` mediumblob,\n"
-                    + "  `Date` date NOT NULL,\n"
-                    + "  `CreatorId` int(11) DEFAULT NULL,\n"
+                    + "  `UsrName` text,\n"
+                    + "  `FullName` text,\n"
+                    + "  `Password` text,\n"
+                    + "  `Status` tinyint(1) DEFAULT '0',\n"
                     + "  PRIMARY KEY (`Id`),\n"
                     + "  UNIQUE KEY `Id` (`Id`)\n"
                     + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
 
-            queryList.add("INSERT INTO `" + dbName + "`.`user` (`Id`, `UsrName`, `FullName`, `EmailAddress`, `ContactNumber`, `Salary`, `Address`, `Password`, `Status`, `UserImage`, `Date`, `CreatorId`) VALUES\n"
-                    + "	(1, '1', 'Ramin', NULL, NULL, NULL, NULL, '1', 1, NULL, '2017-12-10', NULL);");
-
+//            queryList.add("INSERT INTO `" + dbName + "`.`user` (`Id`, `UsrName`, `FullName`, `EmailAddress`, `ContactNumber`, `Salary`, `Address`, `Password`, `Status`, `UserImage`, `Date`, `CreatorId`) VALUES\n"
+//                    + "	(1, '1', 'Ramin', NULL, NULL, NULL, NULL, '1', 1, NULL, '2017-12-10', NULL);");
             return queryList;
         }
 

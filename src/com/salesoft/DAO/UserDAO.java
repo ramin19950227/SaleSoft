@@ -60,4 +60,18 @@ public class UserDAO extends AbstractDAO<User, Integer> {
         }
     }
 
+    public boolean registration(String userName, String userPassword, String fullName, Integer status) {
+
+        try {
+            DBUtil.directExecuteUpdate(SQL.UserSQL.REGISTRATON(userName, userPassword, fullName, status));
+            return true;
+
+        } catch (SQLException ex) {
+            System.out.println("SQLException -  UserDAO.registration(): " + ex);
+            MyLogger.logException("SQLException - UserDAO.registration()", ex);
+            return false;
+        }
+
+    }
+
 }

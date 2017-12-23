@@ -7,28 +7,22 @@ package com.salesoft.controller;
 
 import com.salesoft.DAO.DatabaseConnection;
 import com.salesoft.DAO.UserDAO;
-import com.salesoft.MainApp;
 import com.salesoft.custom.CustomPf;
 import com.salesoft.custom.CustomTf;
+import com.salesoft.database.DBUtil;
 import com.salesoft.util.MyFXMLLoader;
+import com.salesoft.util.MyLogger;
 import com.salesoft.util.MyProperties;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -46,10 +40,6 @@ import javafx.stage.StageStyle;
  * @author Ramin
  */
 public class LoginController implements Initializable {
-
-    private Connection con = null;
-    private PreparedStatement pst = null;
-    private ResultSet rs = null;
 
     //esas AnchorPane . MainStyle buna yuklenir
     @FXML
@@ -155,79 +145,50 @@ public class LoginController implements Initializable {
 
     @FXML
     private void hlCreateAnAccount(ActionEvent event) throws IOException {
-        con = DatabaseConnection.getConnection();
 
-        String db = DatabaseConnection.DB_NAME;
+        String db = MyProperties.getDBProperties().getDbName();
 
-        if (con != null) {
-            try {
-                pst = con.prepareStatement("SELECT Id FROM " + db + ".User ORDER BY Id ASC LIMIT 1");
-                rs = pst.executeQuery();
-                if (rs.next()) {
-                    apMother.setOpacity(0.7);
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error");
-                    alert.setHeaderText("Error");
-                    alert.setContentText("You can't create an account without admin \n permission");
-                    alert.initStyle(StageStyle.UNDECORATED);
-                    Optional<ButtonType> result = alert.showAndWait();
-                    if (result.isPresent() && result.get() == ButtonType.OK) {
-                        apMother.setOpacity(1.0);
-                    }
-                    return;
+        try {
+            ResultSet rs = DBUtil.directExecuteQuery(("SELECT Id FROM " + db + ".User ORDER BY Id ASC LIMIT 1"));
+            if (rs.next()) {
+                System.out.println(rs.getString(1));
+                apMother.setOpacity(0.7);
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Error");
+                alert.setContentText("You can't create an account without admin \n permission");
+                alert.initStyle(StageStyle.UNDECORATED);
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    apMother.setOpacity(1.0);
                 }
-                con.close();
-                pst.close();
-                rs.close();
-                loadRegistration();
-
-            } catch (SQLException ex) {
-                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+                return;
             }
-        } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error : Server Not Found");
-            alert.setContentText("Make sure your mysql is Start properly, \n");
-            alert.initStyle(StageStyle.UNDECORATED);
-            alert.showAndWait();
+            DBUtil.allDisconnect();
+
+            loadRegistration();
+        } catch (SQLException ex) {
+            System.out.println("SQLException -  LoginController.hlCreateAnAccount(): " + ex);
+            MyLogger.logException("SQLException - LoginController.hlCreateAnAccount()", ex);
         }
 
     }
 
     private void loadRegistration() {
-        Parent root = null;
-        try {
-            root = FXMLLoader.load(MainApp.class.getResource("/view/Registration.fxml"));
-            Scene scene = new Scene(root);
-            Stage nStage = new Stage();
-            nStage.setScene(scene);
-            nStage.setMaximized(true);
-            nStage.setTitle("Registration - Sale Soft");
-            nStage.show();
-            Stage stage = (Stage) hlCreateAccount.getScene().getWindow();
-            stage.close();
-        } catch (IOException ex) {
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Stage nStage = new Stage();
+        nStage.setScene(MyFXMLLoader.getSceneFromURL(MyProperties.getURLProperties().getRegistrationURL()));
+        nStage.setMaximized(true);
+        nStage.setTitle("Qeydiyyat - Sale Soft");
+        nStage.show();
+
+        Stage stage = (Stage) hlCreateAccount.getScene().getWindow();
+        stage.close();
 
     }
 
     @FXML
     private void hlDbOnAction(ActionEvent event) {
-        System.out.println("com.salesoft.view.LoginController.hlDbOnAction()");
-        Parent root;
-        try {
-            root = FXMLLoader.load(MainApp.class.getResource("view/Server.fxml"));
-            Scene scene = new Scene(root);
-            Stage nStage = new Stage();
-            nStage.setScene(scene);
-            nStage.setMaximized(false);
-            nStage.setTitle("Server Configure - Sale Soft");
-            nStage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        DBUtil.showServerConfigView();
     }
 
 }
