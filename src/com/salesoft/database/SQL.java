@@ -189,14 +189,21 @@ public class SQL {
             return "SELECT * FROM `" + dbName + "`.Product WHERE id=" + id;
         }
 
+        public static String GET(String barCode) {
+            return "SELECT * FROM `" + dbName + "`.Product WHERE barCode=" + barCode;
+        }
+
         public static String GET_ALL() {
             return "SELECT * FROM `" + dbName + "`.Product ORDER BY `id` DESC LIMIT 1000";
         }
 
-        /**
-         * Butun mehsullari almaq ucun istifade olunur (SELECT * ...)
-         */
-        public static final String PRODUCT_GET_ALL = "SELECT * FROM `" + dbName + "`.`Product`";
+        public static String SEARCH_BY_NAME_LIKE(String name) {
+            return "SELECT * FROM `" + dbName + "`.`Product` WHERE name LIKE '%" + name + "%'";
+        }
+
+        public static String SEARCH_BY_BARODE(String barCode) {
+            return "SELECT * FROM `" + dbName + "`.Product WHERE barCode=" + barCode;
+        }
 
         /**
          * SQL For PreparedStatement, id=? (SELECT * ... WHERE id=?)
@@ -219,16 +226,6 @@ public class SQL {
         public static final String PRODUCT_GET_BY_BARCODE_R = "SELECT * FROM `" + dbName + "`.`Product` WHERE barcode='barcodeR'";
 
         /**
-         * SQL For PreparedStatement, ad LIKE=?
-         */
-        public static final String PRODUCT_GEL_ALL_BY_NAME_LIKE_P = "SELECT * FROM `" + dbName + "`.`Product` WHERE ad LIKE ?";
-
-        /**
-         * SQL For ReplaceAll, ad LIKE=adR
-         */
-        public static final String PRODUCT_GEL_ALL_BY_NAME_LIKE_R = "SELECT * FROM `" + dbName + "`.`Product` WHERE ad LIKE 'adR'";
-
-        /**
          * SQL For PreparedStatement, barcode=?
          */
         public static final String PRODUCT_GEL_ALL_BY_BARCODE_P = "SELECT * FROM `" + dbName + "`.`Product` WHERE barcode=?";
@@ -237,6 +234,7 @@ public class SQL {
          * SQL For ReplaceAll, barcode=barcodeR
          */
         public static final String PRODUCT_GEL_ALL_BY_BARCODE_R = "SELECT * FROM `" + dbName + "`.`Product` WHERE barcode=barcodeR";
+
     }
 
     /**

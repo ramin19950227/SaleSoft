@@ -6,7 +6,6 @@
 package com.salesoft.controller.anbar;
 
 import com.salesoft.DAO.ProductDAO;
-import com.salesoft.DAO.ProductGetDAO;
 import com.salesoft.model.Product;
 import com.salesoft.controller.AnbarRootLayoutController;
 import java.net.URL;
@@ -69,7 +68,7 @@ public class ProductPurchseController implements Initializable {
         } else {
             String barCode = barCodeField.getText();
 
-            barcodeEnteredProduct = ProductGetDAO.getProductByBarCode(barCode);
+            barcodeEnteredProduct = ProductDAO.getByBarcode(barCode);
 
             if (barcodeEnteredProduct == null) {
 

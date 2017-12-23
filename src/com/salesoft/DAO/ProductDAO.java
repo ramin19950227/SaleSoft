@@ -9,6 +9,8 @@ import com.salesoft.database.DBUtil;
 import com.salesoft.database.SQL;
 import com.salesoft.model.Product;
 import com.salesoft.util.MyLogger;
+import com.salesoft.util.RsToModel;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -26,8 +28,8 @@ public class ProductDAO extends AbstractDAO<Product, Integer> {
             return true;
 
         } catch (SQLException ex) {
-            System.out.println("SQLException -  DAO.ProductDAO.create(): " + ex);
-            MyLogger.logException("SQLException - DAO.ProductDAO.create()", ex);
+            System.out.println("SQLException -  ProductDAO.create(): " + ex);
+            MyLogger.logException("SQLException - ProductDAO.create()", ex);
             return false;
         }
 
@@ -40,8 +42,8 @@ public class ProductDAO extends AbstractDAO<Product, Integer> {
             return true;
 
         } catch (SQLException ex) {
-            System.out.println("SQLException -  DAO.ProductDAO.update(): " + ex);
-            MyLogger.logException("SQLException - DAO.ProductDAO.update()", ex);
+            System.out.println("SQLException -  ProductDAO.update(): " + ex);
+            MyLogger.logException("SQLException - ProductDAO.update()", ex);
             return false;
         }
     }
@@ -53,8 +55,8 @@ public class ProductDAO extends AbstractDAO<Product, Integer> {
             return true;
 
         } catch (SQLException ex) {
-            System.out.println("SQLException -  DAO.ProductDAO.delete(): " + ex);
-            MyLogger.logException("SQLException - DAO.ProductDAO.delete()", ex);
+            System.out.println("SQLException -  ProductDAO.delete(): " + ex);
+            MyLogger.logException("SQLException - ProductDAO.delete()", ex);
             return false;
         }
 
@@ -62,12 +64,80 @@ public class ProductDAO extends AbstractDAO<Product, Integer> {
 
     @Override
     public Product getById(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        try {
+            ResultSet rs = DBUtil.directExecuteQuery(SQL.ProductSQL.GET(id));
+
+            return RsToModel.rsToProduct(rs);
+
+        } catch (SQLException ex) {
+            System.out.println("SQLException -  ProductDAO.getById(): " + ex);
+            MyLogger.logException("SQLException - ProductDAO.getById()", ex);
+            return null;
+        }
+    }
+
+    public Product getByBarcode(String barCode) {
+
+        try {
+            ResultSet rs = DBUtil.directExecuteQuery(SQL.ProductSQL.GET(barCode));
+
+            return RsToModel.rsToProduct(rs);
+
+        } catch (SQLException ex) {
+            System.out.println("SQLException -  ProductDAO.getByBarcode(): " + ex);
+            MyLogger.logException("SQLException - ProductDAO.getByBarcode()", ex);
+            return null;
+        }
     }
 
     @Override
     public ArrayList<Product> getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ArrayList<Product> list = new ArrayList<>();
+
+        try {
+            ResultSet rs = DBUtil.directExecuteQuery(SQL.ProductSQL.GET_ALL());
+
+            list = RsToModel.rsToProductList(rs);
+
+        } catch (SQLException ex) {
+            System.out.println("SQLException -  ProductDAO.getAll()(): " + ex);
+            MyLogger.logException("SQLException - ProductDAO.getAll()()", ex);
+        }
+
+        return list;
+    }
+
+    public ArrayList<Product> searchByNameLike(String name) {
+        ArrayList<Product> list = new ArrayList<>();
+
+        try {
+            ResultSet rs = DBUtil.directExecuteQuery(SQL.ProductSQL.SEARCH_BY_NAME_LIKE(name));
+
+            list = RsToModel.rsToProductList(rs);
+
+        } catch (SQLException ex) {
+            System.out.println("SQLException -  ProductDAO.searchByNameLike(): " + ex);
+            MyLogger.logException("SQLException - ProductDAO.searchByNameLike()", ex);
+        }
+
+        return list;
+    }
+
+    public ArrayList<Product> searchByBarcode(String barCode) {
+        ArrayList<Product> list = new ArrayList<>();
+
+        try {
+            ResultSet rs = DBUtil.directExecuteQuery(SQL.ProductSQL.SEARCH_BY_BARODE(barCode));
+
+            list = RsToModel.rsToProductList(rs);
+
+        } catch (SQLException ex) {
+            System.out.println("SQLException -  ProductDAO.searchByNameLike(): " + ex);
+            MyLogger.logException("SQLException - ProductDAO.searchByNameLike()", ex);
+        }
+
+        return list;
     }
 
 }

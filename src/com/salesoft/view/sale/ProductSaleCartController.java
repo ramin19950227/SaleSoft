@@ -11,8 +11,7 @@
 package com.salesoft.view.sale;
 
 import com.salesoft.DAO.InvoiceDAO;
-import com.salesoft.DAO.ProductGetDAO;
-import com.salesoft.DAO.ProductUpdateDAO;
+import com.salesoft.DAO.ProductDAO;
 import com.salesoft.model.Cart;
 import com.salesoft.model.CartItem;
 import com.salesoft.model.Product;
@@ -31,7 +30,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.Stage;
 
 /**
  * FXML Controller class Mehsul satishi bolumu Sebet yani
@@ -138,6 +136,7 @@ public class ProductSaleCartController implements Initializable {
     // barcodsuz mehsulu burda saxlayacam
     private Product nameEnteredProduct = null;
     private Integer nameEnteredProductCounter = 0;
+    private final ProductDAO ProductDAO = new ProductDAO();
 
     /**
      * Initializes the controller class.
@@ -254,7 +253,7 @@ public class ProductSaleCartController implements Initializable {
         String barCode = barCodeField.getText();
 
         //aldigimiz mehsulu vururuq yaddasha
-        this.barCodeEnteredProduct = ProductGetDAO.getProductByBarCode(barCode);
+        barCodeEnteredProduct = ProductDAO.getByBarcode(barCode);
 
         // xanalarda daha evvelden qalmish melumatlar ola biler
         //onlari silek sonra emeliyyat aparaq
@@ -710,18 +709,20 @@ public class ProductSaleCartController implements Initializable {
         cart.getArrayList().forEach((ci) -> {
             //barcodlu mehsulun satishi
             if (ci.getId() >= 0) {
-                System.out.println("barcodlu mehsulun satihi barcod=" + ci.getProduct().getBarCode());
-                System.out.println(ci.getName());
 
                 // saylarimiz haqqinda melumati aliriqq
                 Integer evvelki_say = ci.getProduct().getQty();
                 Integer satish_sayi = ci.getQty();
                 Integer qaliq_say = evvelki_say - satish_sayi;
 
+                Product product = ci.getProduct();
+                product.setQty(qaliq_say);
+
                 //mehsulumuzu satiriq yani sayini yenileyirik
                 // buna ProductDAO-da satish funksyasida yiga bilerik ve bir satish sayini vere bilerik
                 //qalanini ozude ede biler
-                ProductUpdateDAO.updateProductQtyById(ci.getId(), qaliq_say);
+                // indi ise satishi elememisheden evvel mehsulumuzun sayini azaldaq
+                ProductDAO.update(product);
 
                 //indi sayi azaltdiq satish haqqinda melumati yazaq bazaya brbir
                 InvoiceDAO.insertNewInvoiceItem(history_id, ci);

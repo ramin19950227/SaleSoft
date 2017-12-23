@@ -6,7 +6,6 @@
 package com.salesoft.controller.anbar;
 
 import com.salesoft.DAO.ProductDAO;
-import com.salesoft.DAO.ProductGetDAO;
 import com.salesoft.MainApp;
 import com.salesoft.model.Product;
 import java.net.URL;
@@ -268,7 +267,7 @@ public class ProductTableController implements Initializable {
             //eger daxil olan data ULDUZ-durza (*) onda hamsini goster
             //bazya sorgu edirik ve butun mehsullari isteyirik
             //varsa qaytaracaq yoxdursa null qaytaracaq
-            ArrayList<Product> requestList = ProductGetDAO.getAllProductList();
+            ArrayList<Product> requestList = ProductDAO.getAll();
 
             // yoxlayiriq eger requestList bosh deyilse
             // onda if blokundaki emirleri edirik
@@ -288,14 +287,14 @@ public class ProductTableController implements Initializable {
             }
             //yoxlama Eger daxil edilen melumat barcoddursa o zaman songu gonderib  cavabini
             // yoxlayiriq ve eger barcoddursao zaman sorgunun cavabina mehsul Listi gelmelidir
-        } else if (ProductGetDAO.getAllProductListByBarCode(data) != null) {// barcodla tapdisa bu blok ishe dushecek
-            ArrayList<Product> requestList = ProductGetDAO.getAllProductListByBarCode(data);
+        } else if (!ProductDAO.searchByNameLike(data).isEmpty()) {//adla axtarib tapdisa bu blok ishe dushecek
+            ArrayList<Product> requestList = ProductDAO.searchByNameLike(data);
 
             productList.clear();
             productList.addAll(requestList);
             productTable.setItems(productList);
-        } else if (ProductGetDAO.getAllProductListByNameLike(data) != null) {//adla axtarib tapdisa bu blok ishe dushecek
-            ArrayList<Product> requestList = ProductGetDAO.getAllProductListByNameLike(data);
+        } else if (!ProductDAO.searchByBarcode(data).isEmpty()) {// barcodla tapdisa bu blok ishe dushecek
+            ArrayList<Product> requestList = ProductDAO.searchByBarcode(data);
 
             productList.clear();
             productList.addAll(requestList);
@@ -382,7 +381,7 @@ public class ProductTableController implements Initializable {
 
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Mehsulun Bazadan Silinmesi");
-            alert.setHeaderText("Adi: " + selectedProduct.getName() + " - Sayi: "+selectedProduct.getQty());
+            alert.setHeaderText("Adi: " + selectedProduct.getName() + " - Sayi: " + selectedProduct.getQty());
             alert.setContentText(" - Bu Mehsulu Bazadan silmek isteyirsiniz?");
             Optional<ButtonType> action = alert.showAndWait();
 
