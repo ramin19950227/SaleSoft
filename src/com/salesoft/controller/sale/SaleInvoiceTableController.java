@@ -1,12 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.salesoft.view.sale;
+package com.salesoft.controller.sale;
 
 import com.salesoft.DAO.impl.InvoiceDAO;
-import com.salesoft.MainApp;
 import com.salesoft.model.Invoice;
 import java.net.URL;
 import java.util.ArrayList;
@@ -29,9 +23,6 @@ import javafx.scene.input.MouseEvent;
 public class SaleInvoiceTableController implements Initializable {
 
     @FXML
-    private TableView<Invoice> invoiceTable;
-
-    @FXML
     private TableColumn<Invoice, Number> idColumn;
     @FXML
     private TableColumn<Invoice, String> nameColumn;
@@ -40,11 +31,15 @@ public class SaleInvoiceTableController implements Initializable {
     @FXML
     private TableColumn<Invoice, String> dateColumn;
 
+    @FXML
+    private TableView<Invoice> invoiceTable;
     private final ObservableList<Invoice> invoicetList = FXCollections.observableArrayList();
-    InvoiceDAO invoiceDao = new InvoiceDAO();
+
+    private final InvoiceDAO invoiceDao = new InvoiceDAO();
 
     /**
      * Initializes the controller class.
+     *
      * @param url
      * @param rb
      */
@@ -60,9 +55,7 @@ public class SaleInvoiceTableController implements Initializable {
         invoiceTable.setOnMousePressed((MouseEvent event) -> {
             if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
                 Integer invoice_id = invoiceTable.getSelectionModel().getSelectedItem().getId();
-                System.out.println(invoice_id);
-                //mainApp.showSaleInvoiceDetailsTable(invoice_id);
-                //System.out.print(InvoiceDAO.getAllInvoiceItemListById(invoice_id).get(0).getName());
+                //TODO
             }
         });
 
@@ -75,8 +68,6 @@ public class SaleInvoiceTableController implements Initializable {
                     // yoxsa gonderirem ve error cixir nullPointerException
                     if (newValue != null) {
                         setInvoiceToEdit(newValue);
-                    } else {
-                        System.out.println("invoiceTable Selection PRODUCT NULL AUTOCALL");
                     }
                 });
 
@@ -85,7 +76,7 @@ public class SaleInvoiceTableController implements Initializable {
     }
 
     private void updateTable() {
-        ArrayList<Invoice> invoiceList = invoiceDao.getAllInvoice();
+        ArrayList<Invoice> invoiceList = invoiceDao.getAll();
         invoicetList.clear();
         if (invoicetList != null) {
             invoicetList.addAll(invoiceList);
@@ -106,14 +97,6 @@ public class SaleInvoiceTableController implements Initializable {
         } else {
             updateTable();
         }
-    }
-
-    // Ссылка на главное приложение.
-    private MainApp mainApp;
-
-    public void setMainApp(MainApp mainApp) {
-        this.mainApp = mainApp;
-
     }
 
     /**
@@ -154,14 +137,12 @@ public class SaleInvoiceTableController implements Initializable {
         if (isInputValid()) {
             if (idField.getText() == null || idField.getText().length() == 0) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.initOwner(mainApp.getPrimaryStage());
                 alert.setTitle("Cedvelde Qaimeni Secin");
                 alert.setHeaderText("Zehmet olmasa Qaimeni Cedvelden secin");
                 alert.setContentText("Qaimeni Secib Sonra Duymeye basin");
                 alert.showAndWait();
-                return;
             } else {
-                invoiceDao.updateInvoiceCustoemerNameById(Integer.valueOf(idField.getText()), nameField.getText());
+                invoiceDao.update(new Invoice(Integer.valueOf(idField.getText()), "", 0, nameField.getText()));
                 updateTable(nameField.getText());
             }
 
@@ -188,7 +169,6 @@ public class SaleInvoiceTableController implements Initializable {
         if (selectedInvoice == null) {
             System.out.println("null");
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.initOwner(mainApp.getPrimaryStage());
             alert.setTitle("Cedvelde Qaimeni Secin");
             alert.setHeaderText("Zehmet olmasa Qaimeni Cedvelden secin");
             alert.setContentText("Qaimeni Secib Sonra Duymeye basin");
@@ -246,7 +226,6 @@ public class SaleInvoiceTableController implements Initializable {
         } else {
             // Показываем сообщение об ошибке.
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.initOwner(mainApp.getPrimaryStage());
             alert.setTitle("Dogru Daxil edin");
             alert.setHeaderText("Zehmet olmasa melumatlarini dogru daxil edin");
             alert.setContentText(errorMessage);

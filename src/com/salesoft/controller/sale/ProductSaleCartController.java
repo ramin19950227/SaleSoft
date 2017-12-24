@@ -1,15 +1,16 @@
- 
 /**
  * TEKLIFLER
  * XAnalarin validationlarini metoda cixartmaq olar
  *
  */
-package com.salesoft.view.sale;
+package com.salesoft.controller.sale;
 
+import com.salesoft.controller.sale.PrintInvoice;
 import com.salesoft.DAO.impl.InvoiceDAO;
 import com.salesoft.DAO.impl.ProductDAO;
 import com.salesoft.model.Cart;
 import com.salesoft.model.CartItem;
+import com.salesoft.model.Invoice;
 import com.salesoft.model.Product;
 import java.awt.Toolkit;
 import java.net.URL;
@@ -134,6 +135,7 @@ public class ProductSaleCartController implements Initializable {
     private Integer nameEnteredProductCounter = 0;
     private final ProductDAO ProductDAO = new ProductDAO();
     private InvoiceDAO invoiceDAO = new InvoiceDAO();
+
     /**
      * Initializes the controller class.
      *
@@ -696,8 +698,9 @@ public class ProductSaleCartController implements Initializable {
             totalPrice = getTotalPriceFormCart();
         }
 
+        Invoice invoice = new Invoice(0, "", totalPrice, customerName);
         // Qaime syahisina yaziriq ve id aliriq
-        invoiceDAO.insertNewInvoice(customerName, totalPrice);
+        invoiceDAO.create(invoice);
         Integer history_id = invoiceDAO.getLastIdInInvoiceTable();
 
         //Qaime nomremiz var indi satish edirik

@@ -5,8 +5,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.salesoft.view.sale;
+package com.salesoft.controller.sale;
 
+import com.salesoft.controller.sale.PrintInvoice;
 import com.salesoft.DAO.impl.InvoiceDAO;
 import com.salesoft.DAO.impl.ProductDAO;
 import com.salesoft.model.Invoice;
@@ -35,14 +36,9 @@ import javafx.stage.Stage;
  */
 public class SaleInvoiceDetailsTableController implements Initializable {
 
-    // <editor-fold defaultstate="collapsed" desc="Declaration Block">
-    /**
-     * Declaration Class Properties lazim olan propertileri elan edirik
-     */
     /**
      * InvoiceItem Edit Properties
      */
-    //geri qaytarilma sayinin yazilacagi xana
     @FXML
     private TextField productReturnQty;
 
@@ -78,16 +74,14 @@ public class SaleInvoiceDetailsTableController implements Initializable {
     @FXML
     private Label meblegLabel;
 
-    //
     private final ObservableList<InvoiceItem> invoicetList = FXCollections.observableArrayList();
     private final ProductDAO ProductDAO = new ProductDAO();
-    private  InvoiceDAO invoiceDAO = new InvoiceDAO();
+    private final InvoiceDAO invoiceDAO = new InvoiceDAO();
 
     // aldigimiz invoice obyektini burda saxlayiriq
     Invoice invoice = null;
 
     // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="initialize() - method Block">
     /**
      * Initializes the controller class. ishe bashlamazdan evvel bezi
      * obyektlerimizi hazirlayiriq
@@ -122,9 +116,8 @@ public class SaleInvoiceDetailsTableController implements Initializable {
         // HE Super Ishleyirrmish
         clearField();
 
-    }// </editor-fold>
+    }
 
-    // <editor-fold defaultstate="collapsed" desc="initDataById(int id)">
     /**
      * Bu metoda verilen id ile axtarish edecek ve qeyd tapacaqsa gosterecek
      * cedvelde, yox eger tpa bilmese xeberdarliq cixaracaq
@@ -133,7 +126,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
      */
     @FXML
     public void initDataById(int id) {
-        invoice = invoiceDAO.getInvoiceById(id);
+        invoice = invoiceDAO.get(id);
 
         if (invoice != null) {
             cutomerNameLabel.setText(invoice.getCustomerName());
@@ -150,9 +143,8 @@ public class SaleInvoiceDetailsTableController implements Initializable {
             errorAlert("Bu Nomre ile Qaime Tapilmadi", "Bu Nomre ile Qaime Tapilmadi", "Bu Nomre ile Qaime Tapilmadi");
         }
 
-    }// </editor-fold>
+    }
 
-    // <editor-fold defaultstate="collapsed" desc="onActionShowInvoiceButton()">
     /**
      * Mushteri Qaime nomresini yazib enteri basdiqda bu Metod yazilan qaime
      * nomresini initDataById() metoduna gonderecek
@@ -177,9 +169,8 @@ public class SaleInvoiceDetailsTableController implements Initializable {
         idField.requestFocus();
         idField.selectAll();
 
-    }// </editor-fold>
+    }
 
-    // <editor-fold defaultstate="collapsed" desc="errorAlert(String title, String header, String content)">
     /**
      * Bu metod error xeberdarligi cixartmaq ucun istifade olunur
      *
@@ -193,9 +184,8 @@ public class SaleInvoiceDetailsTableController implements Initializable {
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
-    }// </editor-fold>
+    }
 
-    // <editor-fold defaultstate="collapsed" desc="onActionPrintButton()">
     /**
      * Qaime nomresini yazib Cap et duymesini basdiqda bu metot cap ishlemini
      * bashladir
@@ -207,9 +197,8 @@ public class SaleInvoiceDetailsTableController implements Initializable {
         } else {
             errorAlert("Zehmet olmasa Qaime nomresini yazin", "Zehmet olmasa Qaime nomresini yazin", "Sonra qaimeni gosterin daha sonra cap edin");
         }
-    }// </editor-fold>
+    }
 
-    // <editor-fold defaultstate="collapsed" desc="onActionReturnButton()">                          
     /**
      * Geri qaytarilma duymesi basildiqda Bu metod ishe dushur
      */
@@ -324,7 +313,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
                     invoice.setTotalPrice(invoiceSonMebleg);
 
                     // ve hazir Invoice Obyektimizi yenileyirik
-                    invoiceDAO.updateInvoice(invoice);
+                    invoiceDAO.update(invoice);
 
                     //yenilemeler bitdikden sonra indi Invoice Obyektimizi de yenilemeliyik
                     initDataById(invoice.getId());
@@ -358,9 +347,8 @@ public class SaleInvoiceDetailsTableController implements Initializable {
         setInvoiceItemEditFields(selectedInvoiceItem);
         //super ishledi
         //.
-    }//  </editor-fold> 
+    }
 
-    // <editor-fold defaultstate="collapsed" desc="setInvoiceItemEditFields(InvoiceItem invoiceItem)">                          
     /**
      * Aldigimiz InvoiceItem - obyektini bumetoda verdikde onu yandaki Redakte
      * Paneline yazir
@@ -389,9 +377,8 @@ public class SaleInvoiceDetailsTableController implements Initializable {
 
         }
 
-    }//  </editor-fold> 
+    }
 
-    // <editor-fold defaultstate="collapsed" desc="isInputValid()">                          
     /**
      * Bu Metod Xanalarimiza melumatin dogru daxil olub olmadigin yoxlayir eger
      * melumatlar dogru daxil edilibse o zaman true qaytarir yox eger seyf varsa
@@ -438,9 +425,8 @@ public class SaleInvoiceDetailsTableController implements Initializable {
 
             return false;
         }
-    }//  </editor-fold> 
+    }
 
-    // <editor-fold defaultstate="collapsed" desc="clearField()">                          
     /**
      * Bu metod xanalari evvelki veziyyetine getirir, eger hec bir secim
      * edilmeyibse o zaman say bolumune hecne daxil etmeye etiyyac yoxdur ve
@@ -462,5 +448,5 @@ public class SaleInvoiceDetailsTableController implements Initializable {
         // noteField - sadece olsaydi bes edirdi mene ele gelir
         productReturnNote.setDisable(true);
 
-    }//  </editor-fold> 
+    }
 }

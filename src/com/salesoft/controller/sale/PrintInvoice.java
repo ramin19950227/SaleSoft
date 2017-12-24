@@ -1,4 +1,4 @@
-package com.salesoft.view.sale;
+package com.salesoft.controller.sale;
 
 import com.salesoft.DAO.impl.InvoiceDAO;
 import com.salesoft.MainApp;
@@ -42,7 +42,7 @@ public class PrintInvoice {
     //bu da yeni ve daha rahat constructor
     public PrintInvoice(Integer historyId) {
         myStage = MainApp.getPrimaryStage();
-        invoice = invoiceDAO.getInvoiceById(historyId);
+        invoice = invoiceDAO.get(historyId);
     }
 
     CheckBox cbA4 = new CheckBox("A4");
