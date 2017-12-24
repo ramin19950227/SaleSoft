@@ -27,12 +27,19 @@ public class Product {
     //cunki adi qayda ile int a, String b, tipli yazsam irelide
     //problemle rastlashacam Cedvelde Redkte 
     private final IntegerProperty id;//1
-    private final StringProperty name;;//2
+    private final StringProperty name;
+    ;//2
     private final IntegerProperty qty;//3  
     private final DoubleProperty purchasePrice;//4
     private final StringProperty barCode;//5
     private final StringProperty note;//6
 
+    /**
+     * Kohne Constructor bele olanda gerek her sheyi set edem hansinisa unutsam
+     * Problem Cixacaq
+     *
+     * @deprecated
+     */
     public Product() {
         this.id = new SimpleIntegerProperty(0);
         this.name = new SimpleStringProperty("name");
@@ -40,6 +47,25 @@ public class Product {
         this.purchasePrice = new SimpleDoubleProperty(0.0);
         this.barCode = new SimpleStringProperty("barCode");
         this.note = new SimpleStringProperty("note");
+    }
+
+    /**
+     * Yeni Construktor Yeni DAO-da Bunu Istifade edecem
+     *
+     * @param id
+     * @param name
+     * @param qty
+     * @param purchasePrice
+     * @param barCode
+     * @param note
+     */
+    public Product(Integer id, String name, Integer qty, Double purchasePrice, String barCode, String note) {
+        this.id = new SimpleIntegerProperty(id);
+        this.name = new SimpleStringProperty(name);
+        this.qty = new SimpleIntegerProperty(qty);
+        this.purchasePrice = new SimpleDoubleProperty(purchasePrice);
+        this.barCode = new SimpleStringProperty(barCode);
+        this.note = new SimpleStringProperty(note);
     }
 
     public final void setId(int value) {
@@ -112,6 +138,15 @@ public class Product {
 
     public final StringProperty noteProperty() {
         return note;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" + "id=" + id + ", name=" + name + ", qty=" + qty + ", purchasePrice=" + purchasePrice + ", barCode=" + barCode + ", note=" + note + '}';
+    }
+
+    public void println() {
+        System.out.println(toString());
     }
 
 }

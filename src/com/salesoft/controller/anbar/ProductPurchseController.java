@@ -3,14 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.salesoft.view.anbar;
+package com.salesoft.controller.anbar;
 
-import com.salesoft.DAO.ProductGetDAO;
-import com.salesoft.DAO.ProductUpdateDAO;
-import com.salesoft.DAO.ProductNewDAO;
-import com.salesoft.MainApp;
+import com.salesoft.DAO.ProductDAO;
 import com.salesoft.model.Product;
-import com.salesoft.view.AnbarRootLayoutController;
+import com.salesoft.controller.AnbarRootLayoutController;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -45,6 +42,7 @@ public class ProductPurchseController implements Initializable {
     private Button saveButton;
 
     private Product barcodeEnteredProduct = null;
+    private final ProductDAO ProductDAO = new ProductDAO();
 
     /**
      * Initializes the controller class.
@@ -70,7 +68,7 @@ public class ProductPurchseController implements Initializable {
         } else {
             String barCode = barCodeField.getText();
 
-            barcodeEnteredProduct = ProductGetDAO.getProductByBarCode(barCode);
+            barcodeEnteredProduct = ProductDAO.getByBarcode(barCode);
 
             if (barcodeEnteredProduct == null) {
 
@@ -115,28 +113,42 @@ public class ProductPurchseController implements Initializable {
         boolean isValid = isInputValid();
 
         if (isValid && barcodeEnteredProduct != null) {
-            Integer id = barcodeEnteredProduct.getId();
+
+            // bu mehsulumuzun kohne sayi
             Integer oldQty = barcodeEnteredProduct.getQty();
+
+            //bu yeni daxil edilen say
             Integer enteredQty = Integer.valueOf(qtyField.getText());
-            Integer newQty = oldQty + enteredQty;
 
-            ProductUpdateDAO.updateProductNameById(id, nameField.getText());
-            ProductUpdateDAO.updateProductQtyById(id, newQty);
-            ProductUpdateDAO.updateProductPurchasePriceById(id, Double.valueOf(purchasePriceField.getText()));
-            ProductUpdateDAO.updateProductBarCodeById(id, barCodeField.getText());
-            ProductUpdateDAO.updateProductNoteById(id, noteField.getText());
+            //buda netice son say yani CEMI
+            Integer sumQty = oldQty + enteredQty;
 
-            //mainApp.showProductTable();
+            barcodeEnteredProduct.setName(nameField.getText());
+            barcodeEnteredProduct.setQty(sumQty);
+            barcodeEnteredProduct.setPurchasePrice(Double.valueOf(purchasePriceField.getText()));
+            barcodeEnteredProduct.setBarCode(barCodeField.getText());
+            barcodeEnteredProduct.setNote(noteField.getText());
+
+            //indi yenileyek
+            ProductDAO.update(barcodeEnteredProduct);
+
+            // sonra ise Anbari gosteririk
             AnbarRootLayoutController.appControl.btnStockOnClick();
 
         } else if (isValid && barcodeEnteredProduct == null) {
+
             String name = nameField.getText();
             Integer qty = Integer.valueOf(barCodeField.getText());
             Double purchasePrice = Double.valueOf(purchasePriceField.getText());
             String barCode = barCodeField.getText();
             String note = noteField.getText();
 
-            ProductNewDAO.createNewProduct(name, qty, purchasePrice, barCode, note);
+            Product product = new Product(0, name, qty, purchasePrice, barCode, note);
+
+            // Yeni DAO-muza Yeni Sorgu Gonderek )) Bele Cox Gozel Gorsenir
+            // yeni obyektimizi hazirlayiriq ve gonderirik metodumuza
+            ProductDAO.create(product);
+
             AnbarRootLayoutController.appControl.btnStockOnClick();
         }
     }

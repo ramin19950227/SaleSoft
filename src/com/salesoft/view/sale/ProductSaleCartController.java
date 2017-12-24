@@ -10,13 +10,12 @@
  */
 package com.salesoft.view.sale;
 
-import com.salesoft.DAO.HistoryDAO;
-import com.salesoft.DAO.ProductGetDAO;
-import com.salesoft.DAO.ProductUpdateDAO;
-import com.salesoft.MainApp;
+import com.salesoft.DAO.InvoiceDAO;
+import com.salesoft.DAO.ProductDAO;
 import com.salesoft.model.Cart;
 import com.salesoft.model.CartItem;
 import com.salesoft.model.Product;
+import java.awt.Toolkit;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -38,9 +37,6 @@ import javafx.scene.input.KeyEvent;
  * @author Ramin
  */
 public class ProductSaleCartController implements Initializable {
-
-    private Integer namedProductCounter = 0;
-    private MainApp mainApp;
 
     /**
      * -----------------------------SAG EDIT PANEL PROPERTIES
@@ -94,7 +90,7 @@ public class ProductSaleCartController implements Initializable {
      * Mushteri adi
      */
     @FXML
-    private TextField consumerName;
+    private TextField customerName;
 
     /**
      * -----------------------------TABLE, COLUMN PROPERTIES
@@ -139,6 +135,8 @@ public class ProductSaleCartController implements Initializable {
 
     // barcodsuz mehsulu burda saxlayacam
     private Product nameEnteredProduct = null;
+    private Integer nameEnteredProductCounter = 0;
+    private final ProductDAO ProductDAO = new ProductDAO();
 
     /**
      * Initializes the controller class.
@@ -149,6 +147,23 @@ public class ProductSaleCartController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+
+        barCodeField.setPromptText("Barcodu Daxil edin");
+
+        barCodeField.setOnMouseClicked((ecent) -> {
+            barCodeField.selectAll();
+            barCodeField.requestFocus();
+        });
+
+        qtyField.setPromptText("Say daxil edin");
+
+        qtyField.setOnKeyPressed((event) -> {
+            System.out.println("KEYCODE is: " + event.getCode().toString());
+            if (event.isControlDown() && (event.getCode() == KeyCode.BACK_SPACE)) {
+                clearFields();
+                barCodeField.requestFocus();
+            }
+        });
 
         //mebleg Label-imizi sifirlayiriq
         cartTotalPrice.setText("0.00");
@@ -164,7 +179,7 @@ public class ProductSaleCartController implements Initializable {
             KeyCode key = t.getCode();
             if (key == KeyCode.DELETE) {
                 if (cartTable.getSelectionModel().getSelectedItem() == null) {
-                    errorAlert("Zehmet Olmasa Mehsulu Secin", "Zehmet Olmasa Mehsulu Secin", "Zehmet Olmasa Mehsulu Secin");
+                    MyAlert("Zehmet Olmasa Mehsulu Secin", "Zehmet Olmasa Mehsulu Secin", "Zehmet Olmasa Mehsulu Secin");
                 } else {
                     int key2 = (int) cartTable.getSelectionModel().getSelectedItem().getId();
                     System.out.println("line 157, key2=" + key2);
@@ -195,9 +210,15 @@ public class ProductSaleCartController implements Initializable {
 
                         //eger mehsul id-si 0-dan azdirsa
                     } else if (newValue != null && newValue.getId() < 0) {
+                        //mehsulumuzu aliriq ve saxlayiriq
                         nameEnteredProduct = newValue.getProduct();
-                        barCodeField.setText(null);
-                        barCodeField.setEditable(false);
+
+                        //barcod xanamiza yaziriq ki mehsul barcodsuz mehuldur
+                        barCodeField.setText("Barcodsuz Məhsul");
+
+                        //barcod xanasini sondururuk yani Disable edirik
+                        barCodeField.setDisable(true);
+
                         nameField.setText(newValue.getName());
                         qtyField.setText(newValue.getQty().toString());
                         onePrice.setText(newValue.getSalePrice().toString());
@@ -219,13 +240,24 @@ public class ProductSaleCartController implements Initializable {
     @FXML
     private void onActionBarcodeField() {
 
+        if (barCodeField.getText() == null || barCodeField.getText().trim().isEmpty()) {
+            clearFields();
+            barCodeField.requestFocus();
+
+            //Sistemin standart error sesi - dit edir
+            Toolkit.getDefaultToolkit().beep();
+
+            return;
+        }
+
         String barCode = barCodeField.getText();
 
-        if (barCode == null || barCode.equals("")) {
-            errorAlert("Zehmet Olmaza Barcodu Daxil Edib Sonra Enteri basin!!!!", "Barcodu Daxil edin", "Barcodu Daxil edin");
-        }
         //aldigimiz mehsulu vururuq yaddasha
-        this.barCodeEnteredProduct = ProductGetDAO.getProductByBarCode(barCode);
+        barCodeEnteredProduct = ProductDAO.getByBarcode(barCode);
+
+        // xanalarda daha evvelden qalmish melumatlar ola biler
+        //onlari silek sonra emeliyyat aparaq
+        clearFields();
 
         //Mehsulu aldiqdan sonra yoxlayiriq eger sebette varsa ne edek?
         // sayini 1 ed artiraqmi
@@ -233,24 +265,27 @@ public class ProductSaleCartController implements Initializable {
         if (barCodeEnteredProduct != null && barCodeEnteredProduct.getQty() != 0) {
 
             if (!cart.containsKey(barCodeEnteredProduct.getId())) {
-                clearFields();
                 setProductToEditFields(barCodeEnteredProduct);
                 updateStatusChange(false);
             } else {
-                clearFields();
                 setProductToEditFields(barCodeEnteredProduct);
                 updateStatusChange(true);
             }
 
         } else if (barCodeEnteredProduct != null && barCodeEnteredProduct.getQty() == 0) {
 
-            barCodeField.setText("Mehsul Qalmayib");
+            nameField.setText("Məhsul Qalmayıb");
             barCodeField.selectAll();
+
+            Toolkit.getDefaultToolkit().beep();
 
         } else {
 
-            errorAlert("Bu BarCod-la Mehsul Tapilmadi", "Mehsul Tapilmadi", "Mehsul Tapilmadi");
-            clearFields();
+            nameField.setText("Məhsul Tapılmadı");
+            barCodeField.selectAll();
+
+            Toolkit.getDefaultToolkit().beep();
+
         }
 
     }
@@ -263,17 +298,17 @@ public class ProductSaleCartController implements Initializable {
         if (barCodeEnteredProduct == null && nameField.getText().length() > 0) {
 
             Product p = new Product();
-            p.setId(--namedProductCounter);
+            p.setId(--nameEnteredProductCounter);
             p.setName(nameField.getText());
             p.setQty(1000);
             p.setPurchasePrice(1.5);
+            p.setBarCode("");
             nameEnteredProduct = p;
             cart.addCartitem(new CartItem(nameEnteredProduct, 1, 10));
 
             updateTable();
             clearFields();
             barCodeField.requestFocus();
-            nameField.setEditable(true);
 
         }
     }
@@ -382,7 +417,7 @@ public class ProductSaleCartController implements Initializable {
 
         System.out.println("meblegString=:" + meblegString);
         if (meblegString == null || meblegString.equals("") || Double.valueOf(meblegString) <= 0) {
-            errorAlert("Zehmet Olmaza MEblegi Dogru Daxil Edib Sonra Enteri basin", "Meblegi Daxil edin", "Meblegi Daxil edin");
+            MyAlert("Zehmet Olmaza MEblegi Dogru Daxil Edib Sonra Enteri basin", "Meblegi Daxil edin", "Meblegi Daxil edin");
         } else {
             mebleg = Double.valueOf(meblegString);
         }
@@ -395,7 +430,7 @@ public class ProductSaleCartController implements Initializable {
             birEdediQiymeti = mebleg / say;
             onePrice.setText(birEdediQiymeti.toString());
         } else if (say == null) {
-            errorAlert("Mehsulun sayini Daxil edin", "Mehsulun sayini Daxil edin", "Mehsulun sayini Daxil edin");
+            MyAlert("Mehsulun sayini Daxil edin", "Mehsulun sayini Daxil edin", "Mehsulun sayini Daxil edin");
 
             qtyField.requestFocus();
             return;
@@ -430,10 +465,6 @@ public class ProductSaleCartController implements Initializable {
             barCodeField.requestFocus();
         }
 
-        System.out.println("com.salesoft.view.ProductSaleCartController.onActionProductAddButton()");
-        System.out.println("namedProduct=null" + (nameEnteredProduct == null));
-        System.out.println("barCodeEnteredProduct=null" + (barCodeEnteredProduct == null));
-
         //barcodsuz mehsulun yenilenmesi
         if (barCodeEnteredProduct == null && nameEnteredProduct != null) {
             if (cart.containsKey(nameEnteredProduct.getId())) {
@@ -447,7 +478,7 @@ public class ProductSaleCartController implements Initializable {
             if (barCodeEnteredProduct == null && nameField.getText().length() > 0) {
 
                 Product p = new Product();
-                p.setId(--namedProductCounter);
+                p.setId(--nameEnteredProductCounter);
                 p.setName(nameField.getText());
                 p.setQty(1000);
                 p.setPurchasePrice(1.5);
@@ -457,7 +488,6 @@ public class ProductSaleCartController implements Initializable {
                 updateTable();
                 clearFields();
                 barCodeField.requestFocus();
-                nameField.setEditable(true);
 
             }
 
@@ -486,7 +516,8 @@ public class ProductSaleCartController implements Initializable {
      */
     private void clearFields() {
         barCodeField.setText(null);
-        barCodeField.setEditable(true);
+        barCodeField.setDisable(false);
+
         nameField.setEditable(true);
         nameField.setText(null);
         qtyField.setText(null);
@@ -558,8 +589,8 @@ public class ProductSaleCartController implements Initializable {
      * Mushteri adi Getter and Validator for null
      *
      */
-    private String getConsumerNameFormField() {
-        String filed = consumerName.getText();
+    private String getCustomerNameFormField() {
+        String filed = customerName.getText();
         if (filed != null && !filed.equals("")) {
             return filed;
         }
@@ -573,7 +604,7 @@ public class ProductSaleCartController implements Initializable {
      * @param header
      * @param content
      */
-    private void errorAlert(String title, String header, String content) {
+    private void MyAlert(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(header);
@@ -593,11 +624,6 @@ public class ProductSaleCartController implements Initializable {
         }
     }
 
-    public void setMainApp(MainApp mainApp) {
-        this.mainApp = mainApp;
-        barCodeField.requestFocus();
-    }
-
     /**
      * Parametr olaraq verilen Product-i set edir saxdaki Xanalara
      * (TextField-lere)
@@ -605,6 +631,12 @@ public class ProductSaleCartController implements Initializable {
      * @param product
      */
     private void setProductToEditFields(Product product) {
+
+        if (product.getBarCode().isEmpty()) {
+            barCodeField.setPromptText("Barcodsuz Məhsul");
+            barCodeField.setDisable(true);
+        }
+
         barCodeField.setText(product.getBarCode());
         nameField.setText(product.getName());
         nameField.setEditable(false);
@@ -622,7 +654,7 @@ public class ProductSaleCartController implements Initializable {
     private void updateStatusChange(boolean b) {
         update = b;
         if (b) {
-            addButton.setText("Update");
+            addButton.setText("Yenilə");
         } else {
             addButton.setText("Elave et");
         }
@@ -651,58 +683,71 @@ public class ProductSaleCartController implements Initializable {
         //satisha bashladiqda ilk once qaime nomresi almaq lazimdir
         // Mushteri adi ve mebleg ile qaime siyahisina melumatlari yaziriq ve id-sini aliriq
         // mushteri adimizi alar
-        String consumerName = null;
-        if (getConsumerNameFormField() == null) {
-            errorAlert("Mushteri adi daxil edin", "Mushteri adi daxil edin", "Mushteri adi daxil edin");
+        String customerName;
+        if (getCustomerNameFormField() == null) {
+            MyAlert("Mushteri adi daxil edin", "Mushteri adi daxil edin", "Mushteri adi daxil edin");
             return;
         } else {
-            consumerName = getConsumerNameFormField();
+            customerName = getCustomerNameFormField();
         }
 
         //meblegi aliriq
-        Double totalPrice = null;
+        Double totalPrice;
         if (getTotalPriceFormCart() == null) {
-            errorAlert("Satish Meblegi 0-dir", "Satish Meblegi 0-dir", "Satish Meblegi 0-dir");
+            MyAlert("Satish Meblegi 0-dir", "Satish Meblegi 0-dir", "Satish Meblegi 0-dir");
             return;
         } else {
             totalPrice = getTotalPriceFormCart();
         }
 
         // Qaime syahisina yaziriq ve id aliriq
-        Integer history_id = HistoryDAO.startSatishHistoryAndGetHistoryId(consumerName, totalPrice);
+        InvoiceDAO.insertNewInvoice(customerName, totalPrice);
+        Integer history_id = InvoiceDAO.getLastIdInInvoiceTable();
 
         //Qaime nomremiz var indi satish edirik
         //mehsulumuzu dovrile bir bir satacayiq ve satish siyahimiza qeydlerimizi edeceyik
-        for (CartItem ci : cart.getArrayList()) {
+        cart.getArrayList().forEach((ci) -> {
             //barcodlu mehsulun satishi
             if (ci.getId() >= 0) {
-                System.out.println("barcodlu mehsulun satihi barcod=" + ci.getProduct().getBarCode());
-                System.out.println(ci.getName());
 
                 // saylarimiz haqqinda melumati aliriqq
                 Integer evvelki_say = ci.getProduct().getQty();
                 Integer satish_sayi = ci.getQty();
                 Integer qaliq_say = evvelki_say - satish_sayi;
 
+                Product product = ci.getProduct();
+                product.setQty(qaliq_say);
+
                 //mehsulumuzu satiriq yani sayini yenileyirik
                 // buna ProductDAO-da satish funksyasida yiga bilerik ve bir satish sayini vere bilerik
                 //qalanini ozude ede biler
-                ProductUpdateDAO.updateProductQtyById(ci.getId(), qaliq_say);
+                // indi ise satishi elememisheden evvel mehsulumuzun sayini azaldaq
+                ProductDAO.update(product);
 
                 //indi sayi azaltdiq satish haqqinda melumati yazaq bazaya brbir
-                HistoryDAO.insertSaleDetailsIntoSATISH_LIST(history_id, ci);
+                InvoiceDAO.insertNewInvoiceItem(history_id, ci);
 
                 //barcodsuz mehsulun satishi
             } else {
                 System.out.println("barcodSUZ mehsulun satishi id=" + ci.getId());
                 // bazamizda olmadigi ucun mehsul say hesabi da etmirik 
                 //sadece satish yaziriq ve birdi
-                HistoryDAO.insertSaleDetailsIntoSATISH_LIST(history_id, ci);
+                InvoiceDAO.insertNewInvoiceItem(history_id, ci);
 
             }
-        }
-        System.out.println("com.salesoft.view.ProductSaleCartController.saleAllProductInCart()");
-        //mainApp.showSaleInvoiceDetailsTable(history_id);
+        });
+
+        String content = "Qaime №: " + history_id + ", Müştəri: " + customerName;
+
+        MyAlert("Satish Tamamlandi", "Satish Tamamlandi", content);
+
+        //indi satishi tamamladiqdan sonra Qaimeni gostermek lazimdir ki adam baxib cap ede bilsin
+        // yada adama confirm Alert cixartmaq lazimdir ki eger cap etmek isteyirse cap edek
+        // MISAL: confirm dialog goster eger adam ok basdisa
+        // o zaman  qaime nomresi ile cap bolumune kec bir basha printe
+        // heleki hele edecem bir basha printe sonra dizayn vererem
+        //cap et funksiyasi Yeni Construktor ile
+        new PrintInvoice(history_id).start();
 
     }
 }

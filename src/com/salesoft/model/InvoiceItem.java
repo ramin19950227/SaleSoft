@@ -13,29 +13,31 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
+ * @deprecated
  *
  * @author Ramin
  */
 public class InvoiceItem {
 
-    private IntegerProperty id;//1 mehsulun id-si irelide Key kimi istifade olunacaq
-    private StringProperty name;//2 mehsulun adi
-    private IntegerProperty qty;//3  mehsulun satish sayi
-    private DoubleProperty totalPrice;//4 mehsulunn satish meblegi
+    private final IntegerProperty id;//1 InvoiceItem-in id-si cedvelde olan id, mehsula hec bir aidiyyati yoxdur
+    private final StringProperty name;//2 mehsulun adi
+    private final IntegerProperty qty;//3  mehsulun satish sayi
+    private final DoubleProperty totalPrice;//4 mehsulunn satish meblegi
 
-    {// inicializasiya bloku vtomatik ishe dushur
-        this.id = new SimpleIntegerProperty(0);
-        this.name = new SimpleStringProperty(null);
-        this.qty = new SimpleIntegerProperty(0);
-        this.totalPrice = new SimpleDoubleProperty(0);
-    }
+    //yeni 
+    private final IntegerProperty productId; // mehsulun id-si
+    private final StringProperty productBarCode; // mehsulun barodu
 
-    public InvoiceItem(int id, String name, int say, double mebleg) {
+    public InvoiceItem(int id, String name, int say, double mebleg, Integer productId, String barCode) {
         super();
-        this.id.set(id);
-        this.name.set(name);
-        this.qty.set(say);
-        this.totalPrice.set(mebleg);
+        this.id = new SimpleIntegerProperty(id);
+        this.name = new SimpleStringProperty(name);
+        this.qty = new SimpleIntegerProperty(say);
+        this.totalPrice = new SimpleDoubleProperty(mebleg);
+
+        // yeni elaveler
+        this.productId = new SimpleIntegerProperty(productId);
+        this.productBarCode = new SimpleStringProperty(barCode);
     }
 
     public final void setId(Integer value) {
@@ -84,6 +86,39 @@ public class InvoiceItem {
 
     public final DoubleProperty totalPriceProperty() {
         return totalPrice;
+    }
+
+    public final void setProductId(Integer value) {
+        productId.set(value);
+    }
+
+    public final Integer getProductId() {
+        return productId.get();
+    }
+
+    public final IntegerProperty productIdProperty() {
+        return productId;
+    }
+
+    public final void setProductBarCode(String value) {
+        productBarCode.set(value);
+    }
+
+    public final String getProductBarCode() {
+        return productBarCode.get();
+    }
+
+    public final StringProperty productBarCodeProperty() {
+        return productBarCode;
+    }
+
+    @Override
+    public String toString() {
+        return "InvoiceItem{" + "id=" + id + ", name=" + name + ", qty=" + qty + ", totalPrice=" + totalPrice + ", productId=" + productId + ", productBarCode=" + productBarCode + '}';
+    }
+
+    public void println() {
+        System.out.println(toString());
     }
 
 }

@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="apMother" prefHeight="620.0" prefWidth="989.0" stylesheets="@../../../style/MainStyle.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.salesoft.view.LoginController">
+<AnchorPane fx:id="apMother" prefHeight="620.0" prefWidth="989.0" stylesheets="@../../../style/MainStyle.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.salesoft.controller.LoginController">
    <children>
       <HBox alignment="CENTER" prefHeight="535.0" prefWidth="760.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -60,6 +60,11 @@
                                  </children>
                               </GridPane>
                               <Button fx:id="btnLogin" layoutX="96.0" layoutY="203.0" mnemonicParsing="false" onAction="#btnLogin" text="Daxıl ol" />
+                              <Hyperlink fx:id="hlDatabase" layoutX="236.0" layoutY="255.0" onAction="#hlDbOnAction" text="DB Setup">
+                                 <font>
+                                    <Font size="11.0" />
+                                 </font>
+                              </Hyperlink>
                            </children>
                         </AnchorPane>
                         <Text fill="WHITE" layoutX="14.0" layoutY="133.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SaleSoft-u Seçdiyiniz üçün Təşəkkür edirik." wrappingWidth="342.00000152923167">
@@ -73,7 +78,6 @@
                            </font>
                         </Text>
                         <Label layoutX="14.0" layoutY="271.0" text="E-mail:  ramin19950227@gmail.com" textFill="#e8d9d9" />
-                        <Hyperlink id="hl-database" fx:id="hlDatabase" layoutX="686.0" layoutY="347.0" onAction="#hlDbOnAction" text="DB SETUP" />
                         <Label layoutX="14.0" layoutY="300.0" text="TEL    :  (055) 453-50-35" textFill="#e8d9d9" />
                      </children>
                   </AnchorPane>

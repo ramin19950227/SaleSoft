@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="550.0" prefWidth="700.0" stylesheets="@../../../../style/MainStyle.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.salesoft.view.AnbarRootLayoutController">
+<AnchorPane id="AnchorPane" prefHeight="550.0" prefWidth="700.0" stylesheets="@../../../style/MainStyle.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.salesoft.controller.AnbarRootLayoutController">
    <children>
       <BorderPane layoutX="226.0" layoutY="120.0" prefHeight="550.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
@@ -19,14 +19,14 @@
                <children>
                   <GridPane layoutX="76.0" layoutY="5.0" prefHeight="100.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="444.0" minWidth="10.0" prefWidth="306.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="599.0" minWidth="10.0" prefWidth="394.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label fx:id="headLabel" prefHeight="58.0" prefWidth="364.0" text="Anbar" textFill="#ee7a8a">
+                        <Label fx:id="headLabel" prefHeight="58.0" prefWidth="317.0" text="Anbar" textFill="#ee7a8a">
                            <font>
                               <Font name="System Bold Italic" size="40.0" />
                            </font>
@@ -34,7 +34,8 @@
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                            <children>
                               <ToggleButton fx:id="toggleButtonAnbar" mnemonicParsing="false" onAction="#toggleButtonAnbarOnAction" text="Anbarda Olan Məhsullar" />
-                              <ToggleButton fx:id="toggleButtonNewProduct" mnemonicParsing="false" onAction="#toggleButtonNewProductOnAction" text="Yeni Məhsul Al" />
+                              <ToggleButton fx:id="toggleButtonNewProduct" mnemonicParsing="false" onAction="#toggleButtonNewProductOnAction" text="Məhsul Alışı" />
+                              <ToggleButton fx:id="toggleButtonPurchaseInvoiceTable" mnemonicParsing="false" onAction="#toggleButtonPurchaseInvoiceOnAction" text="Alış Tarixçəsi" />
                            </children>
                         </HBox>
                      </children>

@@ -1,22 +1,11 @@
 package com.salesoft;
 
-import com.salesoft.view.anbar.ProductTableController;
-import com.salesoft.view.anbar.ProductPurchseController;
-import com.salesoft.DAO.AllPropertiesGetDAO;
-import com.salesoft.Properties.AllProperties;
 import com.salesoft.util.MyFXMLLoader;
 import com.salesoft.util.*;
-import com.salesoft.view.*;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import java.net.URL;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 /**
@@ -26,38 +15,54 @@ import javafx.stage.Stage;
  */
 public class MainApp extends Application {
 
-    //Butun datalarin alinmasi, unvanlarin, metinlerin, tercuelerin ve s.
-    public static final AllProperties ALL_PROPERTIES = AllPropertiesGetDAO.getAllProperties();
+    public MainApp() {
 
-    private final String loginViewTitle = ALL_PROPERTIES.getUIProperty().getApplicationTitle();
+        // ilk Hazirliqlarimizi Inicializasiyamizi edek
+        // qovluqlarimizi yoxlayaq her shey yolundadirmi deye
+        //1-ci Fayl ve Qovluqlarimizi Hazirlayaq
+        Initializator.initFoldersAndFiles();
 
-    private Stage primaryStage;
+        //2 - ci ise Properties Fayllarimizi hazirlayaq, artiq emin ola bilerik ki FileNotFoundException CIXMAYACAQ
+        Initializator.initMyProperties();
 
-    public Stage getPrimaryStage() {
-        return primaryStage;
+        //3-cu olaraq ise, S
+        // Server ile elaqe Qurmaga Calishaq, 
+        // Sonuludurse Bildirek, 
+        // Melumat bazasinin qurulu olub olmadigini yoxlayaq ve deyilse Qurmagi teklif edek
+        Initializator.initDataBase();
+
     }
 
-    /**
-     * MyLogger Obyektini elan edirik ve yaradiriq, adini XXXXXXX-AppLog.txt
-     * qoyuruq static ve final edirik eks teqdirde error cixirdi bilmedim niye
-     */
-    private static final Logger logger = new MyLogger("AppLog").getLogger();
+    //Consolumuzu Fayla yazmaq ucun bu obyektden istifade edeceyik
+    //PrintStream out = RLogger.logConsoleToFile();
 
-    /**
-     * MyLogger - Proqramimizin esas MyLogger obyektinin linkini almaq ucun
-     * istifade olunur bunun sayesinde esas AppLog faylina qeydlerimizi ede
-     * bilerik proqram baglanana qeder ne ish gorulecekse qeyd ede bilerk
-     *
-     * @return
-     */
-    public static Logger getLogger() {
-        return logger;
+
+    private static Stage primaryStage;
+
+    //bunu static eledimki obiri classlardan bunu ala bilim
+    public static Stage getPrimaryStage() {
+        return primaryStage;
     }
 
     @Override
     public void start(Stage primaryStage) {
+        MainApp.primaryStage = primaryStage;
 
-        primaryStage.setScene(MyFXMLLoader.getSceneFromURL(ALL_PROPERTIES.getURLProperty().getLoginFxmlURL()));
+        //ALL_PROPERTIES = AllPropertiesGetDAO.getAllProperties();
+
+        String loginViewTitle = MyProperties.getUIProperties().getApplicationTitle();
+
+        /**
+         * Login Sehifemizin URL addressi
+         */
+        URL loginViewURL = MyProperties.getURLProperties().getLoginFxmlURL();
+        
+        /**
+         * Login Sehifemizin Scene obyekti
+         */
+        Scene loginViewScene = MyFXMLLoader.getSceneFromURL(loginViewURL);
+
+        primaryStage.setScene(loginViewScene);
 
         primaryStage.setTitle(loginViewTitle);
 
@@ -66,11 +71,10 @@ public class MainApp extends Application {
         primaryStage.setMinHeight(500.0);
         primaryStage.setMinWidth(850.0);
         primaryStage.show();
-
-        this.primaryStage = primaryStage;
     }
 
     public static void main(String[] args) {
         launch(args);
     }
+
 }

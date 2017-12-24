@@ -123,4 +123,13 @@ public class Invoice {
         this.list.add(item);
     }
 
+    @Override
+    public String toString() {
+        return "Invoice{" + "id=" + id + ", customerName=" + customerName + ", totalPrice=" + totalPrice + ", date=" + date + ", list=" + list + '}';
+    }
+
+    public void println() {
+        System.out.println(toString());
+    }
+
 }

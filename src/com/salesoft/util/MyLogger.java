@@ -1,80 +1,94 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.salesoft.util;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
- * MyLogger - bu Class- ile biz loglarimizi yazacayiq irelide bunu deyishdirmek
- * ve dahada mukemmelleshdiremk olar amma heleki bashlanqic ucun bu da bes eder
- * mence, bu class-in obyektini yaradanda yeni txt fayl yaradir C diskinde Log
- * qovlugunda Faylin adi Date() classinin getTime() metodu ile indiki tarixi
- * milli saniyeler ile tesvir edir (seyf etmiremse) millli saniyeleri qaytarir
- * bununla fyllarin adlari unikal olur yani tekrarlanmasi ola bilmez, Istifade
- * yontemi beledir, Exception olanda yeni obyek yaradib onun Contructoruna
- * String tipli obyekt vermek lazimdir hemin String faylin adinin sonuna
- * yazilacaq meselen faylin adinin bashinda 123456789 yazilacaqsa bu tarixdir
- * sonra ise Construktora verdiyimiz String yazilacaq meselen new
- * MyLogger("Test") yazzaq, bizim Log qovlugumuzda 1234567890-Test.txt adli fayl
- * yaranacaq ve icine istediyimizi yaza bilerik , Main appda yeni obyekt qurub
- * adini AppLog qoyuram ve getLogger ederek her defe MyLogger obyektimi her defe
- * log(//////) yazadnda ve neise loqlayanda hemin faylayazacaq bir soznen yeni
- * fayl yaratmayacaq. Yeni fayli Sadece Exceptionlarda istifade etmek
- * meslehetdir ki goze deysin birde Logfaylin icine baxmaga ehtiyyac olmasin ve
- * diger gormek istediyimiz hadiseleri Yeni fayl yaradaraq da goze carpici ede
- * bilerik meselen Silinmeleri ve s...
+ * Bu metodu Yeniledim Bu Yeni Loger metedumdur ve Heleki Tekce Exceptionlari
+ * Loglayacaq, calishacam tarixide normal bir veziyyete getitim
  *
  * @author Ramin
  */
 public class MyLogger {
 
-    //heleki bunu ne ucun istifade olundugunu bilmirem
-    //amma neise adlandirmaya oxshayir her neise oyrenende yazaram heleki lazim deyil
-    Logger logger = Logger.getLogger("MyLog");
-
-    // bu fayllarla ishlemek ucundur yaqin
-    FileHandler fh;
-
-    /**
-     * Construstor - Construktora String tipli ne versek Obyekt yarananda fayla
-     * verilecek ada yazilacaq
-     *
-     * @param s - Faylin adina yazilacaq Metin
+    /*NUMUNE:
+            System.out.println("SQLException -  DBUtil.dbExecuteQuery(): " + ex);
+            MyLogger.logException("SQLException - DBUtil.dbExecuteQuery()", ex);
      */
-    public MyLogger(String s) {
+    // Bu obyekt ile Biz faylimiza setirleri yaza bileceyik ve Consolu yazmaq ucun
+    // System -e bu obyekti vereceyik
+    private static PrintStream out = null;
+
+    public static void logException(String exceptionName, Exception e) {
+        PrintStream out = null;
         try {
+            LocalDateTime timePoint = LocalDateTime.now();
 
-            // This block configure the logger with handler and formatter  
-            fh = new FileHandler("C:/Log/" + (new Date().getTime()) + " - " + s + ".txt");
-            logger.addHandler(fh);
-            SimpleFormatter formatter = new SimpleFormatter();
-            fh.setFormatter(formatter);
+            // TODO code application logic here
+            out = new PrintStream(new FileOutputStream("Log\\Exceptions\\" + (timePoint.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME).replaceAll(":", "-")) + " = " + exceptionName + ".txt"));
 
-            // ilk yazimizi yaziriq Log faylimizin icine  
-            logger.info("Bismilləh - İlk Sətir");
+            out.println("START Exception FILE");
+            out.println();
 
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            out.println("LocalizedMessage: " + e.getLocalizedMessage());
+            out.println("out.println(e): " + e);
+
+            out.println("-----------------------------------");
+            out.println("e.printStackTrace(out); -->>");
+            e.printStackTrace(out);
+
+            out.println();
+            out.println("END Exception FILE");
+
+        } catch (FileNotFoundException ex) {
+            MyAlert.alertAndExitByCodeAndContent(44, "FileNotFoundException - MyLogger.logException() ===" + ex);
+        } finally {
+            if (out != null) {
+                out.close();
+            }
         }
     }
 
     /**
-     * Logger-i qaytarir bunu aciqlamaga ehtiyyac hiss etmirem adi Getter dir
-     * :))
+     * Bu metod Consolu Fayla Cap edir. Bu Bize Proqrami ishe saldiqdan sonra
+     * neler bash verdiyi haqda melumat verecek. Bunu JAR fayli ishe salmazdan
+     * evvel hazirlamaq lazimdir MainApp-da. Amma IDE-de ishlediyimiz zaman buna
+     * ehtiyyac yoxdur onsuzda Consolu goruruk
      *
      * @return
      */
-    public Logger getLogger() {
-        return logger;
+    public static PrintStream logConsoleToFile() {
+        try {
+            LocalDateTime timePoint = LocalDateTime.now();
+
+            out = new PrintStream(new FileOutputStream("Log/console " + (timePoint.format(DateTimeFormatter.ISO_DATE_TIME).replaceAll(":", "-")) + ".txt"));
+            System.setOut(out);
+            System.setErr(out);
+
+        } catch (FileNotFoundException ex) {
+            MyAlert.alertAndExitByCodeAndContent(1, "Consol fayli ile Elaqedar Problem");
+            return null;
+        }
+        return out;
     }
 
+    // bu Classi deyishmek isteyirem
+    // Loglari Bazaya yazacam eyni zamanda da TXT fayla yazacam conssolda ne bash verirse
+    // esas Izleme Baza seviyyesinde olacaq, amma baza ile elaqedar Exceptionlar cixdiqda onlar TXTfaylda qalacaq
+    // her emeliyyat gun-ay-il saat-deqiqe-saniye )) emeliyyat eden istifacedi emeliyyat tipi vesaileri her shey yazacaq.....
+    // Teyyub Muellim Duz deyir ESAS LOG-lardir, sonra niye kimese neyise subut etmeye calishasan ki, her shey ortada olduqdan sonra
+    //emeliiyatlarimizin tiplerini yazaq
+    //LoginForm
+    // login
+    //
+    //  USER OPERATION TABLE
+    //  ID  TimeStamp           Type            Location        Action      Result      DATA 
+    //  1   15.12.2017 5:28:31  Login           LoginForm       Login       Succes      userName=Ramin, userPassword=123
+    //  2   15.12.2017 5:29:50  EditProduct     ProductTable    EditName    Succes      pId=54, pOldName=Baraban 12, pNewName=Barabal 12A, -> pQty=5, pPurchasePrice=1.6, pNote=Kainat
+    //Product-a aid olanlar
+    // add,updateFormTable, updateFromEditPanel, deleteWithDelKey, deleteWithDeleteButton, 
 }

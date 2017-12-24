@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.salesoft.view;
+package com.salesoft.controller;
 
-import com.salesoft.model.Users;
 //import Getway.UsersGetway;
 //import controller.application.EmployeController;
 //import controller.application.SellController;
@@ -16,9 +15,7 @@ import com.salesoft.model.Users;
 //import dataBase.DBProperties;
 import com.salesoft.DAO.DatabaseConnection;
 import com.salesoft.MainApp;
-import static com.salesoft.MainApp.ALL_PROPERTIES;
-import com.salesoft.util.MyFXMLLoader;
-import com.sun.javaws.Main;
+import com.salesoft.util.MyProperties;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -32,8 +29,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -133,10 +128,8 @@ public class ApplicationController implements Initializable {
     PreparedStatement pst;
     ResultSet rs;
 
-    //DBProperties dBProperties = new DBProperties();
-    String db = DatabaseConnection.DB_NAME;
 
-    Users users = new Users();
+    //Users users = new Users();
 //    UsersGetway usersGetway = new UsersGetway();
 //
 //    private userNameMedia usrNameMedia;
@@ -252,7 +245,7 @@ public class ApplicationController implements Initializable {
         FXMLLoader loader = new FXMLLoader();
 
         // loaderimize sehifemizin unvanini gosteririk
-        loader.setLocation(MainApp.ALL_PROPERTIES.getURLProperty().getAnbarRootLayoutURL());
+        loader.setLocation(MyProperties.getURLProperties().getAnbarRootLayoutURL());
 
         //sehifemizi yukleyitik
         // ve yalniz sehifemizi yuledikden sonra Controllerimizi ala bilerik
@@ -283,7 +276,7 @@ public class ApplicationController implements Initializable {
         FXMLLoader loader = new FXMLLoader();
 
         // loaderimize sehifemizin unvanini gosteririk
-        loader.setLocation(MainApp.ALL_PROPERTIES.getURLProperty().getSaleRootLayoutURL());
+        loader.setLocation(MyProperties.getURLProperties().getSaleRootLayoutURL());
 
         //sehifemizi yukleyitik
         // ve yalniz sehifemizi yuledikden sonra Controllerimizi ala bilerik

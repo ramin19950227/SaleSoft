@@ -14,9 +14,9 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="750.0" stylesheets="@../../../../style/MainStyle.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.salesoft.view.sale.SaleInvoiceDetailsTableController">
    <children>
-      <TableView fx:id="invoiceTable" layoutX="15.0" layoutY="172.0" prefHeight="393.0" prefWidth="720.0" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="172.0">
+      <TableView fx:id="invoiceTable" layoutX="15.0" layoutY="165.0" prefHeight="400.0" prefWidth="575.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="165.0" AnchorPane.topAnchor="165.0">
          <columns>
-            <TableColumn fx:id="idColumn" prefWidth="28.0" text="№" />
+            <TableColumn fx:id="barCodeColumn" prefWidth="28.0" text="BarCod" />
             <TableColumn fx:id="nameColumn" prefWidth="256.0" text="Ad" />
             <TableColumn fx:id="sayColumn" prefWidth="75.0" text="Say" />
             <TableColumn fx:id="meblegColumn" prefWidth="75.0" text="Mebleg" />
@@ -25,13 +25,13 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <GridPane layoutX="15.0" layoutY="14.0" prefHeight="136.0" prefWidth="720.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+      <GridPane layoutX="15.0" layoutY="14.0" prefHeight="136.0" prefWidth="711.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
          <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="137.0" minWidth="10.0" prefWidth="77.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="239.0" minWidth="10.0" prefWidth="187.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="240.0" minWidth="10.0" prefWidth="136.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="198.0" minWidth="10.0" prefWidth="137.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="177.0" minWidth="10.0" prefWidth="177.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="137.0" minWidth="10.0" prefWidth="63.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="239.0" minWidth="10.0" prefWidth="134.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="240.0" minWidth="10.0" prefWidth="129.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="198.0" minWidth="10.0" prefWidth="87.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="177.0" minWidth="10.0" prefWidth="119.0" />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -40,44 +40,61 @@
          <children>
             <Label text="Müştəri">
                <font>
-                  <Font size="18.0" />
+                  <Font size="16.0" />
                </font></Label>
             <Label fx:id="cutomerNameLabel" text="Label" GridPane.columnIndex="1">
                <font>
-                  <Font size="18.0" />
+                  <Font size="16.0" />
                </font></Label>
             <Label text="Tarix" GridPane.rowIndex="1">
                <font>
-                  <Font size="18.0" />
+                  <Font size="16.0" />
                </font></Label>
             <Label fx:id="tarixLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <font>
-                  <Font size="18.0" />
+                  <Font size="16.0" />
                </font></Label>
             <Label text="Qaime Nomresi" GridPane.columnIndex="2">
                <font>
-                  <Font size="18.0" />
+                  <Font size="16.0" />
                </font></Label>
             <Label text="Mebleg" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <font>
-                  <Font size="18.0" />
+                  <Font size="16.0" />
                </font></Label>
             <Label fx:id="meblegLabel" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="1">
                <font>
-                  <Font size="18.0" />
+                  <Font size="16.0" />
                </font></Label>
             <TextField fx:id="idField" onAction="#onActionShowInvoiceButton" GridPane.columnIndex="3" />
-            <Button mnemonicParsing="false" onAction="#onActionShowInvoiceButton" prefHeight="35.0" prefWidth="137.0" text="Göstər" GridPane.columnIndex="4">
+            <Button mnemonicParsing="false" onAction="#onActionShowInvoiceButton" prefHeight="35.0" prefWidth="100.0" text="Göstər" GridPane.columnIndex="4">
                <GridPane.margin>
                   <Insets left="20.0" />
                </GridPane.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#onActionPrintButton" prefHeight="35.0" prefWidth="136.0" text="Çap et" GridPane.columnIndex="4" GridPane.rowIndex="1">
+            <Button mnemonicParsing="false" onAction="#onActionPrintButton" prefHeight="35.0" prefWidth="100.0" text="Çap et" GridPane.columnIndex="4" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="20.0" />
                </GridPane.margin>
             </Button>
          </children>
       </GridPane>
+      <AnchorPane layoutX="590.0" layoutY="234.0" prefHeight="420.0" prefWidth="152.0" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="10.0">
+         <children>
+            <TextField fx:id="productReturnQty" layoutX="3.0" layoutY="63.0" prefHeight="33.0" prefWidth="144.0" />
+            <Label layoutX="5.0" layoutY="26.0" text="Geri Qaytarilma Sayi">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Button fx:id="returnButton" layoutX="29.0" layoutY="195.0" mnemonicParsing="false" onAction="#onActionReturnButton" text="Qaytar" AnchorPane.bottomAnchor="195.0" AnchorPane.leftAnchor="29.0" AnchorPane.rightAnchor="28.0" />
+            <TextField fx:id="productReturnNote" editable="false" layoutX="8.0" layoutY="152.0" prefHeight="33.0" prefWidth="144.0" />
+            <Label layoutX="11.0" layoutY="119.0" text="Qaytarilma Sebebi">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

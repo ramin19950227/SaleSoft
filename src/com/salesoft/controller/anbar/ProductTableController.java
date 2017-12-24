@@ -3,21 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.salesoft.view.anbar;
+package com.salesoft.controller.anbar;
 
-import com.salesoft.DAO.ProductDeleteDAO;
-import com.salesoft.DAO.ProductGetDAO;
-import com.salesoft.DAO.ProductUpdateDAO;
+import com.salesoft.DAO.ProductDAO;
 import com.salesoft.MainApp;
 import com.salesoft.model.Product;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -106,6 +102,7 @@ public class ProductTableController implements Initializable {
 
     //cedvelden mehsulu secdikde bura yazilir
     Product selectedProduct = null;
+    private final ProductDAO ProductDAO = new ProductDAO();
 
     /**
      * searchFieldReleased method
@@ -159,6 +156,7 @@ public class ProductTableController implements Initializable {
 
         });
 
+        // (nameColumn) bu Sutundaki emeliyyatlari aciqlayaraq gosterecem obirileri qisaca edecem
         //Cedvelimizin sutunlarini inicializasiya edirik
         //adlarimiz cedvelde gosteririk
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
@@ -171,10 +169,21 @@ public class ProductTableController implements Initializable {
         nameColumn.setOnEditCommit((CellEditEvent<Product, String> t) -> {
             //mehsulumuz redakte olunduqdn sonra enteri basdiqda bu metod ishe dushur
 
+            // mehsulumuzi aldiq AMMA icindeki kohne addir
+            Product product = t.getRowValue();
+
+            //teyin etdiyimiz yeni ADI-da alaq
+            String newName = t.getNewValue();
+
+            // yeni adi yazaq mehsula
+            product.setName(newName);
+
+            //mehsulu bazadada yenileyek
+            ProductDAO.update(product);
+
             //redakte tamamlandiqdan sonra yenilenmish melumati ve mehsulun id-sini
             //gonderirik DAO class-ina ki, Melumat bazasinda yenileyek
-            ProductUpdateDAO.updateProductNameById(t.getRowValue().getId(), t.getNewValue());
-
+            //ProductUpdateDAO.updateProductNameById(t.getRowValue().getId(), t.getNewValue());
             // mehsulun yeni adini melumat bazasina gonderib yeniledikden sonra Cedvelimizi yenileyirik
             // yani mehsullarin siyahisini bazadan yeniden yukleyirik
             updateTable("");
@@ -187,7 +196,8 @@ public class ProductTableController implements Initializable {
         qtyColumn.setCellValueFactory(cellData -> cellData.getValue().qtyProperty());
         qtyColumn.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
         qtyColumn.setOnEditCommit((CellEditEvent<Product, Number> t) -> {
-            ProductUpdateDAO.updateProductQtyById(t.getRowValue().getId(), t.getNewValue().intValue());
+            t.getRowValue().setQty(t.getNewValue().intValue());
+            ProductDAO.update(t.getRowValue());
             updateTable("");
             productTable.getSelectionModel().select(t.getRowValue());
 
@@ -196,7 +206,8 @@ public class ProductTableController implements Initializable {
         purchasePriceColumn.setCellValueFactory(cellData -> cellData.getValue().purchasePriceProperty());
         purchasePriceColumn.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
         purchasePriceColumn.setOnEditCommit((CellEditEvent<Product, Number> t) -> {
-            ProductUpdateDAO.updateProductPurchasePriceById(t.getRowValue().getId(), t.getNewValue().doubleValue());
+            t.getRowValue().setPurchasePrice(t.getNewValue().doubleValue());
+            ProductDAO.update(t.getRowValue());
             updateTable("");
             productTable.getSelectionModel().select(t.getRowValue());
 
@@ -205,7 +216,8 @@ public class ProductTableController implements Initializable {
         barCodeColumn.setCellValueFactory(cellData -> cellData.getValue().barCodeProperty());
         barCodeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         barCodeColumn.setOnEditCommit((CellEditEvent<Product, String> t) -> {
-            ProductUpdateDAO.updateProductBarCodeById(t.getRowValue().getId(), t.getNewValue());
+            t.getRowValue().setBarCode(t.getNewValue());
+            ProductDAO.update(t.getRowValue());
             updateTable("");
             productTable.getSelectionModel().select(t.getRowValue());
 
@@ -214,7 +226,8 @@ public class ProductTableController implements Initializable {
         noteColumn.setCellValueFactory(cellData -> cellData.getValue().noteProperty());
         noteColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         noteColumn.setOnEditCommit((CellEditEvent<Product, String> t) -> {
-            ProductUpdateDAO.updateProductNoteById(t.getRowValue().getId(), t.getNewValue());
+            t.getRowValue().setNote(t.getNewValue());
+            ProductDAO.update(t.getRowValue());
             updateTable("");
             productTable.getSelectionModel().select(t.getRowValue());
 
@@ -249,22 +262,16 @@ public class ProductTableController implements Initializable {
      */
     private void updateTable(String data) {
         data = data.trim();
-        //LOG yaziriq metodun cagirilmasi ile elaqedar
-        MainApp.getLogger().log(Level.INFO, "ProductTableController.updateTable(\"*\" or \"\")(ALL) - called Parameter (String data) =:{0}", data);
 
         if (data.equals("*") || data.equals("")) {//eger daxil olan  * dursa ve ya bosh setirdirse o zaman hamsini goster
             //eger daxil olan data ULDUZ-durza (*) onda hamsini goster
             //bazya sorgu edirik ve butun mehsullari isteyirik
             //varsa qaytaracaq yoxdursa null qaytaracaq
-            ArrayList<Product> requestList = ProductGetDAO.getAllProductList();
-            //ArrayList<Product> requestList = ProductGetDAO.getAllProductListNew();
+            ArrayList<Product> requestList = ProductDAO.getAll();
 
             // yoxlayiriq eger requestList bosh deyilse
             // onda if blokundaki emirleri edirik
             if (requestList != null) {
-
-                //LOG aldigimiz Product obyektini sayini yaziriq
-                MainApp.getLogger().log(Level.SEVERE, "ProductTableController.updateTable() \nrequestList items=:{0}", requestList.size());
 
                 // Listimizi temizleyirik
                 productList.clear();
@@ -276,24 +283,18 @@ public class ProductTableController implements Initializable {
                 //cedvelimize yerleshdiririk
                 productTable.setItems(productList);
             } else {
-                //LOG 
-                MainApp.getLogger().log(Level.INFO, "ProductDAO.getAllProductList() == null");
 
             }
             //yoxlama Eger daxil edilen melumat barcoddursa o zaman songu gonderib  cavabini
             // yoxlayiriq ve eger barcoddursao zaman sorgunun cavabina mehsul Listi gelmelidir
-        } else if (ProductGetDAO.getAllProductListByBarCode(data) != null) {// barcodla tapdisa bu blok ishe dushecek
-            ArrayList<Product> requestList = ProductGetDAO.getAllProductListByBarCode(data);
-
-            MainApp.getLogger().log(Level.SEVERE, "ProductTableController.updateTable(BARCODE) \nBarCode=: {0}requestList items=:{1}", new Object[]{data, requestList.size()});
+        } else if (!ProductDAO.searchByNameLike(data).isEmpty()) {//adla axtarib tapdisa bu blok ishe dushecek
+            ArrayList<Product> requestList = ProductDAO.searchByNameLike(data);
 
             productList.clear();
             productList.addAll(requestList);
             productTable.setItems(productList);
-        } else if (ProductGetDAO.getAllProductListByNameLike(data) != null) {//adla axtarib tapdisa bu blok ishe dushecek
-            ArrayList<Product> requestList = ProductGetDAO.getAllProductListByNameLike(data);
-
-            MainApp.getLogger().log(Level.SEVERE, "ProductTableController.updateTable(BARCODE) \nBarCode=: {0}requestList items=:{1}", new Object[]{data, requestList.size()});
+        } else if (!ProductDAO.searchByBarcode(data).isEmpty()) {// barcodla tapdisa bu blok ishe dushecek
+            ArrayList<Product> requestList = ProductDAO.searchByBarcode(data);
 
             productList.clear();
             productList.addAll(requestList);
@@ -329,15 +330,29 @@ public class ProductTableController implements Initializable {
      */
     @FXML
     private void handleSave() {
-        if (isInputValid()) {
 
-            ProductUpdateDAO.updateProductNameById(Integer.valueOf(idLabel.getText()), nameField.getText());
-            ProductUpdateDAO.updateProductQtyById(Integer.valueOf(idLabel.getText()), Integer.valueOf(qtyField.getText()));
-            ProductUpdateDAO.updateProductPurchasePriceById(Integer.valueOf(idLabel.getText()), Double.valueOf(purchasePriceField.getText()));
-            ProductUpdateDAO.updateProductBarCodeById(Integer.valueOf(idLabel.getText()), barCodeField.getText());
-            ProductUpdateDAO.updateProductNoteById(Integer.valueOf(idLabel.getText()), noteField.getText());
+        boolean isValid = isInputValid();
+
+        if (isValid && selectedProduct != null) {
+
+            selectedProduct.setName(nameField.getText());
+            selectedProduct.setQty(Integer.valueOf(qtyField.getText()));
+            selectedProduct.setPurchasePrice(Double.valueOf(purchasePriceField.getText()));
+            selectedProduct.setBarCode(barCodeField.getText());
+            selectedProduct.setNote(noteField.getText());
+
+            ProductDAO.update(selectedProduct);
 
             updateTable("");
+
+        } else if (isValid && selectedProduct == null) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.initOwner(mainApp.getPrimaryStage());
+            alert.setTitle("Mehsulu Secin");
+            alert.setHeaderText("Zehmet olmasa Mehsulu Cedvelden Secin");
+            alert.setContentText("Redakte etmek istediyiniz mehsulu secin");
+
+            alert.showAndWait();
         }
     }
 
@@ -363,18 +378,17 @@ public class ProductTableController implements Initializable {
 
             alert.showAndWait();
         } else {
-            String name = selectedProduct.getName();
-            Integer id = selectedProduct.getId();
 
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Mehsulun Bazadan Silinmesi");
-            alert.setHeaderText(null);
-            alert.setContentText("( " + name + " ) - Bu Mehsulu Bazadan silmek isteyirsiniz?");
+            alert.setHeaderText("Adi: " + selectedProduct.getName() + " - Sayi: " + selectedProduct.getQty());
+            alert.setContentText(" - Bu Mehsulu Bazadan silmek isteyirsiniz?");
             Optional<ButtonType> action = alert.showAndWait();
 
             if (action.get() == ButtonType.OK) {
-                ProductDeleteDAO.deleteProductById(id);
+                ProductDAO.delete(selectedProduct.getId());
             }
+
             updateTable("");
         }
     }

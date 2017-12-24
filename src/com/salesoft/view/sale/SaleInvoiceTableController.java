@@ -6,15 +6,11 @@
 package com.salesoft.view.sale;
 
 import com.salesoft.DAO.InvoiceDAO;
-import com.salesoft.DAO.ProductGetDAO;
 import com.salesoft.MainApp;
 import com.salesoft.model.Invoice;
-import com.salesoft.model.InvoiceItem;
-import com.salesoft.model.Product;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;

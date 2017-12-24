@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.salesoft.view;
+package com.salesoft.controller;
 
-import com.salesoft.MainApp;
 import com.salesoft.util.MyFXMLLoader;
+import com.salesoft.util.MyProperties;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -33,6 +33,8 @@ public class AnbarRootLayoutController implements Initializable {
     private ToggleButton toggleButtonAnbar;
     @FXML
     private ToggleButton toggleButtonNewProduct;
+    @FXML
+    private ToggleButton toggleButtonPurchaseInvoiceTable;
 
     @FXML
     private Label headLabel;
@@ -49,6 +51,7 @@ public class AnbarRootLayoutController implements Initializable {
         toggleButtonAnbar.setSelected(true);
         toggleButtonAnbar.setToggleGroup(group);
         toggleButtonNewProduct.setToggleGroup(group);
+        toggleButtonPurchaseInvoiceTable.setToggleGroup(group);
 
     }
 
@@ -57,7 +60,7 @@ public class AnbarRootLayoutController implements Initializable {
         headLabel.setText("Anbar");
 
         stackPaneCenter.getChildren().clear();
-        stackPaneCenter.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MainApp.ALL_PROPERTIES.getURLProperty().getProductTableURL()));
+        stackPaneCenter.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MyProperties.getURLProperties().getProductTableURL()));
     }
 
     @FXML
@@ -65,12 +68,20 @@ public class AnbarRootLayoutController implements Initializable {
         headLabel.setText("Məhsul Alışı");
 
         stackPaneCenter.getChildren().clear();
-        stackPaneCenter.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MainApp.ALL_PROPERTIES.getURLProperty().getProductPurchseURL()));
+        stackPaneCenter.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MyProperties.getURLProperties().getProductPurchseURL()));
 
     }
 
     public static void setRoot(ApplicationController input) {
         appControl = input;
+    }
+
+    @FXML
+    public void toggleButtonPurchaseInvoiceOnAction() {
+        headLabel.setText("Alış Tarıxçəsi");
+
+        stackPaneCenter.getChildren().clear();
+        stackPaneCenter.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MyProperties.getURLProperties().getPurchaseInvoiceTableURL()));
     }
 
 }

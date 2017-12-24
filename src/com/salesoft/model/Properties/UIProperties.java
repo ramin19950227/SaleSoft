@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.salesoft.Properties;
+package com.salesoft.model.Properties;
 
 /**
  *
  * @author Ramin
  */
-public class UIProperty {
+public class UIProperties {
     
     String applicationTitle;
 

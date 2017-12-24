@@ -1,5 +1,7 @@
 package com.salesoft.view.sale;
 
+import com.salesoft.DAO.InvoiceDAO;
+import com.salesoft.MainApp;
 import com.salesoft.model.Invoice;
 import com.salesoft.model.InvoiceItem;
 import javafx.print.PageLayout;
@@ -19,51 +21,63 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 
 public class PrintInvoice {
 
-    private Stage myStage;
+    private final Stage myStage;
     private final Invoice invoice;
 
+    // bu evvel sitifade etdiyim construktordur
+    // bunu heleki silmirem silsem gerek bashqa yerlerdede deyishiklik edim
     public PrintInvoice(Stage s, Invoice i) {
         myStage = s;
         invoice = i;
+    }
+
+    //bu da yeni ve daha rahat constructor
+    public PrintInvoice(Integer historyId) {
+        myStage = MainApp.getPrimaryStage();
+        invoice = InvoiceDAO.getInvoiceById(historyId);
     }
 
     CheckBox cbA4 = new CheckBox("A4");
     CheckBox cbA5 = new CheckBox("A5");
 
     public void start() {
+        cbA4.setSelected(true);
         VBox root = new VBox(5);
 
-        Label textLbl = new Label("Text:");
+        Label textLbl = new Label("Qaime:");
         TextArea text = new TextArea();
         text.setBackground(Background.EMPTY);
-        text.setPrefRowCount(36);
+        text.setPrefRowCount(30);
         text.setPrefColumnCount(30);
         text.setWrapText(true);
+        
+        text.setFont(new Font("Times New Roman", 15));
 
-        text.appendText(invoice.getId().toString() + " \n");
-        text.appendText(invoice.getCustomerName() + " \n");
-        text.appendText(invoice.getDate() + " \n");
-        text.appendText(invoice.getTotalPrice() + " \n");
+        text.appendText("Qaime №: " + invoice.getId().toString() + " \n");
+        text.appendText("Müştəri: " + invoice.getCustomerName() + " \n");
+        text.appendText("Tarix: " + invoice.getDate() + " \n");
+        text.appendText("Mebleg: " + invoice.getTotalPrice() + " AZN\n");
         text.appendText(" \n");
         text.appendText(" \n");
 
         int counter = 1;
         for (InvoiceItem invoiceItem : invoice.getList()) {
-            text.appendText(counter++ + "\t\t" + invoiceItem.getName()+ "\t\t" + invoiceItem.getQty()+ "\t" + invoiceItem.getTotalPrice() + " \n");
+            text.appendText(counter++ + "\t\t" + invoiceItem.getName() + "\t\t" + invoiceItem.getQty() + "\t" + invoiceItem.getTotalPrice() + " \n");
         }
 
         // Button to print the TextArea node
-        Button printTextBtn = new Button("Print Text");
+        Button printTextBtn = new Button("Cap Et");
 
         printTextBtn.setOnAction(e -> printMethod2(text));
 
         // Button to print the entire scene
-        Button printSceneBtn = new Button("Print Scene");
+        Button printSceneBtn = new Button("Cap Et (Elave)");
         printSceneBtn.setOnAction(e -> printMethod2(root));
 
         HBox buttonBox = new HBox(5, printTextBtn, printSceneBtn);

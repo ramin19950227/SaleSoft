@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.salesoft.view;
+package com.salesoft.controller;
 
-import com.salesoft.MainApp;
 import com.salesoft.util.MyFXMLLoader;
+import com.salesoft.util.MyProperties;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -59,7 +59,7 @@ public class SaleRootLayoutController implements Initializable {
         headLabel.setText("Satish");
 
         stackPaneCenter.getChildren().clear();
-        stackPaneCenter.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MainApp.ALL_PROPERTIES.getURLProperty().getProductSaleCartURL()));
+        stackPaneCenter.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MyProperties.getURLProperties().getProductSaleCartURL()));
     }
 
     @FXML
@@ -67,7 +67,7 @@ public class SaleRootLayoutController implements Initializable {
         headLabel.setText("Satish Arxivi");
 
         stackPaneCenter.getChildren().clear();
-        stackPaneCenter.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MainApp.ALL_PROPERTIES.getURLProperty().getSaleInvoiceTableURL()));
+        stackPaneCenter.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MyProperties.getURLProperties().getSaleInvoiceTableURL()));
 
     }
 
@@ -76,7 +76,7 @@ public class SaleRootLayoutController implements Initializable {
         headLabel.setText("Qaime Nomresi ile baxish");
 
         stackPaneCenter.getChildren().clear();
-        stackPaneCenter.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MainApp.ALL_PROPERTIES.getURLProperty().getSaleInvoiceDetailsTableURL()));
+        stackPaneCenter.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MyProperties.getURLProperties().getSaleInvoiceDetailsTableURL()));
 
     }
 
