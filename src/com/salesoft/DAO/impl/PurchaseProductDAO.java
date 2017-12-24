@@ -5,7 +5,6 @@
  */
 package com.salesoft.DAO.impl;
 
-import com.salesoft.DAO.AbstractDAO;
 import com.salesoft.DAO.intf.PurchaseProductDAOIntf;
 import com.salesoft.database.DBUtil;
 import com.salesoft.database.SQL;
