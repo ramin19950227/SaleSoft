@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+ 
 package com.salesoft.DAO;
 
 import com.salesoft.database.DBUtil;
@@ -15,7 +11,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Ramin
+ * @author Ramin 
  */
 public class UserDAO extends AbstractDAO<User, Integer> {
 
