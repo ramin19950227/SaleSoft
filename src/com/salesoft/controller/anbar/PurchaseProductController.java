@@ -5,8 +5,8 @@
  */
 package com.salesoft.controller.anbar;
 
-import com.salesoft.DAO.PurchaseProductDAO;
-import com.salesoft.DAO.PurchaseProductDAO;
+import com.salesoft.DAO.impl.PurchaseProductDAO;
+import com.salesoft.DAO.impl.PurchaseProductDAO;
 import com.salesoft.model.PurchaseProduct;
 import java.net.URL;
 import java.util.ArrayList;

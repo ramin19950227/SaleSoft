@@ -1,10 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.salesoft.DAO;
+ 
+package com.salesoft.DAO.impl;
 
+import com.salesoft.DAO.intf.ProductDAOIntf;
 import com.salesoft.database.DBUtil;
 import com.salesoft.database.SQL;
 import com.salesoft.model.Product;
@@ -18,33 +15,34 @@ import java.util.ArrayList;
  *
  * @author Ramin
  */
-public class ProductDAO extends AbstractDAO<Product, Integer> {
+public class ProductDAO implements ProductDAOIntf{
 
+   
     @Override
-    public boolean create(Product entity) {
+    public void create(Product entity) {
 
         try {
             DBUtil.directExecuteUpdate(SQL.ProductSQL.CREATE(entity));
-            return true;
+//            return true;
 
         } catch (SQLException ex) {
             System.out.println("SQLException -  ProductDAO.create(): " + ex);
             MyLogger.logException("SQLException - ProductDAO.create()", ex);
-            return false;
+//            return false;
         }
 
     }
 
     @Override
-    public boolean update(Product entity) {
+    public void update(Product entity) {
         try {
             DBUtil.directExecuteUpdate(SQL.ProductSQL.UPDATE(entity));
-            return true;
+//            return true;
 
         } catch (SQLException ex) {
             System.out.println("SQLException -  ProductDAO.update(): " + ex);
             MyLogger.logException("SQLException - ProductDAO.update()", ex);
-            return false;
+//            return false;
         }
     }
 
@@ -139,5 +137,7 @@ public class ProductDAO extends AbstractDAO<Product, Integer> {
 
         return list;
     }
+
+   
 
 }
