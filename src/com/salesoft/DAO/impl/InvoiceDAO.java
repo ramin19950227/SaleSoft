@@ -1,5 +1,7 @@
-package com.salesoft.DAO;
+package com.salesoft.DAO.impl;
 
+import com.salesoft.DAO.DatabaseConnection;
+import com.salesoft.DAO.intf.InvoiceDAOIntf;
 import com.salesoft.MainApp;
 import com.salesoft.database.DBUtil;
 import com.salesoft.database.SQL;
@@ -15,7 +17,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class InvoiceDAO {
+public class InvoiceDAO  implements InvoiceDAOIntf{
 
     private static final String PRODUCT_TABLE_NAME = "satish_history";
 
@@ -33,7 +35,8 @@ public class InvoiceDAO {
      * @return Invoice - obyekti qaytarir incinde propertilerile ve InvoiceItem
      * lerle birge
      */
-    public static Invoice getInvoiceById(int id) {
+    @Override
+    public Invoice getInvoiceById(int id) {
         Invoice invoice = null;
         try {
             ArrayList<InvoiceItem> list = getAllInvoiceItemListById(id);
@@ -56,7 +59,12 @@ public class InvoiceDAO {
         return invoice;
     }
 
-    public static ArrayList<Invoice> getAllInvoice() {
+    /**
+     *
+     * @return
+     */
+    @Override
+    public   ArrayList<Invoice> getAllInvoice() {
         ArrayList<Invoice> list = new ArrayList<>();
 
         try {
@@ -79,7 +87,8 @@ public class InvoiceDAO {
 
     }
 
-    public static ArrayList<InvoiceItem> getAllInvoiceItemListById(Integer id) {
+    @Override
+    public   ArrayList<InvoiceItem> getAllInvoiceItemListById(Integer id) {
         InvoiceItem invoiceItem;
         try {
             Connection con = DatabaseConnection.getConnection();
@@ -117,7 +126,7 @@ public class InvoiceDAO {
      * @param customerName
      * @deprecated
      */
-    public static void updateInvoiceCustoemerNameById(Integer id, String customerName) {
+    public   void updateInvoiceCustoemerNameById(Integer id, String customerName) {
 //        MainApp.getLogger().log(Level.SEVERE, "InvoiceDAO.updateInvoiceCustoemerNameById(int id, String customerName)  \n"
 //                + "id=: " + id
 //                + "customerName=:" + customerName);
@@ -138,7 +147,7 @@ public class InvoiceDAO {
         }
     }
 
-    public static ArrayList<Invoice> getInvoiceListByNameLike(String name) {
+    public   ArrayList<Invoice> getInvoiceListByNameLike(String name) {
         ArrayList<Invoice> list = new ArrayList<>();
         try {
 
@@ -160,7 +169,7 @@ public class InvoiceDAO {
         return list;
     }
 
-    public static void insertNewInvoice(String customer, Double mebleg) {
+    public   void insertNewInvoice(String customer, Double mebleg) {
         try {
             DBUtil.dbExecuteUpdate(
                     SQL.Invoice.INVOICE_ADD_NEW.
@@ -172,7 +181,7 @@ public class InvoiceDAO {
         }
     }
 
-    public static void insertNewInvoiceItem(Integer history_id, CartItem c) {
+    public   void insertNewInvoiceItem(Integer history_id, CartItem c) {
         try {
             DBUtil.dbExecuteUpdate(
                     SQL.InvoiceItem.INVOICEITEM_ADD_NEW
@@ -191,7 +200,7 @@ public class InvoiceDAO {
         }
     }
 
-    public static Integer getLastIdInInvoiceTable() {
+    public   Integer getLastIdInInvoiceTable() {
         try {
             ResultSet rs = DBUtil.dbExecuteQuery(SQL.Invoice.INVOICE_GET_LAST_ID);
             if (rs.next()) {
@@ -205,7 +214,7 @@ public class InvoiceDAO {
         }
     }
 
-    public static void updateInvoiceItem(InvoiceItem invoiceItem) {
+    public   void updateInvoiceItem(InvoiceItem invoiceItem) {
         try {
             DBUtil.dbExecuteUpdate(
                     SQL.InvoiceItem.INVOICEITEM_UPDATE_BY_ID
@@ -230,7 +239,7 @@ public class InvoiceDAO {
      * @see
      *
      */
-    public static void updateInvoice(Invoice invoice) {
+    public   void updateInvoice(Invoice invoice) {
 
         try {
             //`customer`='customerR', `mebleg`='meblegR', `odenish`='', `qaliq`='' WHERE  `id`=idR;";
