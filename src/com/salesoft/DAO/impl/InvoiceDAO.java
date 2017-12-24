@@ -2,13 +2,11 @@ package com.salesoft.DAO.impl;
 
 import com.salesoft.DAO.DatabaseConnection;
 import com.salesoft.DAO.intf.InvoiceDAOIntf;
-import com.salesoft.MainApp;
 import com.salesoft.database.DBUtil;
 import com.salesoft.database.SQL;
 import com.salesoft.model.CartItem;
 import com.salesoft.model.Invoice;
 import com.salesoft.model.InvoiceItem;
-import com.salesoft.util.MyLogger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -126,6 +124,7 @@ public class InvoiceDAO  implements InvoiceDAOIntf{
      * @param customerName
      * @deprecated
      */
+    @Override
     public   void updateInvoiceCustoemerNameById(Integer id, String customerName) {
 //        MainApp.getLogger().log(Level.SEVERE, "InvoiceDAO.updateInvoiceCustoemerNameById(int id, String customerName)  \n"
 //                + "id=: " + id
@@ -147,6 +146,7 @@ public class InvoiceDAO  implements InvoiceDAOIntf{
         }
     }
 
+    @Override
     public   ArrayList<Invoice> getInvoiceListByNameLike(String name) {
         ArrayList<Invoice> list = new ArrayList<>();
         try {
@@ -169,6 +169,7 @@ public class InvoiceDAO  implements InvoiceDAOIntf{
         return list;
     }
 
+    @Override
     public   void insertNewInvoice(String customer, Double mebleg) {
         try {
             DBUtil.dbExecuteUpdate(
@@ -181,6 +182,7 @@ public class InvoiceDAO  implements InvoiceDAOIntf{
         }
     }
 
+    @Override
     public   void insertNewInvoiceItem(Integer history_id, CartItem c) {
         try {
             DBUtil.dbExecuteUpdate(
@@ -200,6 +202,7 @@ public class InvoiceDAO  implements InvoiceDAOIntf{
         }
     }
 
+    @Override
     public   Integer getLastIdInInvoiceTable() {
         try {
             ResultSet rs = DBUtil.dbExecuteQuery(SQL.Invoice.INVOICE_GET_LAST_ID);
@@ -214,6 +217,7 @@ public class InvoiceDAO  implements InvoiceDAOIntf{
         }
     }
 
+    @Override
     public   void updateInvoiceItem(InvoiceItem invoiceItem) {
         try {
             DBUtil.dbExecuteUpdate(
@@ -239,6 +243,7 @@ public class InvoiceDAO  implements InvoiceDAOIntf{
      * @see
      *
      */
+    @Override
     public   void updateInvoice(Invoice invoice) {
 
         try {

@@ -1,6 +1,6 @@
 package com.salesoft.view.sale;
 
-import com.salesoft.DAO.InvoiceDAO;
+import com.salesoft.DAO.impl.InvoiceDAO;
 import com.salesoft.MainApp;
 import com.salesoft.model.Invoice;
 import com.salesoft.model.InvoiceItem;
@@ -29,9 +29,11 @@ public class PrintInvoice {
 
     private final Stage myStage;
     private final Invoice invoice;
+    private InvoiceDAO invoiceDAO = new InvoiceDAO();
 
     // bu evvel sitifade etdiyim construktordur
     // bunu heleki silmirem silsem gerek bashqa yerlerdede deyishiklik edim
+
     public PrintInvoice(Stage s, Invoice i) {
         myStage = s;
         invoice = i;
@@ -40,7 +42,7 @@ public class PrintInvoice {
     //bu da yeni ve daha rahat constructor
     public PrintInvoice(Integer historyId) {
         myStage = MainApp.getPrimaryStage();
-        invoice = InvoiceDAO.getInvoiceById(historyId);
+        invoice = invoiceDAO.getInvoiceById(historyId);
     }
 
     CheckBox cbA4 = new CheckBox("A4");
@@ -56,7 +58,7 @@ public class PrintInvoice {
         text.setPrefRowCount(30);
         text.setPrefColumnCount(30);
         text.setWrapText(true);
-        
+
         text.setFont(new Font("Times New Roman", 15));
 
         text.appendText("Qaime №: " + invoice.getId().toString() + " \n");

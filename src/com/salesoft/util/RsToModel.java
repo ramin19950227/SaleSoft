@@ -5,17 +5,12 @@
  */
 package com.salesoft.util;
 
-import com.salesoft.DAO.DatabaseConnection;
 import com.salesoft.database.DBUtil;
 import com.salesoft.model.Product;
 import com.salesoft.model.PurchaseProduct;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Class-da Yerleshen Metodlara ResultSet obyektini veririk ve Metodumuza Uygun

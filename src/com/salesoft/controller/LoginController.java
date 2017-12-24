@@ -6,7 +6,7 @@
 package com.salesoft.controller;
 
 import com.salesoft.DAO.DatabaseConnection;
-import com.salesoft.DAO.UserDAO;
+import com.salesoft.DAO.impl.UserDAO;
 import com.salesoft.custom.CustomPf;
 import com.salesoft.custom.CustomTf;
 import com.salesoft.database.DBUtil;
