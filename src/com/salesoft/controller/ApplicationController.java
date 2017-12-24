@@ -181,6 +181,9 @@ public class ApplicationController implements Initializable {
 
         imgUsrTop.setFill(new ImagePattern(usrImg));
         circleImgUsr.setFill(new ImagePattern(usrImg));
+        
+        // Proqram ishe dushen kimi Home Duymesi basilmish kimi Simulyasiya edek
+        btnHomeOnClick(new ActionEvent());
 
     }
 
