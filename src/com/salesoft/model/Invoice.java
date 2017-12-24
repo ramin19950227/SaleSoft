@@ -23,10 +23,10 @@ import javafx.beans.property.StringProperty;
  */
 public class Invoice {
 
-    private IntegerProperty id;
-    private StringProperty customerName;
-    private DoubleProperty totalPrice;
-    private StringProperty date;
+    private final IntegerProperty id;
+    private final StringProperty customerName;
+    private final DoubleProperty totalPrice;
+    private final StringProperty date;
 
     private ArrayList<InvoiceItem> list = new ArrayList<>();
 
@@ -126,10 +126,6 @@ public class Invoice {
     @Override
     public String toString() {
         return "Invoice{" + "id=" + id + ", customerName=" + customerName + ", totalPrice=" + totalPrice + ", date=" + date + ", list=" + list + '}';
-    }
-
-    public void println() {
-        System.out.println(toString());
     }
 
 }

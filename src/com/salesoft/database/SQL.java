@@ -5,6 +5,7 @@
  */
 package com.salesoft.database;
 
+import com.salesoft.model.Invoice;
 import com.salesoft.model.Product;
 import com.salesoft.util.MyProperties;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
  */
 public class SQL {
 
-    private static String dbName;
+    private static final String dbName;
 
     static {
         //ilk Muracietde Melumat Bazamizin adini alaq
@@ -38,6 +39,59 @@ public class SQL {
         //      `" + dbName + "`.
     }
 
+    /**
+     * InvoiceItem Modeli ile aparilan emeliyatlarin SQL-sorgulari
+     */
+    public static class InvoiceItem {
+
+        public static String GET_ALL_BY_INVOICE_ID(Integer id) {
+            return "SELECT * FROM `" + dbName + "`.InvoiceItem WHERE history_id=" + id + " ORDER BY `id` DESC";
+        }
+
+        public static String INVOICEITEM_ADD_NEW = "INSERT INTO `" + dbName + "`.satish_list (history_id,p_id,p_name,p_say,p_qiymet,p_mebleg,p_barcode,p_qeyd,p_satishdan_evvelki_say) VALUES (history_idR, p_idR, 'p_nameR', p_sayR, p_qiymetR, p_meblegR, 'p_barcodeR', 'p_qeydR', p_satishdan_evvelki_sayR)";
+
+        public static String INVOICEITEM_UPDATE_BY_ID = "UPDATE `" + dbName + "`.satish_list SET p_say='p_sayR', p_mebleg='p_meblegR' WHERE  id=idR;";
+
+    }
+
+    /**
+     * InvoiceOldSQL - SQL
+     */
+    public static class InvoiceSQL {
+
+        public static String CREATE(Invoice invoice) {
+            return "INSERT INTO `" + dbName + "`.Invoice (customer,mebleg) VALUES ('" + invoice.getCustomerName() + "', " + invoice.getTotalPrice() + ")";
+        }
+
+        public static String UPDATE(Invoice invoice) {
+            return "UPDATE `" + dbName + "`.Invoice SET `customerName`='" + invoice.getCustomerName() + "', `totalPrice`='" + invoice.getTotalPrice() + "' WHERE  `id`=" + invoice.getId();
+        }
+
+        public static String DELETE(Integer id) {
+            return "";
+        }
+
+        public static String GET(Integer id) {
+            return "SELECT * FROM `" + dbName + "`.Invoice WHERE id=" + id;
+        }
+
+        public static String GET_ALL() {
+            return "SELECT * FROM `" + dbName + "`.Invoice ORDER BY `id` DESC LIMIT 1000";
+        }
+
+        public static String GET_ALL_BY_NAME_LIKE(String name) {
+            return "SELECT * FROM `" + dbName + "`.Invoice WHERE customer LIKE '%" + name + "%'";
+        }
+
+        public static String GET_LAST_ID() {
+            return "SELECT MAX(id) FROM `" + dbName + "`.Invoice LIMIT 1";
+        }
+
+    }
+
+    /**
+     * User - Obyektinin Sorgulari
+     */
     public static class UserSQL {
 
         public static String LOGIN(String UsrName, String Password) {
@@ -95,11 +149,11 @@ public class SQL {
             queryList.add("CREATE DATABASE IF NOT EXISTS `" + dbName + "` DEFAULT CHARACTER SET utf8;");
 
             queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`PurchaseProduct` (\n"
-                    // Ilk 3 Sutun PurchaseProductSQL - Obyektine Mexsusdur
+                    // Ilk 3 Sutun PurchaseProduct - Obyektine Mexsusdur
                     + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
                     + "  `purchaseDate` text,\n"
                     + "  `totalPrice` double DEFAULT NULL,\n"
-                    // Qalan Propertiler ise PurchaseProductSQL - un icinde olan ProductSQL obyektine mexsusdur
+                    // Qalan Propertiler ise PurchaseProduct - un icinde olan ProductSQL obyektine mexsusdur
                     + "  `product_id` int(11) DEFAULT NULL,\n"
                     + "  `product_name` text,\n"
                     + "  `product_qty` int(11) DEFAULT NULL,\n"
@@ -124,22 +178,24 @@ public class SQL {
                     + "  `timeStamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
                     + "  PRIMARY KEY (`id`),\n"
                     + "  UNIQUE KEY `id` (`id`)\n"
-                    + ") ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;");
+                    + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
 
-            queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`satish_history` (\n"
+            queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`Invoice` (\n"
+                    //Object Data = Invoice
                     + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
-                    + "  `customer` text,\n"
-                    + "  `mebleg` double DEFAULT NULL,\n"
-                    + "  `odenish` double DEFAULT NULL,\n"
-                    + "  `qaliq` double DEFAULT NULL,\n"
+                    + "  `customerName` text,\n"
+                    + "  `totalPrice` double DEFAULT NULL,\n"
+                    //Additional Data
                     + "  `timeStamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,\n"
                     + "  PRIMARY KEY (`id`),\n"
                     + "  UNIQUE KEY `id` (`id`)\n"
                     + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
 
-            queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`satish_list` (\n"
+            queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`InvoiceItem` (\n"
+                    //Object DATA = InvoiceItem
                     + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
                     + "  `history_id` int(11) DEFAULT NULL,\n"
+                    //Inner Object Data = Product
                     + "  `p_id` int(11) DEFAULT NULL,\n"
                     + "  `p_name` text,\n"
                     + "  `p_say` int(11) DEFAULT NULL,\n"
@@ -147,6 +203,7 @@ public class SQL {
                     + "  `p_mebleg` double DEFAULT NULL,\n"
                     + "  `p_barcode` text,\n"
                     + "  `p_qeyd` text,\n"
+                    //Additional Data
                     + "  `p_satishdan_evvelki_say` int(11) DEFAULT NULL,\n"
                     + "  `timeStamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,\n"
                     + "  `updateTimeStamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
@@ -155,6 +212,7 @@ public class SQL {
                     + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
 
             queryList.add("CREATE TABLE IF NOT EXISTS `" + dbName + "`.`User` (\n"
+                    //Object DATA = User
                     + "  `Id` int(11) NOT NULL AUTO_INCREMENT,\n"
                     + "  `UsrName` text,\n"
                     + "  `FullName` text,\n"
@@ -164,8 +222,6 @@ public class SQL {
                     + "  UNIQUE KEY `Id` (`Id`)\n"
                     + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
 
-//            queryList.add("INSERT INTO `" + dbName + "`.`user` (`Id`, `UsrName`, `FullName`, `EmailAddress`, `ContactNumber`, `Salary`, `Address`, `Password`, `Status`, `UserImage`, `Date`, `CreatorId`) VALUES\n"
-//                    + "	(1, '1', 'Ramin', NULL, NULL, NULL, NULL, '1', 1, NULL, '2017-12-10', NULL);");
             return queryList;
         }
 
@@ -239,51 +295,6 @@ public class SQL {
          */
         public static final String PRODUCT_GEL_ALL_BY_BARCODE_R = "SELECT * FROM `" + dbName + "`.`Product` WHERE barcode=barcodeR";
 
-    }
-
-    /**
-     * Invoice Modeli ile aparilan emeliyatlarin SQL-sorgulari
-     */
-    public static class Invoice {
-
-        private static final String INVOICE_TABLE_NAME = "satish_history";
-
-        public static final String INVOICE_ADD_NEW = "INSERT INTO " + INVOICE_TABLE_NAME + " (customer,mebleg) VALUES ('customerR', meblegR)";
-        public static final String INVOICE_GET_LAST_ID = "SELECT MAX(id) FROM " + INVOICE_TABLE_NAME + " LIMIT 1";
-
-        //Invoice-obyektini yenilemek ucun 
-        public static final String INVOICE_UPDATE_BY_ID = "UPDATE " + INVOICE_TABLE_NAME + " SET `customer`='customerR', `mebleg`='meblegR' WHERE  `id`=idR;";
-    }
-
-    /**
-     * InvoiceItem Modeli ile aparilan emeliyatlarin SQL-sorgulari
-     */
-    public static class InvoiceItem {
-
-        private static final String INVOICEITEM_TABLE_NAME = "satish_list";
-
-        /**
-         * Parametrler
-         *
-         * @see 1=history_id;
-         * @see 2=p_id;
-         * @see 3=p_name;
-         * @see 4=p_say;
-         * @see 5=p_qiymet;
-         * @see 6=p_mebleg;
-         * @see 7=p_barcode;
-         * @see 8=p_qeyd;
-         * @see 9=p_satishdan_evvelki_say;
-         */
-        public static final String INVOICEITEM_ADD_NEW = "INSERT INTO " + INVOICEITEM_TABLE_NAME + " (history_id,p_id,p_name,p_say,p_qiymet,p_mebleg,p_barcode,p_qeyd,p_satishdan_evvelki_say) VALUES (history_idR, p_idR, 'p_nameR', p_sayR, p_qiymetR, p_meblegR, 'p_barcodeR', 'p_qeydR', p_satishdan_evvelki_sayR)";
-
-        /**
-         * @see ".replaceAll("p_sayR",
-         * invoiceItem.getQty().toString()).replaceAll("p_meblegR",
-         * invoiceItem.getTotalPrice().toString()).replaceAll("id=idR",
-         * invoiceItem.getId().toString())"
-         */
-        public static final String INVOICEITEM_UPDATE_BY_ID = "UPDATE " + INVOICEITEM_TABLE_NAME + " SET p_say='p_sayR', p_mebleg='p_meblegR' WHERE  id=idR;";
     }
 
 }

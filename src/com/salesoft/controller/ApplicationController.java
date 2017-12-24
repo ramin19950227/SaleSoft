@@ -13,7 +13,6 @@ package com.salesoft.controller;
 //import controller.application.home.HomeController;
 //import dataBase.DBConnection;
 //import dataBase.DBProperties;
-import com.salesoft.DAO.DatabaseConnection;
 import com.salesoft.MainApp;
 import com.salesoft.util.MyFXMLLoader;
 import com.salesoft.util.MyProperties;

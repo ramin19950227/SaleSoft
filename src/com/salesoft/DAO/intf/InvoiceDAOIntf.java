@@ -11,23 +11,25 @@ import java.util.ArrayList;
  */
 public interface InvoiceDAOIntf {
 
-    Invoice getInvoiceById(int id);
+    public void create(Invoice invoice);
 
-    ArrayList<Invoice> getAllInvoice();
+    public void update(Invoice invoice);
 
-    ArrayList<InvoiceItem> getAllInvoiceItemListById(Integer id);
+    public void delete(Invoice invoice);
 
-    void updateInvoiceCustoemerNameById(Integer id, String customerName);
+    public Invoice get(int id);
+
+    ArrayList<Invoice> getAll();
 
     ArrayList<Invoice> getInvoiceListByNameLike(String name);
 
-    void insertNewInvoice(String customer, Double mebleg);
+    Integer getLastIdInInvoiceTable();
+
+    //BUNDAN SONRAKILER InvoiceItem-e aiddir ve Burdan Cixartmaq Lazimdir
+    ArrayList<InvoiceItem> getAllInvoiceItemListById(Integer id);
 
     void insertNewInvoiceItem(Integer history_id, CartItem c);
 
-    Integer getLastIdInInvoiceTable();
-
     void updateInvoiceItem(InvoiceItem invoiceItem);
 
-    void updateInvoice(Invoice invoice);
 }

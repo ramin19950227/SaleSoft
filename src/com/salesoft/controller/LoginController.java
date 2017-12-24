@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.salesoft.controller;
 
-import com.salesoft.DAO.DatabaseConnection;
 import com.salesoft.DAO.impl.UserDAO;
 import com.salesoft.custom.CustomPf;
 import com.salesoft.custom.CustomTf;
