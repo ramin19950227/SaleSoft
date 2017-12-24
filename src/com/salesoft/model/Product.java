@@ -145,8 +145,8 @@ public class Product {
         return "Product{" + "id=" + id + ", name=" + name + ", qty=" + qty + ", purchasePrice=" + purchasePrice + ", barCode=" + barCode + ", note=" + note + '}';
     }
 
-    public void println() {
-        System.out.println(toString());
-    }
+//    public void println() {
+//        System.out.println(toString());
+//    }
 
 }
