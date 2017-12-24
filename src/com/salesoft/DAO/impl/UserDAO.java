@@ -1,5 +1,5 @@
  
-package com.salesoft.DAO;
+package com.salesoft.DAO.impl;
 
 import com.salesoft.DAO.intf.UserDAOIntf;
 import com.salesoft.database.DBUtil;
@@ -27,8 +27,10 @@ public class UserDAO implements UserDAOIntf{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
     public boolean login(String UsrName, String Password) {
         try {
+            
             ResultSet rs = DBUtil.directExecuteQuery(SQL.UserSQL.LOGIN(UsrName, Password));
             if (rs.next()) {
                 return true;
@@ -43,6 +45,7 @@ public class UserDAO implements UserDAOIntf{
         }
     }
 
+    @Override
     public boolean registration(String userName, String userPassword, String fullName, Integer status) {
 
         try {
