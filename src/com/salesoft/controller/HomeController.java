@@ -5,7 +5,10 @@
  */
 package com.salesoft.controller;
 
+import com.salesoft.DAO.impl.ProductDAO;
+import com.salesoft.model.Product;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,16 +22,28 @@ import javafx.scene.control.Label;
 public class HomeController implements Initializable {
 
     /**
-     * Butun Mehsullarin Mebleglerinin Cemi += (Mehsul sayi*alish qiymeti);
+     * Mehsullarin Cemi Sayi
      */
     @FXML
-    private Label totalItemsLabel;
+    private Label totalQtyLabel;
 
     /**
-     * Cemi Mehsul Sayi
+     * Mehsullarin Novlerinin Sayı
      */
     @FXML
-    private Label stockValueLabel;
+    private Label totalTypeQtyLabel;
+
+    /**
+     *
+     * Mehsullarin Mebleglerinin Cemi;
+     */
+    @FXML
+    private Label totalPriceLabel;
+
+    /**
+     * DAO Obyektimiz
+     */
+    ProductDAO productDAO;
 
     /**
      * Initializes the controller class.
@@ -38,31 +53,62 @@ public class HomeController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+
+        // DAO init
+        productDAO = new ProductDAO();
 
         //Labelleri sifirlayiriq
-        totalItemsLabel.setText("0");
-        stockValueLabel.setText("0");
-        
+        totalQtyLabel.setText("0");
+        totalTypeQtyLabel.setText("0");
+        totalPriceLabel.setText("0.0");
+
         initData();
 
     }
 
     /**
-     * Melumatlarimizi alir ve yerleshdirir xanalara, Cemi mehsul sayini ve cemi
-     * meblegi
+     * Melumatlarimizi alir ve yerleshdirir xanalara, Cemi mehsul sayini,
+     * mehsullarin novu ve cemi meblegi
      *
      */
     @FXML
     private void initData() {
 
-        // Mehsul sayini al
-        Integer allQty = 21; // test ucun
-        totalItemsLabel.setText(allQty.toString());
+        /**
+         * Məhsulların Cəmi Sayı
+         */
+        Integer totalQty = 0;
 
-        // Cemi meblegi al
-        Double stockValue = 852.55;
-        stockValueLabel.setText(stockValue + " AZN");
+        /**
+         * Məhsulların Növ Sayı, Nece no mehsul var onu gosterir , MESELEN 2
+         * Rucka var 3 ed defter demeli Cemi 2 nov mehsulumuz var amma mehsul
+         * sayi cemi 5-dir
+         */
+        Integer totalTypeQty = 0;
+
+        /**
+         * Məhsulların Cəmi Məbləği
+         */
+        Double totalPrice = 0.0;
+
+        // mehsullarimizin List-i
+        ArrayList<Product> list = productDAO.getAll();
+
+        //Melumatlarimizi ALAQ
+        for (Product product : list) {
+            totalPrice += product.getPurchasePrice() * product.getQty();
+            totalQty += product.getQty();
+        }
+
+        // Mehsullarimizin novunun sayini alaq
+        totalTypeQty = list.size();
+
+        // Melumatlarimizi yaziriq 
+        totalQtyLabel.setText(totalQty.toString() + " Ədəd");
+
+        totalTypeQtyLabel.setText(totalTypeQty.toString() + " Növ");
+
+        totalPriceLabel.setText(totalPrice + " AZN");
     }
 
 }
