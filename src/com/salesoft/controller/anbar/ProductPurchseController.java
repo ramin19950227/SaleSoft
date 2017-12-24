@@ -5,7 +5,8 @@
  */
 package com.salesoft.controller.anbar;
 
-import com.salesoft.DAO.ProductDAO;
+ 
+import com.salesoft.DAO.impl.ProductDAO;
 import com.salesoft.model.Product;
 import com.salesoft.controller.AnbarRootLayoutController;
 import java.net.URL;

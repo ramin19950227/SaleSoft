@@ -1,6 +1,7 @@
  
 package com.salesoft.DAO;
 
+import com.salesoft.DAO.intf.UserDAOIntf;
 import com.salesoft.database.DBUtil;
 import com.salesoft.database.SQL;
 import com.salesoft.model.User;
@@ -13,22 +14,8 @@ import java.util.ArrayList;
  *
  * @author Ramin 
  */
-public class UserDAO extends AbstractDAO<User, Integer> {
-
-    @Override
-    public boolean create(User entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean update(User entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean delete(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+public class UserDAO implements UserDAOIntf{
+  
 
     @Override
     public User getById(Integer id) {
@@ -68,6 +55,21 @@ public class UserDAO extends AbstractDAO<User, Integer> {
             return false;
         }
 
+    }
+
+    @Override
+    public void create(User entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void update(User entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void delete(Integer id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
