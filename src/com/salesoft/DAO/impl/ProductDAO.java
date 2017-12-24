@@ -75,6 +75,7 @@ public class ProductDAO implements ProductDAOIntf{
         }
     }
 
+    @Override
     public Product getByBarcode(String barCode) {
 
         try {
@@ -106,6 +107,7 @@ public class ProductDAO implements ProductDAOIntf{
         return list;
     }
 
+    @Override
     public ArrayList<Product> searchByNameLike(String name) {
         ArrayList<Product> list = new ArrayList<>();
 

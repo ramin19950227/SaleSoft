@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+ 
 /**
  * TEKLIFLER
  * XAnalarin validationlarini metoda cixartmaq olar
@@ -10,8 +6,8 @@
  */
 package com.salesoft.view.sale;
 
-import com.salesoft.DAO.InvoiceDAO;
-import com.salesoft.DAO.ProductDAO;
+import com.salesoft.DAO.impl.InvoiceDAO;
+import com.salesoft.DAO.impl.ProductDAO;
 import com.salesoft.model.Cart;
 import com.salesoft.model.CartItem;
 import com.salesoft.model.Product;
@@ -137,7 +133,7 @@ public class ProductSaleCartController implements Initializable {
     private Product nameEnteredProduct = null;
     private Integer nameEnteredProductCounter = 0;
     private final ProductDAO ProductDAO = new ProductDAO();
-
+    private InvoiceDAO invoiceDAO = new InvoiceDAO();
     /**
      * Initializes the controller class.
      *
@@ -701,8 +697,8 @@ public class ProductSaleCartController implements Initializable {
         }
 
         // Qaime syahisina yaziriq ve id aliriq
-        InvoiceDAO.insertNewInvoice(customerName, totalPrice);
-        Integer history_id = InvoiceDAO.getLastIdInInvoiceTable();
+        invoiceDAO.insertNewInvoice(customerName, totalPrice);
+        Integer history_id = invoiceDAO.getLastIdInInvoiceTable();
 
         //Qaime nomremiz var indi satish edirik
         //mehsulumuzu dovrile bir bir satacayiq ve satish siyahimiza qeydlerimizi edeceyik
@@ -725,14 +721,14 @@ public class ProductSaleCartController implements Initializable {
                 ProductDAO.update(product);
 
                 //indi sayi azaltdiq satish haqqinda melumati yazaq bazaya brbir
-                InvoiceDAO.insertNewInvoiceItem(history_id, ci);
+                invoiceDAO.insertNewInvoiceItem(history_id, ci);
 
                 //barcodsuz mehsulun satishi
             } else {
                 System.out.println("barcodSUZ mehsulun satishi id=" + ci.getId());
                 // bazamizda olmadigi ucun mehsul say hesabi da etmirik 
                 //sadece satish yaziriq ve birdi
-                InvoiceDAO.insertNewInvoiceItem(history_id, ci);
+                invoiceDAO.insertNewInvoiceItem(history_id, ci);
 
             }
         });

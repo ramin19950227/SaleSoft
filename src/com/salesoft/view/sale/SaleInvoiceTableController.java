@@ -5,7 +5,7 @@
  */
 package com.salesoft.view.sale;
 
-import com.salesoft.DAO.InvoiceDAO;
+import com.salesoft.DAO.impl.InvoiceDAO;
 import com.salesoft.MainApp;
 import com.salesoft.model.Invoice;
 import java.net.URL;
@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -41,10 +40,13 @@ public class SaleInvoiceTableController implements Initializable {
     @FXML
     private TableColumn<Invoice, String> dateColumn;
 
-    private ObservableList<Invoice> invoicetList = FXCollections.observableArrayList();
+    private final ObservableList<Invoice> invoicetList = FXCollections.observableArrayList();
+    InvoiceDAO invoiceDao = new InvoiceDAO();
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -55,15 +57,12 @@ public class SaleInvoiceTableController implements Initializable {
         totalPriceColumn.setCellValueFactory(cellData -> cellData.getValue().totalPriceProperty());
         dateColumn.setCellValueFactory(cellData -> cellData.getValue().dateProperty());
 
-        invoiceTable.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
-                    Integer invoice_id = invoiceTable.getSelectionModel().getSelectedItem().getId();
-                    System.out.println(invoice_id);
-                    //mainApp.showSaleInvoiceDetailsTable(invoice_id);
-                    //System.out.print(InvoiceDAO.getAllInvoiceItemListById(invoice_id).get(0).getName());
-                }
+        invoiceTable.setOnMousePressed((MouseEvent event) -> {
+            if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
+                Integer invoice_id = invoiceTable.getSelectionModel().getSelectedItem().getId();
+                System.out.println(invoice_id);
+                //mainApp.showSaleInvoiceDetailsTable(invoice_id);
+                //System.out.print(InvoiceDAO.getAllInvoiceItemListById(invoice_id).get(0).getName());
             }
         });
 
@@ -86,7 +85,7 @@ public class SaleInvoiceTableController implements Initializable {
     }
 
     private void updateTable() {
-        ArrayList<Invoice> invoiceList = InvoiceDAO.getAllInvoice();
+        ArrayList<Invoice> invoiceList = invoiceDao.getAllInvoice();
         invoicetList.clear();
         if (invoicetList != null) {
             invoicetList.addAll(invoiceList);
@@ -97,9 +96,9 @@ public class SaleInvoiceTableController implements Initializable {
     private void updateTable(String data) {
         data = data.trim();
 
-        if (InvoiceDAO.getInvoiceListByNameLike(data) != null) {//adla axtarib tapdisa bu blok ishe dushecek
+        if (invoiceDao.getInvoiceListByNameLike(data) != null) {//adla axtarib tapdisa bu blok ishe dushecek
 
-            ArrayList<Invoice> requestList = InvoiceDAO.getInvoiceListByNameLike(data);
+            ArrayList<Invoice> requestList = invoiceDao.getInvoiceListByNameLike(data);
             invoicetList.clear();
             invoicetList.addAll(requestList);
             invoiceTable.setItems(invoicetList);
@@ -162,7 +161,7 @@ public class SaleInvoiceTableController implements Initializable {
                 alert.showAndWait();
                 return;
             } else {
-                InvoiceDAO.updateInvoiceCustoemerNameById(Integer.valueOf(idField.getText()), nameField.getText());
+                invoiceDao.updateInvoiceCustoemerNameById(Integer.valueOf(idField.getText()), nameField.getText());
                 updateTable(nameField.getText());
             }
 

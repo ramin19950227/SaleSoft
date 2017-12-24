@@ -7,8 +7,8 @@
  */
 package com.salesoft.view.sale;
 
-import com.salesoft.DAO.InvoiceDAO;
-import com.salesoft.DAO.ProductDAO;
+import com.salesoft.DAO.impl.InvoiceDAO;
+import com.salesoft.DAO.impl.ProductDAO;
 import com.salesoft.model.Invoice;
 import com.salesoft.model.InvoiceItem;
 import com.salesoft.model.Product;
@@ -81,6 +81,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
     //
     private final ObservableList<InvoiceItem> invoicetList = FXCollections.observableArrayList();
     private final ProductDAO ProductDAO = new ProductDAO();
+    private  InvoiceDAO invoiceDAO = new InvoiceDAO();
 
     // aldigimiz invoice obyektini burda saxlayiriq
     Invoice invoice = null;
@@ -132,7 +133,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
      */
     @FXML
     public void initDataById(int id) {
-        invoice = InvoiceDAO.getInvoiceById(id);
+        invoice = invoiceDAO.getInvoiceById(id);
 
         if (invoice != null) {
             cutomerNameLabel.setText(invoice.getCustomerName());
@@ -299,7 +300,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
                     selectedInvoiceItem.setTotalPrice(selectedInvoiceItem.getQty() * alishQiymeti);
 
                     // indi ise hazir Item-obyektimizi gonderirik yenilemeye))
-                    InvoiceDAO.updateInvoiceItem(selectedInvoiceItem);
+                    invoiceDAO.updateInvoiceItem(selectedInvoiceItem);
 
                     //DIQQET: item-in meblegini hesablayiriq amma ki Invoice-nin meblegi qaldi onuda duzeltmek lazimdir
                     //burda qaytarmadan sonraki meblegi aliriq
@@ -323,7 +324,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
                     invoice.setTotalPrice(invoiceSonMebleg);
 
                     // ve hazir Invoice Obyektimizi yenileyirik
-                    InvoiceDAO.updateInvoice(invoice);
+                    invoiceDAO.updateInvoice(invoice);
 
                     //yenilemeler bitdikden sonra indi Invoice Obyektimizi de yenilemeliyik
                     initDataById(invoice.getId());

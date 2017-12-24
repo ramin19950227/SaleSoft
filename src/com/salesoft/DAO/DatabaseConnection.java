@@ -1,12 +1,10 @@
 package com.salesoft.DAO;
 
-import com.salesoft.util.MyLogger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
 
 /**
  * Bu Class-i Biz Melumat bazamizla elaqe qurmaq ucun istifade edeceyik burada
@@ -40,15 +38,13 @@ public class DatabaseConnection {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             con = DriverManager.getConnection(connectionURL, "" + USER + "", "" + PASSWORD + "");
 
-        } catch (SQLException ex) {
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             //new MyLogger("DatabaseConnection - SQLException").getLogger().log(Level.SEVERE, "SQLException", ex);
-        } catch (ClassNotFoundException ex) {
-//            new MyLogger("DatabaseConnection - ClassNotFoundException").getLogger().log(Level.SEVERE, "ClassNotFoundException", ex);
-        } catch (InstantiationException ex) {
-//            new MyLogger("DatabaseConnection - InstantiationException").getLogger().log(Level.SEVERE, "InstantiationException", ex);
-        } catch (IllegalAccessException ex) {
-//            new MyLogger("DatabaseConnection - IllegalAccessException").getLogger().log(Level.SEVERE, "IllegalAccessException", ex);
         }
+//            new MyLogger("DatabaseConnection - ClassNotFoundException").getLogger().log(Level.SEVERE, "ClassNotFoundException", ex);
+//            new MyLogger("DatabaseConnection - InstantiationException").getLogger().log(Level.SEVERE, "InstantiationException", ex);
+//            new MyLogger("DatabaseConnection - IllegalAccessException").getLogger().log(Level.SEVERE, "IllegalAccessException", ex);
+
         return con;
     }
 
