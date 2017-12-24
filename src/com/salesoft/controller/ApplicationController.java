@@ -15,6 +15,7 @@ package com.salesoft.controller;
 //import dataBase.DBProperties;
 import com.salesoft.DAO.DatabaseConnection;
 import com.salesoft.MainApp;
+import com.salesoft.util.MyFXMLLoader;
 import com.salesoft.util.MyProperties;
 import java.io.IOException;
 import java.net.URL;
@@ -128,7 +129,6 @@ public class ApplicationController implements Initializable {
     PreparedStatement pst;
     ResultSet rs;
 
-
     //Users users = new Users();
 //    UsersGetway usersGetway = new UsersGetway();
 //
@@ -137,7 +137,6 @@ public class ApplicationController implements Initializable {
 //    public userNameMedia getUsrNameMedia() {
 //        return usrNameMedia;
 //    }
-
 //    public void setUsrNameMedia(userNameMedia usrNameMedia) {
 //        lblUserId.setText(usrNameMedia.getId());
 //        lblUsrName.setText(usrNameMedia.getUsrName());
@@ -226,15 +225,26 @@ public class ApplicationController implements Initializable {
         }
     }
 
+    /**
+     * Home Duymesi basildiqda Bu metod ishe Dushur
+     *
+     * @param event
+     */
     @FXML
     public void btnHomeOnClick(ActionEvent event) {
+
+        //Metodun aciqlamasina baxin
         homeActive();
+
+        //indi ise Home Sehifemizi Gosterek
+        // bu sehifenin Controlleri bize lazim deyil
+        acContent.getChildren().clear();
+        acContent.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MyProperties.getURLProperties().getHomeFxmlURL()));
+
     }
 
     /**
      *
-     * @param event
-     * @throws IOException
      */
     @FXML
     public void btnStockOnClick() {
@@ -407,6 +417,12 @@ public class ApplicationController implements Initializable {
 //            Logger.getLogger(ApplicationController.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //    }
+    /**
+     * Metod Homre Duymesini Activ edir ve digerlerini Sondurur, Activ etme
+     * Processi nedir? Activ etme processi Home Duymesine Qirmizi shekili ve
+     * Activ Style(Stil) set edir, Digerlerine ise adi shekil ve adi Stil set
+     * edir.
+     */
     private void homeActive() {
         imgHomeBtn.setImage(homeRed);
         imgStoreBtn.setImage(stock);

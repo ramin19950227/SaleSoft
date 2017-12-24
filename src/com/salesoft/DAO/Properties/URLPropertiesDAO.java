@@ -24,7 +24,7 @@ public class URLPropertiesDAO {
             return new URLProperties(
                     "view/Login.fxml",
                     "view/Application.fxml",
-                    "view/HOME.fxml",
+                    "view/Home.fxml",
                     "view/anbar/ProductTable.fxml",
                     "view/sale/ProductSaleCart.fxml",
                     "view/AnbarRootLayout.fxml",
