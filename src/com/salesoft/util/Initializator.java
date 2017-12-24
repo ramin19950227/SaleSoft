@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.salesoft.util;
 
 import com.salesoft.MainApp;
@@ -90,15 +85,13 @@ public class Initializator {
                 properties.store(output, null);
                 output.close();
             } catch (FileNotFoundException ex) {
-                System.out.println("FileNotFoundException -  Initializator.initDBProperties(): " + ex);
                 MyLogger.logException("FileNotFoundException - Initializator.initDBProperties()", ex);
 
-                MyAlert.alertAndExitByCodeAndContent(0, "FirstStartInitialization.initDBProperties() - FileNotFoundException");
+                MyAlert.alertAndExitByCodeAndContent(0, "Initializator.initDBProperties() - FileNotFoundException");
             } catch (IOException ex) {
-                System.out.println("IOException -  Initializator.initDBProperties(): " + ex);
                 MyLogger.logException("IOException - Initializator.initDBProperties()", ex);
 
-                MyAlert.alertAndExitByCodeAndContent(0, "FirstStartInitialization.initDBProperties() - IOException");
+                MyAlert.alertAndExitByCodeAndContent(0, "Initializator.initDBProperties() - IOException");
 
             }
 
