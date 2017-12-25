@@ -28,15 +28,13 @@ public class MainApp extends Application {
         //3-cu olaraq ise, S
         // Server ile elaqe Qurmaga Calishaq, 
         // Sonuludurse Bildirek, 
-        // Melumat bazasinin qurulu olub olmadigini yoxlayaq ve deyilse Qurmagi teklif edek
+        // Melumat bazasinin qurulu olub olmadigini yoxlayaq ve deyilse QURUR
         Initializator.initDataBase();
 
     }
 
     //Consolumuzu Fayla yazmaq ucun bu obyektden istifade edeceyik
     //PrintStream out = RLogger.logConsoleToFile();
-
-
     private static Stage primaryStage;
 
     //bunu static eledimki obiri classlardan bunu ala bilim
@@ -49,14 +47,13 @@ public class MainApp extends Application {
         MainApp.primaryStage = primaryStage;
 
         //ALL_PROPERTIES = AllPropertiesGetDAO.getAllProperties();
-
         String loginViewTitle = MyProperties.getUIProperties().getApplicationTitle();
 
         /**
          * Login Sehifemizin URL addressi
          */
         URL loginViewURL = MyProperties.getURLProperties().getLoginFxmlURL();
-        
+
         /**
          * Login Sehifemizin Scene obyekti
          */

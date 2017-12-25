@@ -1,39 +1,42 @@
- 
 package com.salesoft.model;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 /**
- * @deprecated
+ * InvoiceItem - Class - Updated
  *
  * @author Ramin
  */
 public class InvoiceItem {
 
-    private final IntegerProperty id;//1 InvoiceItem-in id-si cedvelde olan id, mehsula hec bir aidiyyati yoxdur
-    private final StringProperty name;//2 mehsulun adi
-    private final IntegerProperty qty;//3  mehsulun satish sayi
-    private final DoubleProperty totalPrice;//4 mehsulunn satish meblegi
+    //this Object data's
+    private final IntegerProperty id;
+    private final IntegerProperty invoiceId;
+    private final DoubleProperty totalPrice;
 
-    //yeni 
-    private final IntegerProperty productId; // mehsulun id-si
-    private final StringProperty productBarCode; // mehsulun barodu
+    //Inner Object
+    private final Product product;
 
-    public InvoiceItem(int id, String name, int say, double mebleg, Integer productId, String barCode) {
-        super();
+    /**
+     *
+     * @param id
+     * @param invoiceId
+     * @param itemTotalPrice
+     * @param product
+     */
+    public InvoiceItem(Integer id, Integer invoiceId, Double itemTotalPrice, Product product) {
+        //this properties init
         this.id = new SimpleIntegerProperty(id);
-        this.name = new SimpleStringProperty(name);
-        this.qty = new SimpleIntegerProperty(say);
-        this.totalPrice = new SimpleDoubleProperty(mebleg);
+        this.invoiceId = new SimpleIntegerProperty(invoiceId);
+        this.totalPrice = new SimpleDoubleProperty(itemTotalPrice);
+        this.product = product;
+    }
 
-        // yeni elaveler
-        this.productId = new SimpleIntegerProperty(productId);
-        this.productBarCode = new SimpleStringProperty(barCode);
+    public Product getProduct() {
+        return product;
     }
 
     public final void setId(Integer value) {
@@ -48,28 +51,16 @@ public class InvoiceItem {
         return id;
     }
 
-    public final void setName(String value) {
-        name.set(value);
+    public final void setInvoiceId(Integer value) {
+        invoiceId.set(value);
     }
 
-    public final String getName() {
-        return name.get();
+    public final Integer getInvoiceId() {
+        return invoiceId.get();
     }
 
-    public final StringProperty nameProperty() {
-        return name;
-    }
-
-    public final void setQty(Integer value) {
-        qty.set(value);
-    }
-
-    public final Integer getQty() {
-        return qty.get();
-    }
-
-    public final IntegerProperty qtyProperty() {
-        return qty;
+    public final IntegerProperty invoiceIdProperty() {
+        return invoiceId;
     }
 
     public final void setTotalPrice(Double value) {
@@ -84,37 +75,9 @@ public class InvoiceItem {
         return totalPrice;
     }
 
-    public final void setProductId(Integer value) {
-        productId.set(value);
-    }
-
-    public final Integer getProductId() {
-        return productId.get();
-    }
-
-    public final IntegerProperty productIdProperty() {
-        return productId;
-    }
-
-    public final void setProductBarCode(String value) {
-        productBarCode.set(value);
-    }
-
-    public final String getProductBarCode() {
-        return productBarCode.get();
-    }
-
-    public final StringProperty productBarCodeProperty() {
-        return productBarCode;
-    }
-
     @Override
     public String toString() {
-        return "InvoiceItem{" + "id=" + id + ", name=" + name + ", qty=" + qty + ", totalPrice=" + totalPrice + ", productId=" + productId + ", productBarCode=" + productBarCode + '}';
-    }
-
-    public void println() {
-        System.out.println(toString());
+        return "InvoiceItem{" + "id=" + id + ", invoiceId=" + invoiceId + ", totalPrice=" + totalPrice + ", product=" + product + '}';
     }
 
 }

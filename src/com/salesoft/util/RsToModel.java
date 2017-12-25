@@ -6,6 +6,8 @@
 package com.salesoft.util;
 
 import com.salesoft.database.DBUtil;
+import com.salesoft.model.Invoice;
+import com.salesoft.model.InvoiceItem;
 import com.salesoft.model.Product;
 import com.salesoft.model.PurchaseProduct;
 import java.sql.ResultSet;
@@ -153,4 +155,72 @@ public class RsToModel {
         }
     }
 
+    public static InvoiceItem rsToInvoiceItem(ResultSet rs) throws SQLException {
+        try {
+
+            Product p = new Product();
+            p.setId(rs.getInt(4));
+            p.setName(rs.getString(5));
+            p.setQty(rs.getInt(6));
+            p.setPurchasePrice(rs.getDouble(7));
+            p.setBarCode(rs.getString(8));
+            p.setNote(rs.getString(9));
+
+            InvoiceItem item = new InvoiceItem(rs.getInt(1), rs.getInt(2), rs.getDouble(3), p);
+            return item;
+
+        } catch (SQLException ex) {
+            throw ex;
+
+        } finally {
+            DBUtil.allDisconnect();
+        }
+    }
+
+    public static ArrayList<InvoiceItem> rsToInvoiceItemList(ResultSet rs) throws SQLException {
+        try {
+            ArrayList<InvoiceItem> list = new ArrayList<>();
+
+            //budur dogru metod bir dene next() etdikse Melumatlari almaliyiq 2-ci next etmemishden evvel
+            while (rs.next()) {
+            Product p = new Product();
+            p.setId(rs.getInt(4));
+            p.setName(rs.getString(5));
+            p.setQty(rs.getInt(6));
+            p.setPurchasePrice(rs.getDouble(7));
+            p.setBarCode(rs.getString(8));
+            p.setNote(rs.getString(9));
+
+            InvoiceItem item = new InvoiceItem(rs.getInt(1), rs.getInt(2), rs.getDouble(3), p);
+
+                list.add(item);
+            }
+            return list;
+
+        } catch (SQLException ex) {
+            throw ex;
+
+        } finally {
+            DBUtil.allDisconnect();
+        }
+    }
+
+    // heleki qalsin sonra davam edecem inshaAllah
+//    public static Invoice rsToInvoice(ResultSet rs) throws SQLException {
+//        try {
+//            if (rs.next()) {
+//                Invoice invoice = new Invoice(rs.getInt(1), rs.getString(2), rs.getDouble(3), );
+//
+//                InvoiceItem item = new InvoiceItem(rs.getInt(1), rs.getInt(2), rs.getDouble(3), p);
+//                return item;
+//            }
+//            return null; //boshdur
+//
+//        } catch (SQLException ex) {
+//            throw ex;
+//
+//        } finally {
+//            DBUtil.allDisconnect();
+//        }
+//    }
 }

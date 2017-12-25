@@ -79,7 +79,7 @@ public class Initializator {
                 output = new FileOutputStream("Properties/DBProperties.properties");
                 properties.setProperty("db.host", "localhost");
                 properties.setProperty("db.port", "3306");
-                properties.setProperty("db.name", "testdb");
+                properties.setProperty("db.name", "SaleSoft");
                 properties.setProperty("db.user", "root");
                 properties.setProperty("db.crypted.password", "password");
                 properties.store(output, null);
@@ -151,6 +151,9 @@ public class Initializator {
         //3-ci Melumat Bazamiza qoshulmaga calishaq Baza Adini istifade ederek
         checkDBConnetion();
 
+        //4 - indi ise yoxlayaq DB ve cedvellerimiz yoxdursa avtomatiq qurrashdiraq
+        setupDataBase();
+
     }
 
     public static void checkServer() {
@@ -217,31 +220,34 @@ public class Initializator {
 
         } else {
             System.out.println("Initializator.initDataBase() - DBConnection is NOT Correct");
-
-            Optional<ButtonType> result = MyAlert.alertOptionalConfirmation(164,
-                    "DBUtil.hasDBConnetion() = false",
-                    "Server ishlek veziyyetdedir, Ve Serverle Baglanti Qurulub",
-                    "AMMA Melumat Bazasi Qurulmayib "
-                    + "\nMelumat bazasini Qurmaq ucun OK duymesini basin"
-                    + "\nAyatlar Penceresini acmaq ucun Cancell duymesini basin"
-                    + "\nEger Proqramnan cixmaq Isteyirsinizse Cancell duymesini basdiqdan sonra acilan pencereni baglayin");
-
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                // OK duymesini basdiqda BAzani QUR
-                setupDataBase();
-                System.exit(233);
-
-            } else if (result.isPresent() && result.get() == ButtonType.CANCEL) {
-
-                //bu metod Acilan pencerede X-i basaraq baglandiqda true qaytarir
-                Boolean isClosed = DBUtil.showServerConfigView();
-                if (isClosed) {
-                    System.exit(241);
-                }
-
-                checkDBConnetion();
-            }
         }
+
+//        } else {
+//            System.out.println("Initializator.initDataBase() - DBConnection is NOT Correct");
+//
+//            Optional<ButtonType> result = MyAlert.alertOptionalConfirmation(164,
+//                    "DBUtil.hasDBConnetion() = false",
+//                    "Server ishlek veziyyetdedir, Ve Serverle Baglanti Qurulub",
+//                    "AMMA Melumat Bazasi Qurulmayib "
+//                    + "\nMelumat bazasini Qurmaq ucun OK duymesini basin"
+//                    + "\nAyatlar Penceresini acmaq ucun Cancell duymesini basin"
+//                    + "\nEger Proqramnan cixmaq Isteyirsinizse Cancell duymesini basdiqdan sonra acilan pencereni baglayin");
+//
+//            if (result.isPresent() && result.get() == ButtonType.OK) {
+//                // OK duymesini basdiqda BAzani QUR
+//                setupDataBase();
+//                System.exit(233);
+//
+//            } else if (result.isPresent() && result.get() == ButtonType.CANCEL) {
+//
+//                //bu metod Acilan pencerede X-i basaraq baglandiqda true qaytarir
+//                Boolean isClosed = DBUtil.showServerConfigView();
+//                if (isClosed) {
+//                    System.exit(241);
+//                }
+//
+//                checkDBConnetion();
+//            }
     }
 
     private static void setupDataBase() {
@@ -254,8 +260,9 @@ public class Initializator {
             try {
                 DBUtil.directExecuteUpdate(query);
             } catch (SQLException ex) {
-                System.out.println("SQLException -  Initializator.setupDataBase(): " + ex);
                 MyLogger.logException("SQLException - Initializator.setupDataBase()", ex);
+                MyAlert.alertAndExitByCodeAndContent(263, "Məlumat bazasının qurrashdirilması zamanı Xəta bash verdi\n"
+                        + "Xətanın Detayları: " + ex.getMessage());
             }
         });
 

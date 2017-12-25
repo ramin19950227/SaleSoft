@@ -1,14 +1,7 @@
-// <editor-fold defaultstate="collapsed" desc="Package declare and Import Block">
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.salesoft.controller.sale;
 
-import com.salesoft.controller.sale.PrintInvoice;
 import com.salesoft.DAO.impl.InvoiceDAO;
+import com.salesoft.DAO.impl.InvoiceItemDAO;
 import com.salesoft.DAO.impl.ProductDAO;
 import com.salesoft.model.Invoice;
 import com.salesoft.model.InvoiceItem;
@@ -26,7 +19,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-//</editor-fold>
 
 /**
  * FXML Controller class Bu Class Qaime nomresi ile Qaimelere baxish ve redakte
@@ -77,6 +69,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
     private final ObservableList<InvoiceItem> invoicetList = FXCollections.observableArrayList();
     private final ProductDAO ProductDAO = new ProductDAO();
     private final InvoiceDAO invoiceDAO = new InvoiceDAO();
+    private final InvoiceItemDAO invoiceItemDAO = new InvoiceItemDAO();
 
     // aldigimiz invoice obyektini burda saxlayiriq
     Invoice invoice = null;
@@ -92,9 +85,9 @@ public class SaleInvoiceDetailsTableController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        barCodeColumn.setCellValueFactory(cellData -> cellData.getValue().productBarCodeProperty());
-        nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-        sayColumn.setCellValueFactory(cellData -> cellData.getValue().qtyProperty());
+        barCodeColumn.setCellValueFactory(cellData -> cellData.getValue().getProduct().barCodeProperty());
+        nameColumn.setCellValueFactory(cellData -> cellData.getValue().getProduct().nameProperty());
+        sayColumn.setCellValueFactory(cellData -> cellData.getValue().getProduct().qtyProperty());
         meblegColumn.setCellValueFactory(cellData -> cellData.getValue().totalPriceProperty());
 
         invoiceTable.getSelectionModel().selectedItemProperty().addListener(
@@ -130,7 +123,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
 
         if (invoice != null) {
             cutomerNameLabel.setText(invoice.getCustomerName());
-            tarixLabel.setText(invoice.getDate());
+            tarixLabel.setText(invoice.getStringDate());
             idField.setText(invoice.getId().toString());
             meblegLabel.setText(invoice.getTotalPrice().toString() + " AZN");
 
@@ -227,7 +220,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
         // yeni alish nece ediremse ocur mi edim? gorem
         // heleki o olasiligi dushunmurem
         // InvoiceItemi-in satish sayini alaq ve serhed qoyaq ki ondan cox qaytarablmesin 
-        Integer itemQty = selectedInvoiceItem.getQty();
+        Integer itemQty = selectedInvoiceItem.getProduct().getQty();
 
         if (isInputValid()) {
             Integer enteredQty = Integer.valueOf(productReturnQty.getText());
@@ -236,7 +229,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
             if (enteredQty <= itemQty && enteredQty > 0) {
 
                 // mehsulun barcodunu aliriq
-                String productBarCode = selectedInvoiceItem.getProductBarCode();
+                String productBarCode = selectedInvoiceItem.getProduct().getBarCode();
 
                 //eger yoxlamani kecdise yani xanaya kecerli melumat yaiibsa yazdigi say satish sayina beraber
                 //ve ya ondan az dirsa ve eyni zamanda 0-dan coxdursa
@@ -261,7 +254,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
 
                     // indi ise InvoiceItem-in sayini azaltmaliyiq
                     // ashagida itemimizin hal hazirdaki sayini aliriq
-                    Integer invoiceItemCurrentQty = selectedInvoiceItem.getQty();
+                    Integer invoiceItemCurrentQty = selectedInvoiceItem.getProduct().getQty();
 
                     //Itemimizin - indiki meblegini yazaq birqiraga
                     Double qaytarmadanEvvelkiMebleg = selectedInvoiceItem.getTotalPrice();
@@ -274,7 +267,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
 
                     //Qaytardigimiz mehsulun qaliq sayini set etdirik ( meselen 5 idi 3-unu qaytardiq 2 qaldi
                     // o 2-nide set edirik obyektimize
-                    selectedInvoiceItem.setQty(itemQaliqSay);
+                    selectedInvoiceItem.getProduct().setQty(itemQaliqSay);
 
                     //Item-in mebleginide hesablamaliyiq onu unutmushuq
                     // mehsul 5 eded idi qiymeti 1 manatdan mebleg 5 edir
@@ -286,10 +279,10 @@ public class SaleInvoiceDetailsTableController implements Initializable {
                     // CIXISH YOLU - meblegi alib bolurem evvelki saya
                     Double alishQiymeti = selectedInvoiceItem.getTotalPrice() / invoiceItemCurrentQty;
 
-                    selectedInvoiceItem.setTotalPrice(selectedInvoiceItem.getQty() * alishQiymeti);
+                    selectedInvoiceItem.setTotalPrice(selectedInvoiceItem.getProduct().getQty() * alishQiymeti);
 
                     // indi ise hazir Item-obyektimizi gonderirik yenilemeye))
-                    invoiceDAO.updateInvoiceItem(selectedInvoiceItem);
+                    invoiceItemDAO.update(selectedInvoiceItem);
 
                     //DIQQET: item-in meblegini hesablayiriq amma ki Invoice-nin meblegi qaldi onuda duzeltmek lazimdir
                     //burda qaytarmadan sonraki meblegi aliriq
@@ -356,13 +349,13 @@ public class SaleInvoiceDetailsTableController implements Initializable {
      * @param invoiceItem
      */
     private void setInvoiceItemEditFields(InvoiceItem invoiceItem) {
-        productReturnQty.setText(invoiceItem.getQty().toString());
+        productReturnQty.setText(invoiceItem.getProduct().getQty().toString());
         returnButton.requestFocus();
 
         // burda yoxlayiriq eger cedvelden secdiyimiz ve redakte etmek istediyimiz
         // item-in sayi 0 dirsa o zaman xanalari evvelki veziyyetine qaytaririrq
         //yani sondururuk, sonulu veziyyete qaytaririq
-        if (invoiceItem.getQty() == 0) {
+        if (invoiceItem.getProduct().getQty() == 0) {
             // emeliyyat ucun bu metodu cagiririq
             clearField();
 
@@ -399,10 +392,10 @@ public class SaleInvoiceDetailsTableController implements Initializable {
 
                 if (qty <= 0) {
                     errorMessage += "Sayi 1-dən az Ola bilmez!\n";
-                } else if (qty > selectedInvoiceItem.getQty()) {
+                } else if (qty > selectedInvoiceItem.getProduct().getQty()) {
                     errorMessage += "Sayi Dogru daxil edin. Satish sayindan cox qaytarmaq olmaz!\n";
-                    errorMessage += "Mehsul: \t" + selectedInvoiceItem.getName() + "\n";
-                    errorMessage += "Qaytara Bileceyiniz Maksimal say Say: \t " + selectedInvoiceItem.getQty() + "\n";
+                    errorMessage += "Mehsul: \t" + selectedInvoiceItem.getProduct().getName() + "\n";
+                    errorMessage += "Qaytara Bileceyiniz Maksimal say Say: \t " + selectedInvoiceItem.getProduct().getQty() + "\n";
                 }
 
             } catch (NumberFormatException e) {

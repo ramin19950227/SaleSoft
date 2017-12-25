@@ -29,18 +29,19 @@ public class PrintInvoice {
 
     private final Stage myStage;
     private final Invoice invoice;
-    private InvoiceDAO invoiceDAO = new InvoiceDAO();
+    private final InvoiceDAO invoiceDAO;
 
     // bu evvel sitifade etdiyim construktordur
     // bunu heleki silmirem silsem gerek bashqa yerlerdede deyishiklik edim
-
     public PrintInvoice(Stage s, Invoice i) {
+        this.invoiceDAO = new InvoiceDAO();
         myStage = s;
         invoice = i;
     }
 
     //bu da yeni ve daha rahat constructor
     public PrintInvoice(Integer historyId) {
+        this.invoiceDAO = new InvoiceDAO();
         myStage = MainApp.getPrimaryStage();
         invoice = invoiceDAO.get(historyId);
     }
@@ -70,7 +71,7 @@ public class PrintInvoice {
 
         int counter = 1;
         for (InvoiceItem invoiceItem : invoice.getList()) {
-            text.appendText(counter++ + "\t\t" + invoiceItem.getName() + "\t\t" + invoiceItem.getQty() + "\t" + invoiceItem.getTotalPrice() + " \n");
+            text.appendText(counter++ + "\t\t" + invoiceItem.getProduct().getName() + "\t\t" + invoiceItem.getProduct().getQty() + "\t" + invoiceItem.getTotalPrice() + " \n");
         }
 
         // Button to print the TextArea node

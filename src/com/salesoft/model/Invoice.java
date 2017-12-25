@@ -5,7 +5,9 @@
  */
 package com.salesoft.model;
 
+import com.salesoft.util.MyDateConverter;
 import java.util.ArrayList;
+import java.util.Date;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -26,41 +28,68 @@ public class Invoice {
     private final IntegerProperty id;
     private final StringProperty customerName;
     private final DoubleProperty totalPrice;
-    private final StringProperty date;
+    //Tarixi Cedvelde Normal Yollarla Gostere Bilmek ucun heleki Bele yoldan istifade edecem
+    private final StringProperty stringDate; // = bura date - stringe ceviribb verecem
 
+    private Date date = null;
     private ArrayList<InvoiceItem> list = new ArrayList<>();
 
-    {// inicializasiya bloku vtomatik ishe dushur
-        this.id = new SimpleIntegerProperty(0);
-        this.customerName = new SimpleStringProperty(null);
-        this.totalPrice = new SimpleDoubleProperty(0);
-        this.date = new SimpleStringProperty(null);
-    }
-
     /**
-     * Constructor
      *
      * @param id
-     * @param date
-     * @param totalPrice
      * @param customerName
+     * @param totalPrice
+     * @param date
      * @param list
      */
-    public Invoice(int id, String date, double totalPrice, String customerName, ArrayList<InvoiceItem> list) {
-        super();
-        this.id.set(id);
-        this.date.set(date);
-        this.totalPrice.set(totalPrice);
-        this.customerName.set(customerName);
+    public Invoice(Integer id, String customerName, Double totalPrice, Date date, ArrayList<InvoiceItem> list) {
+        this.id = new SimpleIntegerProperty(id);
+        this.customerName = new SimpleStringProperty(customerName);
+        this.totalPrice = new SimpleDoubleProperty(totalPrice);
+        this.stringDate = new SimpleStringProperty(MyDateConverter.utilDate.toString(date));
+
+        this.date = date;
         this.list = list;
     }
+//
+//    public Invoice(Integer id, String customerName, Double totalPrice, String date) {
+//        System.out.println("com.salesoft.model.Invoice.<init>(2)");
+//        this.id = new SimpleIntegerProperty(id);
+//        this.customerName = new SimpleStringProperty(customerName);
+//        this.totalPrice = new SimpleDoubleProperty(totalPrice);
+//        this.date = new SimpleStringProperty(date);
+//
+//    }
 
-    public Invoice(int id, String date, double totalPrice, String customerName) {
-        super();
-        this.id.set(id);
-        this.date.set(date);
-        this.totalPrice.set(totalPrice);
-        this.customerName.set(customerName);
+    public Invoice() {
+        this.id = new SimpleIntegerProperty(0);
+        this.customerName = new SimpleStringProperty("customerName");
+        this.totalPrice = new SimpleDoubleProperty(0.0);
+        this.stringDate = new SimpleStringProperty("dateTime");
+
+        this.date = null;
+        this.list = null;
+    }
+
+    @Override
+    public String toString() {
+        return "Invoice{" + "id=" + id + ", customerName=" + customerName + ", totalPrice=" + totalPrice + ", stringDate=" + stringDate + ", date=" + date + ", list=" + list + '}';
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public ArrayList<InvoiceItem> getList() {
+        return list;
+    }
+
+    public void setList(ArrayList<InvoiceItem> list) {
+        this.list = list;
     }
 
     public final void setId(Integer value) {
@@ -99,33 +128,16 @@ public class Invoice {
         return totalPrice;
     }
 
-    public final void setDate(String value) {
-        date.set(value);
+    public final void setStringDate(String value) {
+        stringDate.set(value);
     }
 
-    public final String getDate() {
-        return date.get();
+    public final String getStringDate() {
+        return stringDate.get();
     }
 
-    public final StringProperty dateProperty() {
-        return date;
-    }
-
-    public ArrayList<InvoiceItem> getList() {
-        return list;
-    }
-
-    public void setList(ArrayList<InvoiceItem> list) {
-        this.list = list;
-    }
-
-    public void addItemToList(InvoiceItem item) {
-        this.list.add(item);
-    }
-
-    @Override
-    public String toString() {
-        return "Invoice{" + "id=" + id + ", customerName=" + customerName + ", totalPrice=" + totalPrice + ", date=" + date + ", list=" + list + '}';
+    public final StringProperty stringDateProperty() {
+        return stringDate;
     }
 
 }

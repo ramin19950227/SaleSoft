@@ -21,15 +21,7 @@ public interface InvoiceDAOIntf {
 
     ArrayList<Invoice> getAll();
 
-    ArrayList<Invoice> getInvoiceListByNameLike(String name);
+    Integer getLastId();
 
-    Integer getLastIdInInvoiceTable();
-
-    //BUNDAN SONRAKILER InvoiceItem-e aiddir ve Burdan Cixartmaq Lazimdir
-    ArrayList<InvoiceItem> getAllInvoiceItemListById(Integer id);
-
-    void insertNewInvoiceItem(Integer history_id, CartItem c);
-
-    void updateInvoiceItem(InvoiceItem invoiceItem);
-
+    ArrayList<Invoice> getAllByNameLike(String name);
 }

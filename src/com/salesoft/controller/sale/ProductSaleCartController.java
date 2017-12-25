@@ -7,10 +7,12 @@ package com.salesoft.controller.sale;
 
 import com.salesoft.controller.sale.PrintInvoice;
 import com.salesoft.DAO.impl.InvoiceDAO;
+import com.salesoft.DAO.impl.InvoiceItemDAO;
 import com.salesoft.DAO.impl.ProductDAO;
 import com.salesoft.model.Cart;
 import com.salesoft.model.CartItem;
 import com.salesoft.model.Invoice;
+import com.salesoft.model.InvoiceItem;
 import com.salesoft.model.Product;
 import java.awt.Toolkit;
 import java.net.URL;
@@ -134,7 +136,8 @@ public class ProductSaleCartController implements Initializable {
     private Product nameEnteredProduct = null;
     private Integer nameEnteredProductCounter = 0;
     private final ProductDAO ProductDAO = new ProductDAO();
-    private InvoiceDAO invoiceDAO = new InvoiceDAO();
+    private final InvoiceDAO invoiceDAO = new InvoiceDAO();
+    private final InvoiceItemDAO invoiceItemDAO = new InvoiceItemDAO();
 
     /**
      * Initializes the controller class.
@@ -698,10 +701,15 @@ public class ProductSaleCartController implements Initializable {
             totalPrice = getTotalPriceFormCart();
         }
 
-        Invoice invoice = new Invoice(0, "", totalPrice, customerName);
+        Invoice invoice = new Invoice();
+        invoice.setCustomerName(customerName);
+        invoice.setTotalPrice(totalPrice);
+
         // Qaime syahisina yaziriq ve id aliriq
         invoiceDAO.create(invoice);
-        Integer history_id = invoiceDAO.getLastIdInInvoiceTable();
+
+        // son elave etdiyimiz qaimeninn nomresi
+        Integer invoiceId = invoiceDAO.getLastId();
 
         //Qaime nomremiz var indi satish edirik
         //mehsulumuzu dovrile bir bir satacayiq ve satish siyahimiza qeydlerimizi edeceyik
@@ -723,20 +731,43 @@ public class ProductSaleCartController implements Initializable {
                 // indi ise satishi elememisheden evvel mehsulumuzun sayini azaldaq
                 ProductDAO.update(product);
 
-                //indi sayi azaltdiq satish haqqinda melumati yazaq bazaya brbir
-                invoiceDAO.insertNewInvoiceItem(history_id, ci);
+                //Inner Object Product data's IN InvoiceItem
+                Integer id = ci.getId();
+                String name = ci.getName();
+                Integer qty = ci.getQty();
+                Double price = ci.getSalePrice();
+                String barCode = ci.getProduct().getBarCode();
+                String note = ci.getProduct().getNote();
+
+                Product saleProduct = new Product(id, name, qty, price, barCode, note);
+
+                InvoiceItem saleItem = new InvoiceItem(0, invoiceId, ci.getTotalPrice(), saleProduct);
+
+                //indi satish haqqinda melumati yazaq bazaya brbir
+                invoiceItemDAO.create(saleItem);
 
                 //barcodsuz mehsulun satishi
             } else {
-                System.out.println("barcodSUZ mehsulun satishi id=" + ci.getId());
                 // bazamizda olmadigi ucun mehsul say hesabi da etmirik 
                 //sadece satish yaziriq ve birdi
-                invoiceDAO.insertNewInvoiceItem(history_id, ci);
 
+                Integer id = ci.getId();
+                String name = ci.getName();
+                Integer qty = ci.getQty();
+                Double price = ci.getSalePrice();
+                String barCode = ci.getProduct().getBarCode();
+                String note = ci.getProduct().getNote();
+
+                Product saleProduct = new Product(id, name, qty, price, barCode, note);
+
+                InvoiceItem saleItem = new InvoiceItem(0, invoiceId, ci.getTotalPrice(), saleProduct);
+
+                //indi satish haqqinda melumati yazaq bazaya brbir
+                invoiceItemDAO.create(saleItem);
             }
         });
 
-        String content = "Qaime №: " + history_id + ", Müştəri: " + customerName;
+        String content = "Qaime №: " + invoiceId + ", Müştəri: " + customerName;
 
         MyAlert("Satish Tamamlandi", "Satish Tamamlandi", content);
 
@@ -746,7 +777,7 @@ public class ProductSaleCartController implements Initializable {
         // o zaman  qaime nomresi ile cap bolumune kec bir basha printe
         // heleki hele edecem bir basha printe sonra dizayn vererem
         //cap et funksiyasi Yeni Construktor ile
-        new PrintInvoice(history_id).start();
+        new PrintInvoice(invoiceId).start();
 
     }
 }

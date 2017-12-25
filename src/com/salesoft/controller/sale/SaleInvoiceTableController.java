@@ -50,7 +50,7 @@ public class SaleInvoiceTableController implements Initializable {
         idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().customerNameProperty());
         totalPriceColumn.setCellValueFactory(cellData -> cellData.getValue().totalPriceProperty());
-        dateColumn.setCellValueFactory(cellData -> cellData.getValue().dateProperty());
+        dateColumn.setCellValueFactory(cellData -> cellData.getValue().stringDateProperty());
 
         invoiceTable.setOnMousePressed((MouseEvent event) -> {
             if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
@@ -87,9 +87,9 @@ public class SaleInvoiceTableController implements Initializable {
     private void updateTable(String data) {
         data = data.trim();
 
-        if (invoiceDao.getInvoiceListByNameLike(data) != null) {//adla axtarib tapdisa bu blok ishe dushecek
+        if (invoiceDao.getAllByNameLike(data) != null) {//adla axtarib tapdisa bu blok ishe dushecek
 
-            ArrayList<Invoice> requestList = invoiceDao.getInvoiceListByNameLike(data);
+            ArrayList<Invoice> requestList = invoiceDao.getAllByNameLike(data);
             invoicetList.clear();
             invoicetList.addAll(requestList);
             invoiceTable.setItems(invoicetList);
@@ -134,19 +134,19 @@ public class SaleInvoiceTableController implements Initializable {
      */
     @FXML
     private void handleSave() {
-        if (isInputValid()) {
-            if (idField.getText() == null || idField.getText().length() == 0) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Cedvelde Qaimeni Secin");
-                alert.setHeaderText("Zehmet olmasa Qaimeni Cedvelden secin");
-                alert.setContentText("Qaimeni Secib Sonra Duymeye basin");
-                alert.showAndWait();
-            } else {
-                invoiceDao.update(new Invoice(Integer.valueOf(idField.getText()), "", 0, nameField.getText()));
-                updateTable(nameField.getText());
-            }
-
-        }
+//        if (isInputValid()) {
+//            if (idField.getText() == null || idField.getText().length() == 0) {
+//                Alert alert = new Alert(Alert.AlertType.ERROR);
+//                alert.setTitle("Cedvelde Qaimeni Secin");
+//                alert.setHeaderText("Zehmet olmasa Qaimeni Cedvelden secin");
+//                alert.setContentText("Qaimeni Secib Sonra Duymeye basin");
+//                alert.showAndWait();
+//            } else {
+//                invoiceDao.update(new Invoice(Integer.valueOf(idField.getText()), nameField.getText()));
+//                updateTable(nameField.getText());
+//            }
+//
+//        }
     }
 
     /**
@@ -193,7 +193,7 @@ public class SaleInvoiceTableController implements Initializable {
             idField.setText(invoice.getId().toString());
             nameField.setText(invoice.getCustomerName());
             totalPriceField.setText(invoice.getTotalPrice().toString());
-            dateField.setText(invoice.getDate());
+            dateField.setText(invoice.getStringDate());
         } else {
             // Если Person = null, то убираем весь текст.
             idField.setText("");
