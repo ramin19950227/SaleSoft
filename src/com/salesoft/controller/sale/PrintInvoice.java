@@ -64,7 +64,7 @@ public class PrintInvoice {
 
         text.appendText("Qaime №: " + invoice.getId().toString() + " \n");
         text.appendText("Müştəri: " + invoice.getCustomerName() + " \n");
-        text.appendText("Tarix: " + invoice.getDate() + " \n");
+        text.appendText("Tarix: " + invoice.getStringDate()+ " \n");
         text.appendText("Mebleg: " + invoice.getTotalPrice() + " AZN\n");
         text.appendText(" \n");
         text.appendText(" \n");

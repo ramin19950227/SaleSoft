@@ -185,7 +185,7 @@ public class SQL {
                     + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
                     + "  `customerName` text,\n"
                     + "  `totalPrice` double DEFAULT NULL,\n"
-                    + "  `dateTime` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                    + "  `dateTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,\n"
                     //Additional Data
                     + "  `createTimeStamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,\n"
                     + "  `lastUpdateTimeStamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,\n"
