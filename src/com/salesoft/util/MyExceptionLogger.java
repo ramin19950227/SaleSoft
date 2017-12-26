@@ -1,6 +1,5 @@
 package com.salesoft.util;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -13,11 +12,11 @@ import java.time.format.DateTimeFormatter;
  *
  * @author Ramin
  */
-public class MyLogger {
+public class MyExceptionLogger {
 
     /*NUMUNE:
             System.out.println("SQLException -  DBUtil.dbExecuteQuery(): " + ex);
-            MyLogger.logException("SQLException - DBUtil.dbExecuteQuery()", ex);
+            MyExceptionLogger.logException("SQLException - DBUtil.dbExecuteQuery()", ex);
      */
     // Bu obyekt ile Biz faylimiza setirleri yaza bileceyik ve Consolu yazmaq ucun
     // System -e bu obyekti vereceyik
@@ -46,6 +45,60 @@ public class MyLogger {
 
         } catch (FileNotFoundException ex) {
             MyAlert.alertAndExitByCodeAndContent(44, "FileNotFoundException - MyLogger.logException() ===" + ex);
+        } finally {
+            if (out != null) {
+                out.close();
+            }
+        }
+    }
+
+    /**
+     * logException - Metodunun Yeni Versiyasi Loglara Obyektin neticesini ve
+     * elave melumat yazir
+     *
+     * @param exceptionName
+     * @param object
+     * @param additionalData
+     * @param e
+     */
+    public static void logExceptionV2(String exceptionName, String additionalData, Object object, Exception e) {
+        PrintStream out = null;
+        try {
+            LocalDateTime timePoint = LocalDateTime.now();
+
+            // TODO code application logic here
+            out = new PrintStream(
+                    new FileOutputStream(
+                            "Log\\Exceptions\\" + "V2LOG - "
+                            + (timePoint.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME).replaceAll(":", "-"))
+                            + " = " + exceptionName + ".txt")
+            );
+
+            out.println("START Exception FILE");
+            out.println();
+
+            out.println("LocalizedMessage: " + e.getLocalizedMessage());
+            out.println("out.println(e): " + e);
+            out.println();
+
+            out.println("Object Datalari: -_>> ");
+            out.println();
+            out.println(object);
+            out.println();
+
+            out.println("String additionalData: -->>");
+            out.println(additionalData);
+            out.println();
+
+            out.println("-----------------------------------");
+            out.println("e.printStackTrace(out); -->>");
+            e.printStackTrace(out);
+            out.println();
+
+            out.println("END Exception FILE");
+
+        } catch (FileNotFoundException ex) {
+            MyAlert.alertAndExitByCodeAndContent(44, "FileNotFoundException - MyLogger.logExceptionV2() ===" + ex);
         } finally {
             if (out != null) {
                 out.close();

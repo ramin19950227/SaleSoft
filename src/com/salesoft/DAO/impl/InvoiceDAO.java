@@ -5,7 +5,8 @@ import com.salesoft.database.DBUtil;
 import com.salesoft.database.SQL;
 import com.salesoft.model.Invoice;
 import com.salesoft.model.InvoiceItem;
-import com.salesoft.util.MyLogger;
+import com.salesoft.util.MyExceptionLogger;
+import com.salesoft.util.UserOperationLogger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,18 +18,29 @@ public class InvoiceDAO implements InvoiceDAOIntf {
     @Override
     public void create(Invoice invoice) {
         try {
-            DBUtil.directExecuteUpdate(SQL.InvoiceSQL.CREATE(invoice));
+            String SQLQuery = SQL.InvoiceSQL.CREATE(invoice);
+
+            //Sorgumuzu Qeyde alaq
+            UserOperationLogger.logSQL(SQLQuery);
+
+            DBUtil.directExecuteUpdate(SQLQuery);
+
         } catch (SQLException ex) {
-            MyLogger.logException("SQLException - InvoiceDAO.create(Invoice invoice)", ex);
+            MyExceptionLogger.logException("SQLException - InvoiceDAO.create(Invoice invoice)", ex);
         }
     }
 
     @Override
     public void update(Invoice invoice) {
         try {
-            DBUtil.directExecuteUpdate(SQL.InvoiceSQL.UPDATE(invoice));
+            String SQLQuery = SQL.InvoiceSQL.UPDATE(invoice);
+
+            //Sorgumuzu Qeyde alaq
+            UserOperationLogger.logSQL(SQLQuery);
+
+            DBUtil.directExecuteUpdate(SQLQuery);
         } catch (SQLException ex) {
-            MyLogger.logException("SQLException - InvoiceDAO.update(Invoice invoice)", ex);
+            MyExceptionLogger.logException("SQLException - InvoiceDAO.update(Invoice invoice)", ex);
         }
     }
 
@@ -41,8 +53,15 @@ public class InvoiceDAO implements InvoiceDAOIntf {
     public Invoice get(int id) {
         Invoice invoice = null;
         try {
+
+            String SQLQuery = SQL.InvoiceSQL.GET(id);
+
+            //Sorgumuzu Qeyde alaq
+            UserOperationLogger.logSQL(SQLQuery);
+
             ArrayList<InvoiceItem> list = invoiceItemDAO.getAllById(id);
-            ResultSet rs = DBUtil.directExecuteQuery(SQL.InvoiceSQL.GET(id));
+
+            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
 
             while (rs.next()) {
                 invoice = new Invoice(
@@ -54,7 +73,7 @@ public class InvoiceDAO implements InvoiceDAOIntf {
                 );
             }
         } catch (SQLException ex) {
-            MyLogger.logException("SQLException - InvoiceDAO.get(int id)", ex);
+            MyExceptionLogger.logException("SQLException - InvoiceDAO.get(int id)", ex);
         }
         return invoice;
     }
@@ -67,7 +86,13 @@ public class InvoiceDAO implements InvoiceDAOIntf {
     public ArrayList<Invoice> getAll() {
         ArrayList<Invoice> list = new ArrayList<>();
         try {
-            ResultSet rs = DBUtil.directExecuteQuery(SQL.InvoiceSQL.GET_ALL());
+
+            String SQLQuery = SQL.InvoiceSQL.GET_ALL();
+
+            //Sorgumuzu Qeyde alaq
+            UserOperationLogger.logSQL(SQLQuery);
+
+            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
 
             while (rs.next()) {
                 list.add(new Invoice(
@@ -80,7 +105,7 @@ public class InvoiceDAO implements InvoiceDAOIntf {
             }
 
         } catch (SQLException ex) {
-            MyLogger.logException("SQLException - InvoiceDAO.getAll()", ex);
+            MyExceptionLogger.logException("SQLException - InvoiceDAO.getAll()", ex);
         }
         return list;
 
@@ -90,8 +115,11 @@ public class InvoiceDAO implements InvoiceDAOIntf {
     public ArrayList<Invoice> getAllByNameLike(String name) {
         ArrayList<Invoice> list = new ArrayList<>();
         try {
+            String SQLQuery = SQL.InvoiceSQL.GET_ALL_BY_NAME_LIKE(name);
 
-            ResultSet rs = DBUtil.directExecuteQuery(SQL.InvoiceSQL.GET_ALL_BY_NAME_LIKE(name));
+            UserOperationLogger.logSQL(SQLQuery);
+
+            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
             while (rs.next()) {
                 list.add(
                         new Invoice(
@@ -104,7 +132,7 @@ public class InvoiceDAO implements InvoiceDAOIntf {
                 );
             }
         } catch (SQLException ex) {
-            MyLogger.logException("SQLException - InvoiceDAO.getInvoiceListByNameLike(String name)", ex);
+            MyExceptionLogger.logException("SQLException - InvoiceDAO.getInvoiceListByNameLike(String name)", ex);
         }
         return list;
     }
@@ -112,14 +140,18 @@ public class InvoiceDAO implements InvoiceDAOIntf {
     @Override
     public Integer getLastId() {
         try {
-            ResultSet rs = DBUtil.directExecuteQuery(SQL.InvoiceSQL.GET_LAST_ID());
+            String SQLQuery = SQL.InvoiceSQL.GET_LAST_ID();
+
+            UserOperationLogger.logSQL(SQLQuery);
+            
+            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
             if (rs.next()) {
                 return rs.getInt("MAX(id)");
             } else {
                 return null;
             }
         } catch (SQLException ex) {
-            MyLogger.logException("SQLException - InvoiceDAO.getLastIdInInvoiceTable()", ex);
+            MyExceptionLogger.logException("SQLException - InvoiceDAO.getLastIdInInvoiceTable()", ex);
             return null;
         }
     }

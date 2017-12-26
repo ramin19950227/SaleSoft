@@ -6,7 +6,7 @@
 package com.salesoft.DAO.Properties;
 
 import com.salesoft.model.Properties.URLProperties;
-import com.salesoft.util.MyLogger;
+import com.salesoft.util.MyExceptionLogger;
 import java.net.MalformedURLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,7 +37,7 @@ public class URLPropertiesDAO {
 
         } catch (MalformedURLException ex) {
             System.out.println("SQLException -  URLPropertiesDAO.loadURLPropertiesFromFile(): " + ex);
-            MyLogger.logException("SQLException - URLPropertiesDAO.loadURLPropertiesFromFile()", ex);
+            MyExceptionLogger.logException("SQLException - URLPropertiesDAO.loadURLPropertiesFromFile()", ex);
         }
         return null;
     }

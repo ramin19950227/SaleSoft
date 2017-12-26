@@ -42,35 +42,8 @@ public class DBUtil {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             System.out.println("ClassNotFoundException -  DBUtil.static{}: " + e);
-            MyLogger.logException("ClassNotFoundException - DBUtil.static{}", e);
+            MyExceptionLogger.logException("ClassNotFoundException - DBUtil.static{}", e);
         }
-    }
-
-    /**
-     * Bazamizla elaqe yaradir. conn obyektini dolduruq ve elaqe acir yani sorgu
-     * gonderme ucun hazirlayir
-     *
-     * @throws java.sql.SQLException
-     * @deprecated - Metodu yenilemek lazimdir
-     */
-    public static void dbConnect() throws SQLException {
-
-        // DBProperties Obyektimizdeki URL ile bazamiza qoshulmaga calishiriq
-        try {
-            // Elde etdyimz Elaqe (Connection) Obyektini conn adli yuxarida elan etdiyimiz unvana yerleshdiririk;
-            conn = DriverManager.getConnection(MyProperties.getDBProperties().getDbUrl());
-            rs = null;
-            stmt = null;
-
-        } catch (SQLException e) {
-            System.out.println("SQLException -  DBUtil.dbConnect(): " + e);
-            MyLogger.logException("SQLException - DBUtil.dbConnect()", e);
-            throw e;
-        }
-        // ve Bitdi. Bize lazim olan bu qeder idi elaqe qurduq ve yerleshdirdik conn adli unvana
-        // ve Obyektimiz artiq istifadeye hazirdir. ishimiz bitirdikden sonra baglamagi unutmayin
-        // ve Bitdi. Bize lazim olan bu qeder idi elaqe qurduq ve yerleshdirdik conn adli unvana
-        // ve Obyektimiz artiq istifadeye hazirdir. ishimiz bitirdikden sonra baglamagi unutmayin
     }
 
     /**
@@ -89,7 +62,7 @@ public class DBUtil {
 
         } catch (SQLException e) {
             System.out.println("SQLException -  DBUtil.dbConnect(): " + e);
-            MyLogger.logException("SQLException - DBUtil.dbConnect()", e);
+            MyExceptionLogger.logException("SQLException - DBUtil.dbConnect()", e);
             throw e;
         }
         // ve Bitdi. Bize lazim olan bu qeder idi elaqe qurduq ve yerleshdirdik conn adli unvana
@@ -119,39 +92,7 @@ public class DBUtil {
             }
         } catch (SQLException e) {
             System.out.println("SQLException -  DBUtil.allDisconnect(): " + e);
-            MyLogger.logException("SQLException - DBUtil.allDisconnect()", e);
-            throw e;
-        }
-    }
-
-    /**
-     * Bu Metoda SQL Soru vereceyik ve necicede ise ResultSet Obyekti
-     * Qaytaracaq, meselen ResultSet rs = DBUtl.bdExecuteQuery(SQL);, Diqqet Bu
-     * Metodla ishimiz bitdikden sonra mutleq baglamaq lazimdir
-     *
-     * @param selectSQLQuery
-     * @return ResultSet Tipli obyekt qaytarir
-     * @throws SQLException
-     * @deprecated
-     */
-    public static ResultSet dbExecuteQuery(String selectSQLQuery) throws SQLException {
-
-        //old
-        //CachedRowSetImpl crs = new CachedRowSetImpl();
-        try {
-            //Connect to DBProperties (Establish MySQL Connection)
-            dbConnect();
-            System.out.println("selectSQLQuery: " + selectSQLQuery + "\n");
-
-            stmt = conn.createStatement();
-
-            //Execute select (query) operation
-            rs = stmt.executeQuery(selectSQLQuery);
-
-            return rs;
-        } catch (SQLException e) {
-            System.out.println("SQLException -  DBUtil.dbExecuteQuery(): " + e);
-            MyLogger.logException("SQLException - DBUtil.dbExecuteQuery()", e);
+            MyExceptionLogger.logException("SQLException - DBUtil.allDisconnect()", e);
             throw e;
         }
     }
@@ -180,37 +121,8 @@ public class DBUtil {
 
             return rs;
         } catch (SQLException e) {
-            System.out.println("SQLException -  DBUtil.dbExecuteQuery(): " + e);
-            MyLogger.logException("SQLException - DBUtil.dbExecuteQuery()", e);
+            MyExceptionLogger.logExceptionV2("SQLException - DBUtil.dbExecuteQuery()", "selectSQLQuery: " + selectSQLQuery, "null", e);
             throw e;
-        }
-    }
-
-    /**
-     * DBProperties Execute Update (For Update/Insert/Delete) Operation
-     *
-     * @param updateSQLQuery
-     * @throws SQLException
-     * @deprecated
-     */
-    public static void dbExecuteUpdate(String updateSQLQuery) throws SQLException {
-        try {
-            //Connect to DBProperties (Establish MySQL Connection)
-            dbConnect();
-
-            System.out.println("updateSQLQuery :" + updateSQLQuery);
-
-            //Create Statement
-            stmt = conn.createStatement();
-            //Run executeUpdate operation with given sql statement
-            stmt.executeUpdate(updateSQLQuery);
-        } catch (SQLException e) {
-            System.out.println("SQLException -  DBUtil.dbExecuteUpdate(): " + e);
-            MyLogger.logException("SQLException - DBUtil.dbExecuteUpdate()", e);
-            throw e;
-        } finally {
-            //Close connection
-            allDisconnect();
         }
     }
 
@@ -234,7 +146,7 @@ public class DBUtil {
             stmt.executeUpdate(updateSQLQuery);
         } catch (SQLException e) {
             System.out.println("SQLException -  DBUtil.dbExecuteUpdate(): " + e);
-            MyLogger.logException("SQLException - DBUtil.dbExecuteUpdate()", e);
+            MyExceptionLogger.logException("SQLException - DBUtil.dbExecuteUpdate()", e);
             throw e;
         } finally {
             //Close connection
@@ -253,7 +165,7 @@ public class DBUtil {
             return true;
         } catch (SQLException e) {
             System.out.println("SQLException -  DBUtil.hasConnetion(): " + e);
-            MyLogger.logException("SQLException - DBUtil.hasConnetion()", e);
+            MyExceptionLogger.logException("SQLException - DBUtil.hasConnetion()", e);
             return false;
         }
     }
@@ -272,7 +184,7 @@ public class DBUtil {
             return true;
         } catch (SQLException e) {
             System.out.println("SQLException -  DBUtil.hasDBConnetion(): " + e);
-            MyLogger.logException("SQLException - DBUtil.hasDBConnetion()", e);
+            MyExceptionLogger.logException("SQLException - DBUtil.hasDBConnetion()", e);
             return false;
         }
     }
@@ -308,17 +220,17 @@ public class DBUtil {
 
         } catch (ConnectException e) {
             System.out.println("ConnectException -  DBUtil.isServerRunning(): " + e);
-            MyLogger.logException("ConnectException - DBUtil.isServerRunning()", e);
+            MyExceptionLogger.logException("ConnectException - DBUtil.isServerRunning()", e);
             return false;
 
         } catch (UnknownHostException e) {
             System.out.println("UnknownHostException -  DBUtil.isServerRunning(): " + e);
-            MyLogger.logException("UnknownHostException - DBUtil.isServerRunning()", e);
+            MyExceptionLogger.logException("UnknownHostException - DBUtil.isServerRunning()", e);
             return false;
 
         } catch (IOException e) {
             System.out.println("IOException -  DBUtil.isServerRunning(): " + e);
-            MyLogger.logException("IOException - DBUtil.isServerRunning()", e);
+            MyExceptionLogger.logException("IOException - DBUtil.isServerRunning()", e);
             return false;
 
         }

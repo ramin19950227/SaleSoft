@@ -1,12 +1,12 @@
- 
 package com.salesoft.DAO.impl;
 
 import com.salesoft.DAO.intf.ProductDAOIntf;
 import com.salesoft.database.DBUtil;
 import com.salesoft.database.SQL;
 import com.salesoft.model.Product;
-import com.salesoft.util.MyLogger;
+import com.salesoft.util.MyExceptionLogger;
 import com.salesoft.util.RsToModel;
+import com.salesoft.util.UserOperationLogger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,19 +15,21 @@ import java.util.ArrayList;
  *
  * @author Ramin
  */
-public class ProductDAO implements ProductDAOIntf{
+public class ProductDAO implements ProductDAOIntf {
 
-   
     @Override
     public void create(Product entity) {
 
         try {
-            DBUtil.directExecuteUpdate(SQL.ProductSQL.CREATE(entity));
+            String SQLQuery = SQL.ProductSQL.CREATE(entity);
+
+            UserOperationLogger.logSQL(SQLQuery);
+
+            DBUtil.directExecuteUpdate(SQLQuery);
 //            return true;
 
         } catch (SQLException ex) {
-            System.out.println("SQLException -  ProductDAO.create(): " + ex);
-            MyLogger.logException("SQLException - ProductDAO.create()", ex);
+            MyExceptionLogger.logException("SQLException - ProductDAO.create()", ex);
 //            return false;
         }
 
@@ -36,25 +38,29 @@ public class ProductDAO implements ProductDAOIntf{
     @Override
     public void update(Product entity) {
         try {
-            DBUtil.directExecuteUpdate(SQL.ProductSQL.UPDATE(entity));
-//            return true;
+            String SQLQuery = SQL.ProductSQL.UPDATE(entity);
+
+            UserOperationLogger.logSQL(SQLQuery);
+
+            DBUtil.directExecuteUpdate(SQLQuery);
 
         } catch (SQLException ex) {
-            System.out.println("SQLException -  ProductDAO.update(): " + ex);
-            MyLogger.logException("SQLException - ProductDAO.update()", ex);
-//            return false;
+            MyExceptionLogger.logException("SQLException - ProductDAO.update()", ex);
         }
     }
 
     @Override
     public boolean delete(Integer id) {
         try {
-            DBUtil.directExecuteUpdate(SQL.ProductSQL.DELETE(id));
+            String SQLQuery = SQL.ProductSQL.DELETE(id);
+
+            UserOperationLogger.logSQL(SQLQuery);
+
+            DBUtil.directExecuteUpdate(SQLQuery);
             return true;
 
         } catch (SQLException ex) {
-            System.out.println("SQLException -  ProductDAO.delete(): " + ex);
-            MyLogger.logException("SQLException - ProductDAO.delete()", ex);
+            MyExceptionLogger.logException("SQLException - ProductDAO.delete()", ex);
             return false;
         }
 
@@ -62,7 +68,6 @@ public class ProductDAO implements ProductDAOIntf{
 
     @Override
     public Product getById(Integer id) {
-
         try {
             ResultSet rs = DBUtil.directExecuteQuery(SQL.ProductSQL.GET(id));
 
@@ -70,22 +75,24 @@ public class ProductDAO implements ProductDAOIntf{
 
         } catch (SQLException ex) {
             System.out.println("SQLException -  ProductDAO.getById(): " + ex);
-            MyLogger.logException("SQLException - ProductDAO.getById()", ex);
+            MyExceptionLogger.logException("SQLException - ProductDAO.getById()", ex);
             return null;
         }
     }
 
     @Override
     public Product getByBarcode(String barCode) {
-
         try {
-            ResultSet rs = DBUtil.directExecuteQuery(SQL.ProductSQL.GET(barCode));
+            String SQLQuery = SQL.ProductSQL.GET(barCode);
+
+            UserOperationLogger.logSQL(SQLQuery);
+
+            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
 
             return RsToModel.rsToProduct(rs);
 
         } catch (SQLException ex) {
-            System.out.println("SQLException -  ProductDAO.getByBarcode(): " + ex);
-            MyLogger.logException("SQLException - ProductDAO.getByBarcode()", ex);
+            MyExceptionLogger.logException("SQLException - ProductDAO.getByBarcode()", ex);
             return null;
         }
     }
@@ -95,13 +102,17 @@ public class ProductDAO implements ProductDAOIntf{
         ArrayList<Product> list = new ArrayList<>();
 
         try {
-            ResultSet rs = DBUtil.directExecuteQuery(SQL.ProductSQL.GET_ALL());
+            String SQLQuery = SQL.ProductSQL.GET_ALL();
+
+            UserOperationLogger.logSQL(SQLQuery);
+
+            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
 
             list = RsToModel.rsToProductList(rs);
 
         } catch (SQLException ex) {
             System.out.println("SQLException -  ProductDAO.getAll()(): " + ex);
-            MyLogger.logException("SQLException - ProductDAO.getAll()()", ex);
+            MyExceptionLogger.logException("SQLException - ProductDAO.getAll()()", ex);
         }
 
         return list;
@@ -112,34 +123,39 @@ public class ProductDAO implements ProductDAOIntf{
         ArrayList<Product> list = new ArrayList<>();
 
         try {
-            ResultSet rs = DBUtil.directExecuteQuery(SQL.ProductSQL.SEARCH_BY_NAME_LIKE(name));
+            String SQLQuery = SQL.ProductSQL.SEARCH_BY_NAME_LIKE(name);
+
+            UserOperationLogger.logSQL(SQLQuery);
+
+            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
 
             list = RsToModel.rsToProductList(rs);
 
         } catch (SQLException ex) {
-            System.out.println("SQLException -  ProductDAO.searchByNameLike(): " + ex);
-            MyLogger.logException("SQLException - ProductDAO.searchByNameLike()", ex);
+            MyExceptionLogger.logException("SQLException - ProductDAO.searchByNameLike()", ex);
         }
 
         return list;
     }
 
+    @Override
     public ArrayList<Product> searchByBarcode(String barCode) {
         ArrayList<Product> list = new ArrayList<>();
 
         try {
-            ResultSet rs = DBUtil.directExecuteQuery(SQL.ProductSQL.SEARCH_BY_BARODE(barCode));
+            String SQLQuery = SQL.ProductSQL.SEARCH_BY_BARODE(barCode);
+
+            UserOperationLogger.logSQL(SQLQuery);
+
+            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
 
             list = RsToModel.rsToProductList(rs);
 
         } catch (SQLException ex) {
-            System.out.println("SQLException -  ProductDAO.searchByNameLike(): " + ex);
-            MyLogger.logException("SQLException - ProductDAO.searchByNameLike()", ex);
+            MyExceptionLogger.logException("SQLException - ProductDAO.searchByNameLike()", ex);
         }
 
         return list;
     }
-
-   
 
 }

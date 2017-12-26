@@ -9,8 +9,9 @@ import com.salesoft.DAO.intf.PurchaseProductDAOIntf;
 import com.salesoft.database.DBUtil;
 import com.salesoft.database.SQL;
 import com.salesoft.model.PurchaseProduct;
-import com.salesoft.util.MyLogger;
+import com.salesoft.util.MyExceptionLogger;
 import com.salesoft.util.RsToModel;
+import com.salesoft.util.UserOperationLogger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -22,19 +23,19 @@ import java.util.ArrayList;
  */
 public class PurchaseProductDAO implements PurchaseProductDAOIntf {
 
-   
-
     @Override
     public PurchaseProduct getById(Integer id) {
-
         try {
-            ResultSet rs = DBUtil.directExecuteQuery(SQL.PurchaseProductSQL.GET(id));
+            String SQLQuery = SQL.PurchaseProductSQL.GET(id);
+
+            UserOperationLogger.logSQL(SQLQuery);
+
+            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
 
             return RsToModel.rsToPurchaseProduct(rs);
 
         } catch (SQLException ex) {
-            System.out.println("SQLException -  PurchaseProductDAO.getAllList(): " + ex);
-            MyLogger.logException("SQLException - PurchaseProductDAO.getAllList()", ex);
+            MyExceptionLogger.logException("SQLException - PurchaseProductDAO.getAllList()", ex);
             return null;
         }
     }
@@ -44,13 +45,16 @@ public class PurchaseProductDAO implements PurchaseProductDAOIntf {
         ArrayList<PurchaseProduct> list = new ArrayList<>();
 
         try {
-            ResultSet rs = DBUtil.directExecuteQuery(SQL.PurchaseProductSQL.GET_ALL());
+            String SQLQuery = SQL.PurchaseProductSQL.GET_ALL();
+
+            UserOperationLogger.logSQL(SQLQuery);
+
+            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
 
             list = RsToModel.rsToPurchaseProductList(rs);
 
         } catch (SQLException ex) {
-            System.out.println("SQLException -  PurchaseProductDAO.getAllList(): " + ex);
-            MyLogger.logException("SQLException - PurchaseProductDAO.getAllList()", ex);
+            MyExceptionLogger.logException("SQLException - PurchaseProductDAO.getAllList()", ex);
         }
 
         return list;

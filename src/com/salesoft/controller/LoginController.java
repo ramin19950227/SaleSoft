@@ -5,7 +5,7 @@ import com.salesoft.custom.CustomPf;
 import com.salesoft.custom.CustomTf;
 import com.salesoft.database.DBUtil;
 import com.salesoft.util.MyFXMLLoader;
-import com.salesoft.util.MyLogger;
+import com.salesoft.util.MyExceptionLogger;
 import com.salesoft.util.MyProperties;
 import java.io.IOException;
 import java.net.URL;
@@ -163,7 +163,7 @@ public class LoginController implements Initializable {
             loadRegistration();
         } catch (SQLException ex) {
             System.out.println("SQLException -  LoginController.hlCreateAnAccount(): " + ex);
-            MyLogger.logException("SQLException - LoginController.hlCreateAnAccount()", ex);
+            MyExceptionLogger.logException("SQLException - LoginController.hlCreateAnAccount()", ex);
         }
 
     }

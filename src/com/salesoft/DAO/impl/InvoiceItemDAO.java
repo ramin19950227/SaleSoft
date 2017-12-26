@@ -9,8 +9,9 @@ import com.salesoft.DAO.intf.InvoiceItemDAOIntf;
 import com.salesoft.database.DBUtil;
 import com.salesoft.database.SQL;
 import com.salesoft.model.InvoiceItem;
-import com.salesoft.util.MyLogger;
+import com.salesoft.util.MyExceptionLogger;
 import com.salesoft.util.RsToModel;
+import com.salesoft.util.UserOperationLogger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -24,18 +25,26 @@ public class InvoiceItemDAO implements InvoiceItemDAOIntf {
     @Override
     public void create(InvoiceItem item) {
         try {
-            DBUtil.directExecuteUpdate(SQL.InvoiceItemSQL.CREATE(item));
+            String SQLQuery = SQL.InvoiceItemSQL.CREATE(item);
+
+            UserOperationLogger.logSQL(SQLQuery);
+
+            DBUtil.directExecuteUpdate(SQLQuery);
         } catch (SQLException ex) {
-            MyLogger.logException("SQLException - InvoiceItemDAO.create(InvoiceItem item)", ex);
+            MyExceptionLogger.logException("SQLException - InvoiceItemDAO.create(InvoiceItem item)", ex);
         }
     }
 
     @Override
     public void update(InvoiceItem item) {
         try {
-            DBUtil.directExecuteUpdate(SQL.InvoiceItemSQL.UPDATE(item));
+            String SQLQuery = SQL.InvoiceItemSQL.UPDATE(item);
+
+            UserOperationLogger.logSQL(SQLQuery);
+
+            DBUtil.directExecuteUpdate(SQLQuery);
         } catch (SQLException ex) {
-            MyLogger.logException("SQLException - InvoiceItemDAO.create(InvoiceItem item)", ex);
+            MyExceptionLogger.logException("SQLException - InvoiceItemDAO.create(InvoiceItem item)", ex);
         }
     }
 
@@ -57,15 +66,20 @@ public class InvoiceItemDAO implements InvoiceItemDAOIntf {
     @Override
     public ArrayList<InvoiceItem> getAllById(Integer id) {
         try {
+            String SQLQuery = SQL.InvoiceItemSQL.GET_ALL_BY_INVOICE_ID(id);
+
+            UserOperationLogger.logSQL(SQLQuery);
+
             ArrayList<InvoiceItem> list;
-            ResultSet rs = DBUtil.directExecuteQuery(SQL.InvoiceItemSQL.GET_ALL_BY_INVOICE_ID(id));
+
+            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
 
             list = RsToModel.rsToInvoiceItemList(rs);
 
             return list;
 
         } catch (SQLException ex) {
-            MyLogger.logException("SQLException - InvoiceDAO.getAllInvoiceItemListById(Integer id)", ex);
+            MyExceptionLogger.logException("SQLException - InvoiceDAO.getAllInvoiceItemListById(Integer id)", ex);
             return null;
         }
     }

@@ -85,11 +85,11 @@ public class Initializator {
                 properties.store(output, null);
                 output.close();
             } catch (FileNotFoundException ex) {
-                MyLogger.logException("FileNotFoundException - Initializator.initDBProperties()", ex);
+                MyExceptionLogger.logException("FileNotFoundException - Initializator.initDBProperties()", ex);
 
                 MyAlert.alertAndExitByCodeAndContent(0, "Initializator.initDBProperties() - FileNotFoundException");
             } catch (IOException ex) {
-                MyLogger.logException("IOException - Initializator.initDBProperties()", ex);
+                MyExceptionLogger.logException("IOException - Initializator.initDBProperties()", ex);
 
                 MyAlert.alertAndExitByCodeAndContent(0, "Initializator.initDBProperties() - IOException");
 
@@ -260,7 +260,7 @@ public class Initializator {
             try {
                 DBUtil.directExecuteUpdate(query);
             } catch (SQLException ex) {
-                MyLogger.logException("SQLException - Initializator.setupDataBase()", ex);
+                MyExceptionLogger.logException("SQLException - Initializator.setupDataBase()", ex);
                 MyAlert.alertAndExitByCodeAndContent(263, "Məlumat bazasının qurrashdirilması zamanı Xəta bash verdi\n"
                         + "Xətanın Detayları: " + ex.getMessage());
             }

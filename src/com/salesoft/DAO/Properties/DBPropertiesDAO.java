@@ -7,7 +7,7 @@ package com.salesoft.DAO.Properties;
 
 import com.salesoft.model.Properties.DBProperties;
 import com.salesoft.util.MyAlert;
-import com.salesoft.util.MyLogger;
+import com.salesoft.util.MyExceptionLogger;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -37,7 +37,7 @@ public class DBPropertiesDAO {
             inputStream = new FileInputStream("Properties/DBProperties.properties");
         } catch (FileNotFoundException e) {
             System.out.println("FileNotFoundException -  MyPropertiesDAO.loadDbPropertyFromFile(): " + e);
-            MyLogger.logException("FileNotFoundException - MyPropertiesDAO.loadDbPropertyFromFile()", e);
+            MyExceptionLogger.logException("FileNotFoundException - MyPropertiesDAO.loadDbPropertyFromFile()", e);
 
             //Niyese mene ele gelir ki bu exception hec vaxt cixmayacaq
             //cunki proqram ishe dushende Init Class-i oz ishini gorur axi
@@ -51,7 +51,7 @@ public class DBPropertiesDAO {
             properties.load(inputStream);
         } catch (IOException e) {
             System.out.println("IOException -  MyPropertiesDAO.loadDbPropertyFromFile(): " + e);
-            MyLogger.logException("IOException - MyPropertiesDAO.loadDbPropertyFromFile()", e);
+            MyExceptionLogger.logException("IOException - MyPropertiesDAO.loadDbPropertyFromFile()", e);
 
             //Niyese mene ele gelir ki bu exception hec vaxt cixmayacaq
             //cunki proqram ishe dushende Init Class-i oz ishini gorur axi
@@ -69,7 +69,7 @@ public class DBPropertiesDAO {
             port = Integer.parseInt(properties.getProperty("db.port"));
         } catch (NumberFormatException ex) {
             System.out.println("NumberFormatException -  MyPropertiesDAO.loadDbPropertyFromFile(): " + ex);
-            MyLogger.logException("NumberFormatException - MyPropertiesDAO.loadDbPropertyFromFile()", ex);
+            MyExceptionLogger.logException("NumberFormatException - MyPropertiesDAO.loadDbPropertyFromFile()", ex);
 
             MyAlert.alertContent(46, "Server Ayarlarında Qeyd olunan Port Keçərsizdir "
                     + "\n Default olaraq 3306 secilecek db.port=3306"
@@ -108,10 +108,10 @@ public class DBPropertiesDAO {
 
         } catch (FileNotFoundException ex) {
             System.out.println("FileNotFoundException -  MyPropertiesDAO.saveDBPropertiesToFile(DBProperties dbp): " + ex);
-            MyLogger.logException("FileNotFoundException - MyPropertiesDAO.saveDBPropertiesToFile(DBProperties dbp)", ex);
+            MyExceptionLogger.logException("FileNotFoundException - MyPropertiesDAO.saveDBPropertiesToFile(DBProperties dbp)", ex);
         } catch (IOException ex) {
             System.out.println("IOException -  MyPropertiesDAO.saveDBPropertiesToFile(DBProperties dbp): " + ex);
-            MyLogger.logException("IOException - MyPropertiesDAO.saveDBPropertiesToFile(DBProperties dbp)", ex);
+            MyExceptionLogger.logException("IOException - MyPropertiesDAO.saveDBPropertiesToFile(DBProperties dbp)", ex);
         }
     }
     
