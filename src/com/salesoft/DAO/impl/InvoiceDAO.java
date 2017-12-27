@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class InvoiceDAO implements InvoiceDAOIntf {
+public class InvoiceDAO implements InvoiceDAOIntf<Invoice, Integer, String> {
 
     InvoiceItemDAO invoiceItemDAO = new InvoiceItemDAO();
 
@@ -50,7 +50,7 @@ public class InvoiceDAO implements InvoiceDAOIntf {
     }
 
     @Override
-    public Invoice get(int id) {
+    public Invoice get(Integer id) {
         Invoice invoice = null;
         try {
 
@@ -143,7 +143,7 @@ public class InvoiceDAO implements InvoiceDAOIntf {
             String SQLQuery = SQL.InvoiceSQL.GET_LAST_ID();
 
             UserOperationLogger.logSQL(SQLQuery);
-            
+
             ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
             if (rs.next()) {
                 return rs.getInt("MAX(id)");
