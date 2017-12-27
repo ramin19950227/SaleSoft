@@ -14,10 +14,9 @@
     <children>
         <AnchorPane layoutX="174.0" layoutY="29.0" prefHeight="100.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <AnchorPane id="AnchorPane" layoutX="618.0" layoutY="2.0" prefHeight="700.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <AnchorPane id="AnchorPane" layoutX="618.0" layoutY="2.0" prefHeight="600.0" prefWidth="285.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <Label layoutX="59.0" layoutY="123.0" text="Redakte Bolum" />
-                        <GridPane layoutX="7.0" layoutY="137.0" prefHeight="383.0" prefWidth="188.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="136.0">
+                        <GridPane layoutX="7.0" layoutY="137.0" prefHeight="418.0" prefWidth="188.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="136.0">
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             </columnConstraints>
@@ -36,6 +35,7 @@
                                 <RowConstraints maxHeight="54.0" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
                                 <RowConstraints maxHeight="54.0" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
                                 <RowConstraints maxHeight="54.0" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="54.0" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
                                 <Label text="Məhsulun Adı" />
@@ -48,20 +48,31 @@
                                 <TextField fx:id="barCodeField" GridPane.rowIndex="7" />
                                 <Label text="Qeyd" GridPane.rowIndex="8" />
                                 <TextField fx:id="noteField" GridPane.rowIndex="9" />
-                                <Button minWidth="33.0" mnemonicParsing="false" onAction="#handleDelete" onKeyPressed="#handleDelete" prefHeight="35.0" prefWidth="120.0" text="Sil !!!" GridPane.rowIndex="13" />
-                                <Button minWidth="47.0" mnemonicParsing="false" onAction="#handleCansel" onKeyPressed="#handleCansel" prefHeight="35.0" prefWidth="120.0" text="Ləgv et" GridPane.rowIndex="12" />
-                                <Button mnemonicParsing="false" onAction="#handleSave" onKeyPressed="#handleSave" prefHeight="35.0" prefWidth="120.0" text="Yadda saxla" GridPane.rowIndex="11" />
+                                <Button minWidth="33.0" mnemonicParsing="false" onAction="#handleDelete" onKeyPressed="#handleDelete" prefHeight="35.0" prefWidth="189.0" text="Məhsulu - Bazadan Sil" GridPane.rowIndex="12" />
+                        <GridPane prefHeight="40.0" prefWidth="280.0" GridPane.rowIndex="11">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="155.0" minWidth="10.0" prefWidth="129.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="181.0" minWidth="10.0" prefWidth="163.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                                      <Button mnemonicParsing="false" onAction="#handleSave" onKeyPressed="#handleSave" prefHeight="35.0" prefWidth="120.0" text="Yadda saxla" />
+                                      <Button minWidth="47.0" mnemonicParsing="false" onAction="#handleCansel" onKeyPressed="#handleCansel" prefHeight="40.0" prefWidth="159.0" text="Xanaları təmizlə" GridPane.columnIndex="1" />
+                           </children>
+                        </GridPane>
                             </children>
                         </GridPane>
-                        <Label fx:id="idLabel" layoutX="180.0" layoutY="578.0" text="id" />
-                        <Label layoutX="28.0" layoutY="6.0" text="Mehsul haqqinda melumat almaq" textAlignment="CENTER" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
-                        <Label layoutX="5.0" layoutY="23.0" text="ucun barcod ve ya Adini daxil edin" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />
-                        <TextField fx:id="searchField" layoutX="32.0" layoutY="52.0" onKeyReleased="#searchFieldReleased" prefWidth="149.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="50.0" />
+                        <Label fx:id="idLabel" layoutX="265.0" layoutY="578.0" text="id" textFill="#e1ddd6" />
+                        <Label layoutX="5.0" layoutY="6.0" text="Mehsul haqqinda melumat almaq ucun barcod " textAlignment="CENTER" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="6.0" />
+                        <Label layoutX="83.0" layoutY="22.0" prefHeight="17.0" prefWidth="119.0" text="ve ya Adini daxil edin" textAlignment="CENTER" AnchorPane.leftAnchor="83.0" AnchorPane.rightAnchor="83.0" />
+                        <TextField fx:id="searchField" layoutX="15.0" layoutY="39.0" onKeyReleased="#searchFieldReleased" prefWidth="149.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="39.0" />
                     </children>
                 </AnchorPane>
             </children>
         </AnchorPane>
-        <TableView fx:id="productTable" layoutY="103.0" prefHeight="492.0" prefWidth="588.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="205.0" AnchorPane.topAnchor="5.0">
+        <TableView fx:id="productTable" layoutY="103.0" prefHeight="590.0" prefWidth="505.0" tableMenuButtonVisible="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="290.0" AnchorPane.topAnchor="5.0">
             <columns>
                 <TableColumn fx:id="nameColumn" prefWidth="75.0" text="Mehsul adı" />
                 <TableColumn fx:id="qtyColumn" prefWidth="75.0" text="Say" />

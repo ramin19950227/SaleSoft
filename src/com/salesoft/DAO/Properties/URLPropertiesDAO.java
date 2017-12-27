@@ -8,8 +8,6 @@ package com.salesoft.DAO.Properties;
 import com.salesoft.model.Properties.URLProperties;
 import com.salesoft.util.MyExceptionLogger;
 import java.net.MalformedURLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -33,7 +31,9 @@ public class URLPropertiesDAO {
                     "view/sale/SaleInvoiceTable.fxml",
                     "view/sale/SaleInvoiceDetailsTable.fxml",
                     "view/anbar/PurchaseProductTable.fxml",
-                    "view/Registration.fxml");
+                    "view/Registration.fxml",
+                    "view/anbar/ProductRegistration.fxml"
+            );
 
         } catch (MalformedURLException ex) {
             System.out.println("SQLException -  URLPropertiesDAO.loadURLPropertiesFromFile(): " + ex);

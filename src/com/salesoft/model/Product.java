@@ -42,11 +42,11 @@ public class Product {
      */
     public Product() {
         this.id = new SimpleIntegerProperty(0);
-        this.name = new SimpleStringProperty("name");
+        this.name = new SimpleStringProperty("");
         this.qty = new SimpleIntegerProperty(0);
         this.purchasePrice = new SimpleDoubleProperty(0.0);
-        this.barCode = new SimpleStringProperty("barCode");
-        this.note = new SimpleStringProperty("note");
+        this.barCode = new SimpleStringProperty("");
+        this.note = new SimpleStringProperty("");
     }
 
     /**
@@ -148,5 +148,4 @@ public class Product {
 //    public void println() {
 //        System.out.println(toString());
 //    }
-
 }

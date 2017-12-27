@@ -57,6 +57,12 @@ import javafx.util.Duration;
  */
 public class ApplicationController implements Initializable {
 
+    private static ApplicationController applicationController;
+
+    public static ApplicationController getApplicationController() {
+        return applicationController;
+    }
+
     @FXML
     private StackPane acContent;
     @FXML
@@ -180,9 +186,12 @@ public class ApplicationController implements Initializable {
 
         imgUsrTop.setFill(new ImagePattern(usrImg));
         circleImgUsr.setFill(new ImagePattern(usrImg));
-        
+
         // Proqram ishe dushen kimi Home Duymesi basilmish kimi Simulyasiya edek
         btnHomeOnClick(new ActionEvent());
+
+        //Obyektimizi Statik Deyishkene yaziram ki Qiraqdan muraciet ede bilim
+        applicationController = this;
 
     }
 
@@ -274,7 +283,6 @@ public class ApplicationController implements Initializable {
 
         //ve controllerimizden bize lazim olan metodu cagiririq
         anbarController.toggleButtonAnbarOnAction();
-        anbarController.setRoot(this);
 
         acContent.getChildren().clear();
         acContent.getChildren().add(ap);
@@ -305,7 +313,6 @@ public class ApplicationController implements Initializable {
 
         //ve controllerimizden bize lazim olan metodu cagiririq
         saleController.toggleButtonSaleOnAction();
-        saleController.setRoot(this);
 
         acContent.getChildren().clear();
         acContent.getChildren().add(ap);

@@ -5,7 +5,6 @@
  */
 package com.salesoft.controller.anbar;
 
-
 import com.salesoft.DAO.impl.ProductDAO;
 import com.salesoft.MainApp;
 import com.salesoft.model.Product;
@@ -24,7 +23,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.util.converter.NumberStringConverter;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.input.KeyCode;
@@ -130,6 +128,12 @@ public class ProductTableController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
+        //Heleki Qerara aldiq ki ad ve Qeyd-den bashqa hecneyi Redakte etmek olmasin
+        // hele SAYI hec olmaz
+        qtyField.setDisable(true);
+        purchasePriceField.setDisable(true);
+        barCodeField.setDisable(true);
+
         //cedvelimizde Excelde oldugu kimi xanalari REDAKTE ede bilmek ucun
         //bu metodun parametrine true vermek lazimdir 
         productTable.setEditable(true);
@@ -143,8 +147,6 @@ public class ProductTableController implements Initializable {
                     // yoxsa gonderirem ve error cixir nullPointerException
                     if (newValue != null) {
                         setProductToEdit(newValue);
-                    } else {
-                        System.out.println("productTable Selection PRODUCT NULL AUTOCALL");
                     }
                 });
 
@@ -195,34 +197,34 @@ public class ProductTableController implements Initializable {
         });
 
         qtyColumn.setCellValueFactory(cellData -> cellData.getValue().qtyProperty());
-        qtyColumn.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
-        qtyColumn.setOnEditCommit((CellEditEvent<Product, Number> t) -> {
-            t.getRowValue().setQty(t.getNewValue().intValue());
-            ProductDAO.update(t.getRowValue());
-            updateTable("");
-            productTable.getSelectionModel().select(t.getRowValue());
 
-        });
-
+//        qtyColumn.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
+//        qtyColumn.setOnEditCommit((CellEditEvent<Product, Number> t) -> {
+//            t.getRowValue().setQty(t.getNewValue().intValue());
+//            ProductDAO.update(t.getRowValue());
+//            updateTable("");
+//            productTable.getSelectionModel().select(t.getRowValue());
+//
+//        });
         purchasePriceColumn.setCellValueFactory(cellData -> cellData.getValue().purchasePriceProperty());
-        purchasePriceColumn.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
-        purchasePriceColumn.setOnEditCommit((CellEditEvent<Product, Number> t) -> {
-            t.getRowValue().setPurchasePrice(t.getNewValue().doubleValue());
-            ProductDAO.update(t.getRowValue());
-            updateTable("");
-            productTable.getSelectionModel().select(t.getRowValue());
-
-        });
+//        purchasePriceColumn.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
+//        purchasePriceColumn.setOnEditCommit((CellEditEvent<Product, Number> t) -> {
+//            t.getRowValue().setPurchasePrice(t.getNewValue().doubleValue());
+//            ProductDAO.update(t.getRowValue());
+//            updateTable("");
+//            productTable.getSelectionModel().select(t.getRowValue());
+//
+//        });
 
         barCodeColumn.setCellValueFactory(cellData -> cellData.getValue().barCodeProperty());
-        barCodeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        barCodeColumn.setOnEditCommit((CellEditEvent<Product, String> t) -> {
-            t.getRowValue().setBarCode(t.getNewValue());
-            ProductDAO.update(t.getRowValue());
-            updateTable("");
-            productTable.getSelectionModel().select(t.getRowValue());
-
-        });
+//        barCodeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+//        barCodeColumn.setOnEditCommit((CellEditEvent<Product, String> t) -> {
+//            t.getRowValue().setBarCode(t.getNewValue());
+//            ProductDAO.update(t.getRowValue());
+//            updateTable("");
+//            productTable.getSelectionModel().select(t.getRowValue());
+//
+//        });
 
         noteColumn.setCellValueFactory(cellData -> cellData.getValue().noteProperty());
         noteColumn.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -235,7 +237,7 @@ public class ProductTableController implements Initializable {
         });
 
         // bu cedvel bosh olduqda xeberdarliq cixarir yani meselen mehsul yoxdur ve s.
-        productTable.setPlaceholder(new Label("Bazada Mehsul Tapilmadi"));
+        productTable.setPlaceholder(new Label("Məhsul Yoxdur"));
 
         updateTable("");
         setProductToEdit(null);
@@ -391,6 +393,10 @@ public class ProductTableController implements Initializable {
             }
 
             updateTable("");
+
+            //Mesulu Sildikden sonra xanalari da temizleyek
+            handleCansel();
+
         }
     }
 

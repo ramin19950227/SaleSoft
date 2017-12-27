@@ -33,9 +33,10 @@
                         </Label>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                            <children>
-                              <ToggleButton fx:id="toggleButtonAnbar" mnemonicParsing="false" onAction="#toggleButtonAnbarOnAction" text="Anbarda Olan Məhsullar" />
-                              <ToggleButton fx:id="toggleButtonNewProduct" mnemonicParsing="false" onAction="#toggleButtonNewProductOnAction" text="Məhsul Alışı" />
-                              <ToggleButton fx:id="toggleButtonPurchaseInvoiceTable" mnemonicParsing="false" onAction="#toggleButtonPurchaseInvoiceOnAction" text="Alış Tarixçəsi" />
+                              <ToggleButton fx:id="toggleButtonAnbar" mnemonicParsing="false" prefHeight="63.0" prefWidth="74.0" text="Anbar" />
+                              <ToggleButton fx:id="toggleButtonProductRegistrarion" mnemonicParsing="false" text="Qeydiyyat" />
+                              <ToggleButton fx:id="toggleButtonProductMedaxil" mnemonicParsing="false" text="Medaxil" />
+                              <ToggleButton fx:id="toggleButtonProductHistory" mnemonicParsing="false" text="Mədaxil Tarixçəsi" />
                            </children>
                         </HBox>
                      </children>

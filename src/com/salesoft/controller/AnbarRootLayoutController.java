@@ -23,18 +23,32 @@ import javafx.scene.layout.StackPane;
  */
 public class AnbarRootLayoutController implements Initializable {
 
-    //esas sehifenin unvanini bura yaziriq ki obiri sehifelere burdan kecid ede bilek
-    public static ApplicationController appControl;
-
     @FXML
     private StackPane stackPaneCenter;
 
+    /**
+     * Anbar Sehifesini gostermek ucun Istifade olunur
+     */
     @FXML
     private ToggleButton toggleButtonAnbar;
+
+    /**
+     * Mehsul Qeydiyyati Sehifesin Yuklemek ucun Sitifade olunur
+     */
     @FXML
-    private ToggleButton toggleButtonNewProduct;
+    private ToggleButton toggleButtonProductRegistrarion;
+
+    /**
+     * Mehsul Mədaxil Sehifesini yukləyir
+     */
     @FXML
-    private ToggleButton toggleButtonPurchaseInvoiceTable;
+    private ToggleButton toggleButtonProductMedaxil;
+
+    /**
+     * Mehsul Mədaxil Tarixcesinin Sehifesini yukləyir
+     */
+    @FXML
+    private ToggleButton toggleButtonProductHistory;
 
     @FXML
     private Label headLabel;
@@ -49,9 +63,26 @@ public class AnbarRootLayoutController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         ToggleGroup group = new ToggleGroup();
         toggleButtonAnbar.setSelected(true);
+
         toggleButtonAnbar.setToggleGroup(group);
-        toggleButtonNewProduct.setToggleGroup(group);
-        toggleButtonPurchaseInvoiceTable.setToggleGroup(group);
+        toggleButtonAnbar.setOnAction(value -> {
+            toggleButtonAnbarOnAction();
+        });
+
+        toggleButtonProductRegistrarion.setToggleGroup(group);
+        toggleButtonProductRegistrarion.setOnAction(value -> {
+            toggleButtonProductRegistrarionOnAction();
+        });
+
+        toggleButtonProductMedaxil.setToggleGroup(group);
+        toggleButtonProductMedaxil.setOnAction(value -> {
+            toggleButtonProductMedaxilOnAction();
+        });
+
+        toggleButtonProductHistory.setToggleGroup(group);
+        toggleButtonProductHistory.setOnAction(value -> {
+            toggleButtonProductHistoryOnAction();
+        });
 
     }
 
@@ -64,21 +95,25 @@ public class AnbarRootLayoutController implements Initializable {
     }
 
     @FXML
-    private void toggleButtonNewProductOnAction() {
-        headLabel.setText("Məhsul Alışı");
+    private void toggleButtonProductRegistrarionOnAction() {
+        headLabel.setText("Qeydiyyat");
 
         stackPaneCenter.getChildren().clear();
-        stackPaneCenter.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MyProperties.getURLProperties().getProductPurchseURL()));
+        stackPaneCenter.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MyProperties.getURLProperties().getProductRegistrarionURL()));
 
-    }
-
-    public static void setRoot(ApplicationController input) {
-        appControl = input;
     }
 
     @FXML
-    public void toggleButtonPurchaseInvoiceOnAction() {
-        headLabel.setText("Alış Tarıxçəsi");
+    public void toggleButtonProductMedaxilOnAction() {
+        headLabel.setText("Mədaxil");
+
+        stackPaneCenter.getChildren().clear();
+        stackPaneCenter.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MyProperties.getURLProperties().getProductPurchseURL()));
+    }
+
+    @FXML
+    public void toggleButtonProductHistoryOnAction() {
+        headLabel.setText("Mədaxil Tarıxçəsi");
 
         stackPaneCenter.getChildren().clear();
         stackPaneCenter.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MyProperties.getURLProperties().getPurchaseInvoiceTableURL()));

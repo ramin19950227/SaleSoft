@@ -5,10 +5,10 @@
  */
 package com.salesoft.controller.anbar;
 
- 
 import com.salesoft.DAO.impl.ProductDAO;
 import com.salesoft.model.Product;
 import com.salesoft.controller.AnbarRootLayoutController;
+import com.salesoft.controller.ApplicationController;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -134,7 +134,7 @@ public class ProductPurchseController implements Initializable {
             ProductDAO.update(barcodeEnteredProduct);
 
             // sonra ise Anbari gosteririk
-            AnbarRootLayoutController.appControl.btnStockOnClick();
+            ApplicationController.getApplicationController().btnStockOnClick();
 
         } else if (isValid && barcodeEnteredProduct == null) {
 
@@ -150,7 +150,7 @@ public class ProductPurchseController implements Initializable {
             // yeni obyektimizi hazirlayiriq ve gonderirik metodumuza
             ProductDAO.create(product);
 
-            AnbarRootLayoutController.appControl.btnStockOnClick();
+            ApplicationController.getApplicationController().btnStockOnClick();
         }
     }
 
