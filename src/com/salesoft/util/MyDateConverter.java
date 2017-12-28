@@ -2,7 +2,10 @@ package com.salesoft.util;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
@@ -14,6 +17,22 @@ import java.util.Date;
  * @author Ramin Ismayilov
  */
 public class MyDateConverter {
+
+    public static Date asDate(LocalDate localDate) {
+        return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    public static Date asDate(LocalDateTime localDateTime) {
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    public static LocalDate asLocalDate(Date date) {
+        return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    public static LocalDateTime asLocalDateTime(Date date) {
+        return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
 
     /**
      * Java Util Date -Objecti ile Ede bileceyimiz emeliyyatlar
@@ -39,7 +58,7 @@ public class MyDateConverter {
          * @param format - give the String type format
          * @return
          */
-        public static String toString(Date date, String format) {
+        public static String toStringCustomFormat(Date date, String format) {
             DateFormat formatter = new SimpleDateFormat(format);
             return formatter.format(date);
         }
@@ -53,6 +72,12 @@ public class MyDateConverter {
             DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy, HH:mm:ss");
             return formatter.format(date);
         }
+
+        public static String toStringCustomFormat(java.sql.Date date, String format) {
+            DateFormat formatter = new SimpleDateFormat(format);
+            return formatter.format(date);
+        }
+
     }
 
     // https://stackoverflow.com/questions/28897303/persist-java-localdate-in-mysql

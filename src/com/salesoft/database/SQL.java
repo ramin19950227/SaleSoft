@@ -8,6 +8,7 @@ package com.salesoft.database;
 import com.salesoft.model.Invoice;
 import com.salesoft.model.InvoiceItem;
 import com.salesoft.model.Product;
+import com.salesoft.util.MyDateConverter;
 import com.salesoft.util.MyProperties;
 import java.util.ArrayList;
 
@@ -107,9 +108,9 @@ public class SQL {
      */
     public static class PurchaseProductSQL {
 
-        public static String CREATE(String purchaseDate, String totalPrice, String product_id, String product_name, String product_qty, String product_purchasePrice, String product_barCode, String product_note) {
+        public static String CREATE(java.util.Date purchaseDate, String totalPrice, String product_id, String product_name, String product_qty, String product_purchasePrice, String product_barCode, String product_note) {
             return "INSERT INTO `" + DB_NAME + "`.PurchaseProduct (`purchaseDate`, `totalPrice`, `product_id`, `product_name`, `product_qty`, `product_purchasePrice`, `product_barCode`, `product_note`) "
-                    + "VALUES ('" + purchaseDate + "', '" + totalPrice + "', '" + product_id + "', '" + product_name + "', '" + product_qty + "', '" + product_purchasePrice + "', '" + product_barCode + "','" + product_note + "');";
+                    + "VALUES ('" + MyDateConverter.utilDate.toStringCustomFormat(purchaseDate, "yyyy-MM-dd") + "', '" + totalPrice + "', '" + product_id + "', '" + product_name + "', '" + product_qty + "', '" + product_purchasePrice + "', '" + product_barCode + "','" + product_note + "');";
         }
 
         public static String UPDATE() {

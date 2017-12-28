@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public interface PurchaseProductDAOIntf {
 
-    void create(PurchaseProduct entity);
+    void create(PurchaseProduct entity, java.util.Date date);
 
     void update(PurchaseProduct entity);
 

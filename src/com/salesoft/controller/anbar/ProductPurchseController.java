@@ -6,15 +6,21 @@
 package com.salesoft.controller.anbar;
 
 import com.salesoft.DAO.impl.ProductDAO;
+import com.salesoft.DAO.impl.PurchaseProductDAO;
 import com.salesoft.model.Product;
-import com.salesoft.controller.AnbarRootLayoutController;
 import com.salesoft.controller.ApplicationController;
+import com.salesoft.model.PurchaseProduct;
+import com.salesoft.util.MyDateConverter;
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 /**
@@ -26,6 +32,9 @@ public class ProductPurchseController implements Initializable {
 
     @FXML
     private TextField barCodeField;
+
+    @FXML
+    private Label barCodeFieldErrorMessage;
 
     @FXML
     private TextField nameField;
@@ -42,8 +51,13 @@ public class ProductPurchseController implements Initializable {
     @FXML
     private Button saveButton;
 
+    @FXML
+    private DatePicker datePicker;
+
     private Product barcodeEnteredProduct = null;
     private final ProductDAO ProductDAO = new ProductDAO();
+
+    PurchaseProductDAO purchaseProductDAO = new PurchaseProductDAO();
 
     /**
      * Initializes the controller class.
@@ -54,18 +68,33 @@ public class ProductPurchseController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        barCodeFieldErrorMessage.setText(null);
+
+        datePicker.setOnAction(event -> {
+            //for Testing
+            LocalDate date = datePicker.getValue();
+            //System.out.println("Selected LocalDate: " + date);
+            Date d = MyDateConverter.asDate(date);
+            //System.out.println("Selected util.Date: " + d);
+
+        });
+
+        // bugunku tarixi set edek
+        datePicker.setValue(LocalDate.now());
+
     }
 
     @FXML
-    private void handleBarCode() {
+    private void barCodeFieldOnAction() {
 
         barCodeField.setStyle("-fx-border-color: white;-fx-border-width: 0;");
 
         if (barCodeField.getText() == null || barCodeField.getText().length() == 0) {
 
             barCodeField.setStyle("-fx-border-color: red;-fx-border-width: 5;");
-
+            barCodeFieldErrorMessage.setText("  BarCodu Daxil Edin");
             barCodeField.requestFocus();
+
         } else {
             String barCode = barCodeField.getText();
 
@@ -73,12 +102,18 @@ public class ProductPurchseController implements Initializable {
 
             if (barcodeEnteredProduct == null) {
 
+                barCodeFieldErrorMessage.setText("  Məhsul Qeydiyyatda Yoxdur: Yeni Olaraq Qeydiyyata Alinacaq");
+                nameField.setDisable(false);
                 nameField.requestFocus();
-                nameField.setText("Yeni Mehsul:");
-                nameField.selectAll();
+
             } else {
-                clearFields();
-                setProductToEditFields(barcodeEnteredProduct);
+
+                barCodeFieldErrorMessage.setText(null);
+
+                nameField.setText(barcodeEnteredProduct.getName());
+                nameField.setDisable(true);
+                qtyField.requestFocus();
+
             }
 
         }
@@ -111,6 +146,11 @@ public class ProductPurchseController implements Initializable {
 
     @FXML
     private void hanleSaveButton() {
+        LocalDate date = datePicker.getValue();
+        System.out.println("Selected LocalDate: " + date);
+        Date d = MyDateConverter.asDate(date);
+        System.out.println("Selected util.Date: " + d);
+
         boolean isValid = isInputValid();
 
         if (isValid && barcodeEnteredProduct != null) {
@@ -133,13 +173,17 @@ public class ProductPurchseController implements Initializable {
             //indi yenileyek
             ProductDAO.update(barcodeEnteredProduct);
 
+            java.util.Date date1 = MyDateConverter.asDate(datePicker.getValue());
+
+            purchaseProductDAO.create(new PurchaseProduct(0, "", barcodeEnteredProduct.getQty() * barcodeEnteredProduct.getPurchasePrice(), barcodeEnteredProduct), date1);
+
             // sonra ise Anbari gosteririk
             ApplicationController.getApplicationController().btnStockOnClick();
 
         } else if (isValid && barcodeEnteredProduct == null) {
 
             String name = nameField.getText();
-            Integer qty = Integer.valueOf(barCodeField.getText());
+            Integer qty = Integer.valueOf(qtyField.getText());
             Double purchasePrice = Double.valueOf(purchasePriceField.getText());
             String barCode = barCodeField.getText();
             String note = noteField.getText();
@@ -149,6 +193,12 @@ public class ProductPurchseController implements Initializable {
             // Yeni DAO-muza Yeni Sorgu Gonderek )) Bele Cox Gozel Gorsenir
             // yeni obyektimizi hazirlayiriq ve gonderirik metodumuza
             ProductDAO.create(product);
+
+            java.util.Date date1 = MyDateConverter.asDate(datePicker.getValue());
+
+            PurchaseProduct pp = new PurchaseProduct(0, "", product.getQty() * product.getPurchasePrice(), product);
+
+            purchaseProductDAO.create(pp, date1);
 
             ApplicationController.getApplicationController().btnStockOnClick();
         }
@@ -160,33 +210,12 @@ public class ProductPurchseController implements Initializable {
         barcodeEnteredProduct = null;
     }
 
-    /**
-     * Additional Metods
-     */
-    /**
-     *
-     * @param product
-     */
-    private void setProductToEditFields(Product product) {
-        if (product != null) {
-            barCodeField.setText(product.getBarCode());
-            nameField.setText(product.getName());
-            nameField.setEditable(false);
-            qtyField.setText(product.getQty().toString());
-            qtyField.requestFocus();
-            purchasePriceField.setText(product.getPurchasePrice().toString());
-
-        }
-    }
-
     @FXML
     private void clearFields() {
         barCodeField.setText(null);
         barCodeField.setStyle("-fx-border-color: white;-fx-border-width: 0;");
-        barCodeField.requestFocus();
 
         nameField.setText(null);
-        nameField.setEditable(true);
         nameField.setStyle("-fx-border-color: white;-fx-border-width: 0;");
 
         qtyField.setText(null);
@@ -202,12 +231,16 @@ public class ProductPurchseController implements Initializable {
     private boolean isInputValid() {
         String errorMessage = "";
 
+        if (datePicker.getValue() == null) {
+            errorMessage += "Zehmet Olmasa Medaxil Tarixini secin!\n";
+        }
+
         if (nameField.getText() == null || nameField.getText().length() == 0) {
             errorMessage += "Mehsulun Adini dogru daxil edin!\n";
             nameField.setStyle("-fx-border-color: red;-fx-border-width: 5;");
         }
 
-        if (qtyField.getText() == null || qtyField.getText().length() == 0) {
+        if (qtyField.getText() == null || qtyField.getText().length() == 0 || qtyField.getText().equals("0")) {
             errorMessage += "Mehsulun Sayini dogru daxil edin!\n";
             qtyField.setStyle("-fx-border-color: red;-fx-border-width: 5;");
         } else {

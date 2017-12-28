@@ -24,6 +24,31 @@ import java.util.ArrayList;
 public class PurchaseProductDAO implements PurchaseProductDAOIntf {
 
     @Override
+    public void create(PurchaseProduct entity, java.util.Date date) {
+
+        try {
+            String SQLQuery = SQL.PurchaseProductSQL.CREATE(date, entity.getTotalPrice().toString(), entity.getProduct().getId().toString(), entity.getProduct().getName(), entity.getProduct().getQty().toString(), entity.getProduct().getPurchasePrice().toString(), entity.getProduct().getBarCode(), entity.getProduct().getNote());
+
+            UserOperationLogger.logSQL(SQLQuery);
+
+            DBUtil.directExecuteUpdate(SQLQuery);
+
+        } catch (SQLException ex) {
+            MyExceptionLogger.logException("SQLException - ProductDAO.create()", ex);
+        }
+    }
+
+    @Override
+    public void update(PurchaseProduct entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void delete(Integer id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
     public PurchaseProduct getById(Integer id) {
         try {
             String SQLQuery = SQL.PurchaseProductSQL.GET(id);
@@ -58,21 +83,6 @@ public class PurchaseProductDAO implements PurchaseProductDAOIntf {
         }
 
         return list;
-    }
-
-    @Override
-    public void create(PurchaseProduct entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void update(PurchaseProduct entity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void delete(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
