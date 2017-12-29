@@ -13,6 +13,7 @@ import com.salesoft.model.PurchaseProduct;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Class-da Yerleshen Metodlara ResultSet obyektini veririk ve Metodumuza Uygun
@@ -29,7 +30,7 @@ public class RsToModel {
             while (rs.next()) {
 
                 Integer id = rs.getInt(1);
-                String purchaseDate = rs.getString(2);
+                Date uDate = new Date(rs.getDate(2).getTime());
                 Double totalPrice = rs.getDouble(3);
 
                 // mence Bele daha Sade Olacaq ve rahat Oxunacaq
@@ -41,7 +42,7 @@ public class RsToModel {
                 product.setBarCode(rs.getString(8));
                 product.setNote(rs.getString(9));
 
-                PurchaseProduct pp = new PurchaseProduct(id, purchaseDate, totalPrice, product);
+                PurchaseProduct pp = new PurchaseProduct(id, uDate, totalPrice, product);
                 list.add(pp);
             }
             return list;
@@ -66,9 +67,10 @@ public class RsToModel {
         try {
             if (rs.next()) {
                 Integer id = rs.getInt(1);
-                String purchaseDate = rs.getString(2);
+                Date date = new Date(rs.getDate(2).getTime());
                 Double totalPrice = rs.getDouble(3);
-                // mence Bele daha Sade Olacaq ve rahat Oxunacaq
+
+                //Product-i aliriq
                 Product product = new Product();
                 product.setId(rs.getInt(4));
                 product.setName(rs.getString(5));
@@ -77,7 +79,7 @@ public class RsToModel {
                 product.setBarCode(rs.getString(8));
                 product.setNote(rs.getString(9));
 
-                PurchaseProduct pp = new PurchaseProduct(id, purchaseDate, totalPrice, product);
+                PurchaseProduct pp = new PurchaseProduct(id, date, totalPrice, product);
                 return pp;
             }
             return null;
@@ -183,15 +185,15 @@ public class RsToModel {
 
             //budur dogru metod bir dene next() etdikse Melumatlari almaliyiq 2-ci next etmemishden evvel
             while (rs.next()) {
-            Product p = new Product();
-            p.setId(rs.getInt(4));
-            p.setName(rs.getString(5));
-            p.setQty(rs.getInt(6));
-            p.setPurchasePrice(rs.getDouble(7));
-            p.setBarCode(rs.getString(8));
-            p.setNote(rs.getString(9));
+                Product p = new Product();
+                p.setId(rs.getInt(4));
+                p.setName(rs.getString(5));
+                p.setQty(rs.getInt(6));
+                p.setPurchasePrice(rs.getDouble(7));
+                p.setBarCode(rs.getString(8));
+                p.setNote(rs.getString(9));
 
-            InvoiceItem item = new InvoiceItem(rs.getInt(1), rs.getInt(2), rs.getDouble(3), p);
+                InvoiceItem item = new InvoiceItem(rs.getInt(1), rs.getInt(2), rs.getDouble(3), p);
 
                 list.add(item);
             }

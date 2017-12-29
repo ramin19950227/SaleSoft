@@ -47,15 +47,30 @@ public class TextFieldValidator {
 
     }
 
-    /**
-     * Verilen TextField-in hem bosh olmadigini hemde Kecerli Integer oldugunu
-     * yoxlayi
-     *
-     * @param field
-     * @return
-     */
-    public Boolean isNotNullANDisCorrectInt(TextField field) {
+    public Boolean isCorrectIntANDisNotZERO(TextField field) {
+        if (isCorrectInt(field)) {
+            if (Integer.parseInt(field.getText()) > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-        return isNotNull(field) & isCorrectInt(field);
+    public Boolean isCorrectDoubleANDisNotZERO(TextField field) {
+        if (isCorrectDouble(field)) {
+            if (Double.parseDouble(field.getText()) > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Boolean isCorrectDouble(TextField field) {
+        try {
+            Double.parseDouble(field.getText());
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }

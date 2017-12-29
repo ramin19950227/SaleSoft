@@ -24,10 +24,10 @@ import java.util.ArrayList;
 public class PurchaseProductDAO implements PurchaseProductDAOIntf {
 
     @Override
-    public void create(PurchaseProduct entity, java.util.Date date) {
+    public void create(PurchaseProduct purchaseProduct) {
 
         try {
-            String SQLQuery = SQL.PurchaseProductSQL.CREATE(date, entity.getTotalPrice().toString(), entity.getProduct().getId().toString(), entity.getProduct().getName(), entity.getProduct().getQty().toString(), entity.getProduct().getPurchasePrice().toString(), entity.getProduct().getBarCode(), entity.getProduct().getNote());
+            String SQLQuery = SQL.PurchaseProductSQL.CREATE(purchaseProduct.getDate(), purchaseProduct.getTotalPrice().toString(), purchaseProduct.getProduct().getId().toString(), purchaseProduct.getProduct().getName(), purchaseProduct.getProduct().getQty().toString(), purchaseProduct.getProduct().getPurchasePrice().toString(), purchaseProduct.getProduct().getBarCode(), purchaseProduct.getProduct().getNote());
 
             UserOperationLogger.logSQL(SQLQuery);
 
@@ -39,7 +39,7 @@ public class PurchaseProductDAO implements PurchaseProductDAOIntf {
     }
 
     @Override
-    public void update(PurchaseProduct entity) {
+    public void update(PurchaseProduct purchaseProduct) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

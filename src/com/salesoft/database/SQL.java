@@ -255,7 +255,7 @@ public class SQL {
         }
 
         public static String GET(String barCode) {
-            return "SELECT * FROM `" + DB_NAME + "`.Product WHERE barCode=" + barCode;
+            return "SELECT * FROM `" + DB_NAME + "`.Product WHERE barCode=" + barCode + " ORDER BY `id` DESC LIMIT 1";
         }
 
         public static String GET_ALL() {

@@ -5,6 +5,8 @@
  */
 package com.salesoft.model;
 
+import com.salesoft.util.MyDateConverter;
+import java.util.Date;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -22,28 +24,74 @@ public class PurchaseProduct {
     private final StringProperty purchaseDate;
     private final DoubleProperty totalPrice;
 
-    private final Product product;
+    private Date date;
+    private Product product;
 
     /**
+     * Constructor For use in DAO.get
      *
      * @param id
      * @param purchaseDate
      * @param totalPrice
      * @param product
      */
-    public PurchaseProduct(Integer id, String purchaseDate, Double totalPrice, Product product) {
+    public PurchaseProduct(Integer id, Date purchaseDate, Double totalPrice, Product product) {
 
         this.id = new SimpleIntegerProperty(id);
-        this.purchaseDate = new SimpleStringProperty(purchaseDate);
+        this.purchaseDate = new SimpleStringProperty(MyDateConverter.utilDate.toStringCustomFormat(purchaseDate, "yyyy-MM-dd"));
         this.totalPrice = new SimpleDoubleProperty(totalPrice);
 
+        this.date = purchaseDate;
         this.product = product;
 
+    }
+
+    /**
+     * Constructor FOR DAO.create funktions
+     *
+     * @param purchaseDate
+     * @param product
+     */
+    public PurchaseProduct(Date purchaseDate, Product product) {
+
+        this.id = new SimpleIntegerProperty(0);
+        this.purchaseDate = new SimpleStringProperty(MyDateConverter.utilDate.toStringCustomFormat(purchaseDate, "yyyy-MM-dd"));
+        this.totalPrice = new SimpleDoubleProperty(product.getPurchasePrice() * product.getQty());
+
+        this.date = purchaseDate;
+        this.product = product;
+    }
+
+    /**
+     * Default Constructor with starting initialization data's
+     */
+    public PurchaseProduct() {
+
+        this.id = new SimpleIntegerProperty(0);
+        this.purchaseDate = new SimpleStringProperty("0000-00-00");
+        this.totalPrice = new SimpleDoubleProperty(0.0);
+
+        this.date = new Date();
+        this.product = new Product();
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public Product getProduct() {
         return product;
     }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+    
+    
 
     public final void setId(Integer value) {
         id.set(value);
@@ -80,14 +128,7 @@ public class PurchaseProduct {
     public final DoubleProperty totalPriceProperty() {
         return totalPrice;
     }
-
-    @Override
-    public String toString() {
-        return "PurchaseProduct{" + "id=" + id + ", purchaseDate=" + purchaseDate + ", totalPrice=" + totalPrice + ", product=" + product + '}';
-    }
-
-    public void println() {
-        System.out.println(toString());
-    }
+    
+    
 
 }

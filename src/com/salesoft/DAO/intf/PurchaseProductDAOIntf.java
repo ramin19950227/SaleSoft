@@ -10,9 +10,9 @@ import java.util.ArrayList;
  */
 public interface PurchaseProductDAOIntf {
 
-    void create(PurchaseProduct entity, java.util.Date date);
+    void create(PurchaseProduct purchaseProduct);
 
-    void update(PurchaseProduct entity);
+    void update(PurchaseProduct purchaseProduct);
 
     void delete(Integer id);
 
