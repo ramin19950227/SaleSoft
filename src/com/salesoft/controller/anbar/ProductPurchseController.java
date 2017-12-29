@@ -11,6 +11,7 @@ import com.salesoft.model.Product;
 import com.salesoft.controller.ApplicationController;
 import com.salesoft.model.PurchaseProduct;
 import com.salesoft.util.MyDateConverter;
+import com.salesoft.util.MyView;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Date;
@@ -22,6 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 
 /**
  * FXML Controller class
@@ -104,6 +106,7 @@ public class ProductPurchseController implements Initializable {
 
                 barCodeFieldErrorMessage.setText("  Məhsul Qeydiyyatda Yoxdur: Yeni Olaraq Qeydiyyata Alinacaq");
                 nameField.setDisable(false);
+                nameField.setText(null);
                 nameField.requestFocus();
 
             } else {

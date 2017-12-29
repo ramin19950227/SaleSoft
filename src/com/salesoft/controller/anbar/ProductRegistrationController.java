@@ -8,6 +8,7 @@ package com.salesoft.controller.anbar;
 import com.salesoft.DAO.impl.ProductDAO;
 import com.salesoft.controller.ApplicationController;
 import com.salesoft.model.Product;
+import com.salesoft.util.MyView;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,34 +28,35 @@ import javafx.scene.image.ImageView;
  * @author Ramin
  */
 public class ProductRegistrationController implements Initializable {
-    
+
     @FXML
     private ImageView imageViewBarCode;
-    
+
     @FXML
     private ImageView imageViewName;
-    
+
     @FXML
     private TextField barCodeField;
     private String barCodeFieldLastCorrectValue;
-    
+
     @FXML
     private Label barCodeFieldErrorMessageLabel;
-    
+
     @FXML
     private TextField nameField;
     private String nameFieldLastCorrectValue;
-    
+
     @FXML
     private Label nameFieldErrorMessageLabel;
-    
+
     @FXML
     private Button okButton;
-    
+
     @FXML
     private Button clearButton;
-    
+
     private final ProductDAO productDAO = new ProductDAO();
+    MyView myView = new MyView();
 
     /**
      * Initializes the controller class.
@@ -64,22 +66,22 @@ public class ProductRegistrationController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         okButton.setOnAction(value -> {
             okButtonOnAction();
         });
-        
+
         clearButton.setOnAction(value -> {
             clearButtonOnAction();
         });
-        
+
         okButton.setDisable(true);
-        
+
         barCodeField.setOnKeyReleased(value -> {
             barCodeFieldOnKeyReleased();
         });
         barCodeField.setPromptText("BarCodu Daxil Edin");
-        
+
         nameField.setOnKeyReleased(value -> {
             nameFieldOnKeyReleased();
         });
@@ -87,94 +89,59 @@ public class ProductRegistrationController implements Initializable {
         // her ehtimala qarshi init edirem ki birden NullPoiter Cixar))
         barCodeFieldLastCorrectValue = "";
         nameFieldLastCorrectValue = "";
-        
+
         barCodeFieldErrorMessageLabel.setText(null);
         nameFieldErrorMessageLabel.setText(null);
     }
-    
+
     private void barCodeFieldOnKeyReleased() {
-        
+
         if (isBarcodeInputValid()) {
             // eger Yoxlamadan kecdise Yadda saxlayaq
             barCodeFieldLastCorrectValue = barCodeField.getText();
-            
+
             if (productDAO.getByBarcode(barCodeField.getText()) == null) {
-                
-                showOkOnBarcode();
+
+                myView.showOk(imageViewBarCode);
                 checkButtonEnableStatus();
-                
+
             } else {
                 checkButtonEnableStatus();
-                
-                showNoOnBarcode();
+
+                myView.showNo(imageViewBarCode);
                 barCodeFieldErrorMessageLabel.setText("Məhsul artıq Qeytiyyatdan Keçib");
             }
-            
+
         } else {
             checkButtonEnableStatus();
-            
-            showNoOnBarcode();
+
+            myView.showNo(imageViewBarCode);
+
             // eger mushteririn daxil elediyi yazi Yoxlamani kecmedise onu evvelki dogru ile evez edek
             barCodeField.setText(barCodeFieldLastCorrectValue);
         }
-        
+
     }
-    
+
     private void nameFieldOnKeyReleased() {
-        
+
         if (isNameInputValid()) {
-            showOkOnName();
-            
+            myView.showOk(imageViewName);
+
             checkButtonEnableStatus();
-            
+
         } else {
-            showNoOnName();
+            myView.showNo(imageViewName);
             checkButtonEnableStatus();
         }
-        
-    }
-    
-    private void showWarningOnBarcode() {
-        try {
-            // TODO
 
-            File file = new File("src/com/salesoft/image/w.png");
-            Image image = new Image(new FileInputStream(file));
-            imageViewBarCode.setImage(image);
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        }
     }
-    
-    private void showOkOnBarcode() {
-        try {
-            // TODO
 
-            File file = new File("src/com/salesoft/image/ok.png");
-            Image image = new Image(new FileInputStream(file));
-            imageViewBarCode.setImage(image);
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        }
-    }
-    
-    private void showNoOnBarcode() {
-        try {
-            // TODO
-
-            File file = new File("src/com/salesoft/image/no2.png");
-            Image image = new Image(new FileInputStream(file));
-            imageViewBarCode.setImage(image);
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        }
-    }
-    
     private boolean isBarcodeInputValid() {
-        
+
         if (barCodeField.getText() == null || barCodeField.getText().length() == 0) {
             barCodeFieldErrorMessageLabel.setText("BarCod Daxil Edin!");
-            
+
             barCodeFieldLastCorrectValue = "";
             return false;
         } else {
@@ -184,89 +151,63 @@ public class ProductRegistrationController implements Initializable {
                 Integer.parseInt(barCodeField.getText());
             } catch (NumberFormatException e) {
                 barCodeFieldErrorMessageLabel.setText("Kecərli BarCod daxil edin (Tam eded olmalidir)!");
-                
+
                 return false;
             }
         }
-        
+
         return true;
     }
-    
+
     private boolean isNameInputValid() {
-        
+
         if (nameField.getText() == null || nameField.getText().length() == 0) {
             nameFieldErrorMessageLabel.setText("Məhsulun adını daxil edin!");
             return false;
         } else {
             nameFieldErrorMessageLabel.setText(null);
         }
-        
+
         return true;
     }
-    
-    private void showNoOnName() {
-        
-        try {
-            // TODO
 
-            File file = new File("src/com/salesoft/image/no2.png");
-            Image image = new Image(new FileInputStream(file));
-            imageViewName.setImage(image);
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        }
-        
-    }
-    
-    private void showOkOnName() {
-        try {
-            // TODO
-
-            File file = new File("src/com/salesoft/image/ok.png");
-            Image image = new Image(new FileInputStream(file));
-            imageViewName.setImage(image);
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        }
-    }
-    
     private void checkButtonEnableStatus() {
-        
+
         if (isBarcodeInputValid() && isNameInputValid() && productDAO.getByBarcode(barCodeField.getText()) == null) {
             okButton.setDisable(false);
-            
+
         } else {
             okButton.setDisable(true);
         }
-        
+
     }
-    
+
     private void okButtonOnAction() {
         Product product = new Product();
-        
+
         product.setBarCode(barCodeField.getText());
         product.setName(nameField.getText());
-        
+
         productDAO.create(product);
 
         //Anbari Gosterek
         ApplicationController.getApplicationController().btnStockOnClick();
-        
+
     }
-    
+
     private void clearButtonOnAction() {
-        
+
         barCodeField.setText(null);
         nameField.setText(null);
-        
+
         imageViewBarCode.setImage(null);
         imageViewName.setImage(null);
-        
+
         nameFieldErrorMessageLabel.setText(null);
         barCodeFieldErrorMessageLabel.setText(null);
-        
+
         barCodeField.requestFocus();
-        
+
     }
-    
+
 }
