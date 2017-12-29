@@ -35,12 +35,12 @@
                   <Font name="Times New Roman Bold Italic" size="20.0" />
                </font>
             </Label>
-            <TextField fx:id="barCodeField" GridPane.columnIndex="1" />
-            <TextField fx:id="nameField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label fx:id="barCodeFieldErrorMessageLabel" text="xəbərdarlıq" GridPane.columnIndex="3" />
-            <Label fx:id="nameFieldErrorMessageLabel" text="xəbərdarliq" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-            <ImageView fx:id="imageViewBarCode" fitHeight="45.0" fitWidth="59.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
-            <ImageView fx:id="imageViewName" fitHeight="45.0" fitWidth="59.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <TextField fx:id="bTF" GridPane.columnIndex="1" />
+            <TextField fx:id="nTF" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="bWL" text="xəbərdarlıq" GridPane.columnIndex="3" />
+            <Label fx:id="nWL" text="xəbərdarliq" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <ImageView fx:id="bIV" fitHeight="45.0" fitWidth="59.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
+            <ImageView fx:id="nIV" fitHeight="45.0" fitWidth="59.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <GridPane prefHeight="26.0" prefWidth="209.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
               <columnConstraints>
                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -50,7 +50,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                <Button fx:id="okButton" mnemonicParsing="false" text="Qeydə Al" />
+                <Button fx:id="saveButton" mnemonicParsing="false" text="Qeydə Al" />
                   <Button fx:id="clearButton" mnemonicParsing="false" text="Xanaları Təmizlə" GridPane.columnIndex="1" />
                </children>
             </GridPane>

@@ -9,9 +9,6 @@ import com.salesoft.DAO.impl.ProductDAO;
 import com.salesoft.controller.ApplicationController;
 import com.salesoft.model.Product;
 import com.salesoft.util.MyView;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -19,7 +16,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
@@ -30,30 +26,17 @@ import javafx.scene.image.ImageView;
 public class ProductRegistrationController implements Initializable {
 
     @FXML
-    private ImageView imageViewBarCode;
+    private ImageView bIV, nIV;
 
     @FXML
-    private ImageView imageViewName;
+    private TextField bTF, nTF;
+    private String lastCorrectBarCode;
 
     @FXML
-    private TextField barCodeField;
-    private String barCodeFieldLastCorrectValue;
+    private Label bWL, nWL;
 
     @FXML
-    private Label barCodeFieldErrorMessageLabel;
-
-    @FXML
-    private TextField nameField;
-    private String nameFieldLastCorrectValue;
-
-    @FXML
-    private Label nameFieldErrorMessageLabel;
-
-    @FXML
-    private Button okButton;
-
-    @FXML
-    private Button clearButton;
+    private Button saveButton, clearButton;
 
     private final ProductDAO productDAO = new ProductDAO();
     MyView myView = new MyView();
@@ -67,7 +50,7 @@ public class ProductRegistrationController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        okButton.setOnAction(value -> {
+        saveButton.setOnAction(value -> {
             okButtonOnAction();
         });
 
@@ -75,50 +58,51 @@ public class ProductRegistrationController implements Initializable {
             clearButtonOnAction();
         });
 
-        okButton.setDisable(true);
+        saveButton.setDisable(true);
 
-        barCodeField.setOnKeyReleased(value -> {
+        bTF.setOnKeyReleased(value -> {
             barCodeFieldOnKeyReleased();
         });
-        barCodeField.setPromptText("BarCodu Daxil Edin");
 
-        nameField.setOnKeyReleased(value -> {
+        bTF.setPromptText("BarCodu Daxil Edin");
+        nTF.setPromptText("Mehsulun Adını Daxil Edin");
+
+        nTF.setOnKeyReleased(value -> {
             nameFieldOnKeyReleased();
         });
 
         // her ehtimala qarshi init edirem ki birden NullPoiter Cixar))
-        barCodeFieldLastCorrectValue = "";
-        nameFieldLastCorrectValue = "";
+        lastCorrectBarCode = "";
 
-        barCodeFieldErrorMessageLabel.setText(null);
-        nameFieldErrorMessageLabel.setText(null);
+        bWL.setText(null);
+        nWL.setText(null);
     }
 
     private void barCodeFieldOnKeyReleased() {
 
         if (isBarcodeInputValid()) {
             // eger Yoxlamadan kecdise Yadda saxlayaq
-            barCodeFieldLastCorrectValue = barCodeField.getText();
+            lastCorrectBarCode = bTF.getText();
 
-            if (productDAO.getByBarcode(barCodeField.getText()) == null) {
+            if (productDAO.getByBarcode(bTF.getText()) == null) {
 
-                myView.showOk(imageViewBarCode);
+                myView.showOk(bIV);
                 checkButtonEnableStatus();
 
             } else {
                 checkButtonEnableStatus();
 
-                myView.showNo(imageViewBarCode);
-                barCodeFieldErrorMessageLabel.setText("Məhsul artıq Qeytiyyatdan Keçib");
+                myView.showNo(bIV);
+                bWL.setText("Məhsul artıq Qeytiyyatdan Keçib");
             }
 
         } else {
             checkButtonEnableStatus();
 
-            myView.showNo(imageViewBarCode);
+            myView.showNo(bIV);
 
             // eger mushteririn daxil elediyi yazi Yoxlamani kecmedise onu evvelki dogru ile evez edek
-            barCodeField.setText(barCodeFieldLastCorrectValue);
+            bTF.setText(lastCorrectBarCode);
         }
 
     }
@@ -126,12 +110,12 @@ public class ProductRegistrationController implements Initializable {
     private void nameFieldOnKeyReleased() {
 
         if (isNameInputValid()) {
-            myView.showOk(imageViewName);
+            myView.showOk(nIV);
 
             checkButtonEnableStatus();
 
         } else {
-            myView.showNo(imageViewName);
+            myView.showNo(nIV);
             checkButtonEnableStatus();
         }
 
@@ -139,18 +123,18 @@ public class ProductRegistrationController implements Initializable {
 
     private boolean isBarcodeInputValid() {
 
-        if (barCodeField.getText() == null || barCodeField.getText().length() == 0) {
-            barCodeFieldErrorMessageLabel.setText("BarCod Daxil Edin!");
+        if (bTF.getText() == null || bTF.getText().length() == 0) {
+            bWL.setText("BarCod Daxil Edin!");
 
-            barCodeFieldLastCorrectValue = "";
+            lastCorrectBarCode = "";
             return false;
         } else {
-            barCodeFieldErrorMessageLabel.setText(null);
+            bWL.setText(null);
             // пытаемся преобразовать в int.
             try {
-                Integer.parseInt(barCodeField.getText());
+                Integer.parseInt(bTF.getText());
             } catch (NumberFormatException e) {
-                barCodeFieldErrorMessageLabel.setText("Kecərli BarCod daxil edin (Tam eded olmalidir)!");
+                bWL.setText("Kecərli BarCod daxil edin (Tam eded olmalidir)!");
 
                 return false;
             }
@@ -161,11 +145,11 @@ public class ProductRegistrationController implements Initializable {
 
     private boolean isNameInputValid() {
 
-        if (nameField.getText() == null || nameField.getText().length() == 0) {
-            nameFieldErrorMessageLabel.setText("Məhsulun adını daxil edin!");
+        if (nTF.getText() == null || nTF.getText().length() == 0) {
+            nWL.setText("Məhsulun adını daxil edin!");
             return false;
         } else {
-            nameFieldErrorMessageLabel.setText(null);
+            nWL.setText(null);
         }
 
         return true;
@@ -173,11 +157,11 @@ public class ProductRegistrationController implements Initializable {
 
     private void checkButtonEnableStatus() {
 
-        if (isBarcodeInputValid() && isNameInputValid() && productDAO.getByBarcode(barCodeField.getText()) == null) {
-            okButton.setDisable(false);
+        if (isBarcodeInputValid() && isNameInputValid() && productDAO.getByBarcode(bTF.getText()) == null) {
+            saveButton.setDisable(false);
 
         } else {
-            okButton.setDisable(true);
+            saveButton.setDisable(true);
         }
 
     }
@@ -185,8 +169,8 @@ public class ProductRegistrationController implements Initializable {
     private void okButtonOnAction() {
         Product product = new Product();
 
-        product.setBarCode(barCodeField.getText());
-        product.setName(nameField.getText());
+        product.setBarCode(bTF.getText());
+        product.setName(nTF.getText());
 
         productDAO.create(product);
 
@@ -197,16 +181,16 @@ public class ProductRegistrationController implements Initializable {
 
     private void clearButtonOnAction() {
 
-        barCodeField.setText(null);
-        nameField.setText(null);
+        bTF.setText(null);
+        nTF.setText(null);
 
-        imageViewBarCode.setImage(null);
-        imageViewName.setImage(null);
+        bIV.setImage(null);
+        nIV.setImage(null);
 
-        nameFieldErrorMessageLabel.setText(null);
-        barCodeFieldErrorMessageLabel.setText(null);
+        nWL.setText(null);
+        bWL.setText(null);
 
-        barCodeField.requestFocus();
+        bTF.requestFocus();
 
     }
 
