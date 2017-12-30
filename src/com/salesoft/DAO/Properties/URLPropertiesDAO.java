@@ -26,7 +26,7 @@ public class URLPropertiesDAO {
                     "view/anbar/ProductTable.fxml",
                     "view/sale/ProductSaleCart.fxml",
                     "view/AnbarRootLayout.fxml",
-                    "view/anbar/ProductPurchse.fxml",
+                    "view/anbar/ProductImport.fxml",
                     "view/SaleRootLayout.fxml",
                     "view/sale/SaleInvoiceTable.fxml",
                     "view/sale/SaleInvoiceDetailsTable.fxml",
