@@ -30,7 +30,7 @@ public class URLPropertiesDAO {
                     "view/SaleRootLayout.fxml",
                     "view/sale/SaleInvoiceTable.fxml",
                     "view/sale/SaleInvoiceDetailsTable.fxml",
-                    "view/anbar/PurchaseProductTable.fxml",
+                    "view/anbar/ProductImportTable.fxml",
                     "view/Registration.fxml",
                     "view/anbar/ProductRegistration.fxml"
             );

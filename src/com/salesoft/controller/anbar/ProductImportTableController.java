@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.salesoft.controller.anbar;
 
 import com.salesoft.DAO.impl.PurchaseProductDAO;
@@ -22,7 +17,7 @@ import javafx.scene.control.TableView;
  *
  * @author Ramin
  */
-public class PurchaseProductController implements Initializable {
+public class ProductImportTableController implements Initializable {
 
     //cedvel ve List-i Elan edirik
     @FXML
