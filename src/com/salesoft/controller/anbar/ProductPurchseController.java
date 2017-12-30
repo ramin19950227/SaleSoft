@@ -144,7 +144,7 @@ public class ProductPurchseController implements Initializable {
         });
 
         pTF.setOnAction(value -> {
-            if (TFValidator.isCorrectDoubleANDisNotZERO(pTF)) {
+            if (TFValidator.isCorrectInt(pTF)) {
                 myView.showOk(pIV);
                 pWL.setText(null);
                 datePicker.requestFocus();
@@ -475,7 +475,7 @@ public class ProductPurchseController implements Initializable {
 
     private void bTFOnAction() {
         //yoxlayaq eger barcod yazilibsa 
-        if (TFValidator.isCorrectIntANDisNotZERO(bTF)) {
+        if (TFValidator.isCorrectInt(bTF)) {
             //eger daxil edilen barcod bazada varsa Product null deyil ve null deyilse demeli ad xanasinda melumat var
             // ad xanasinda melumat varsa ve barcod xanasinda enter basilibsa
             // say xanasina fokus ele. yox mehsul bazada yoxdursa ve barcod xanasinda enter basilibsa
@@ -500,7 +500,7 @@ public class ProductPurchseController implements Initializable {
     }
 
     private boolean qTFOnKeyReleased() {
-        if (TFValidator.isCorrectIntANDisNotZERO(qTF)) {
+        if (TFValidator.isCorrectInt(qTF)) {
             myView.showOk(qIV);
             nWL.setText(null);
             return true;
@@ -512,7 +512,7 @@ public class ProductPurchseController implements Initializable {
     }
 
     private boolean pTFOnKeyReleased() {
-        if (TFValidator.isCorrectDoubleANDisNotZERO(pTF)) {
+        if (TFValidator.isCorrectDouble(pTF)) {
             myView.showOk(pIV);
             pWL.setText(null);
             return true;

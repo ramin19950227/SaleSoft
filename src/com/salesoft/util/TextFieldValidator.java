@@ -21,13 +21,10 @@ public class TextFieldValidator {
      * @return
      */
     public Boolean isNotNull(TextField field) {
-
         if (field.getText() == null || field.getText().length() == 0 || field.getText().equals("")) {
             return false;
         }
-
         return true;
-
     }
 
     /**
@@ -44,28 +41,9 @@ public class TextFieldValidator {
         } catch (NumberFormatException e) {
             return false;
         }
-
     }
 
-    public Boolean isCorrectIntANDisNotZERO(TextField field) {
-        if (isCorrectInt(field)) {
-            if (Integer.parseInt(field.getText()) > 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Boolean isCorrectDoubleANDisNotZERO(TextField field) {
-        if (isCorrectDouble(field)) {
-            if (Double.parseDouble(field.getText()) > 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private Boolean isCorrectDouble(TextField field) {
+    public Boolean isCorrectDouble(TextField field) {
         try {
             Double.parseDouble(field.getText());
             return true;
@@ -73,4 +51,24 @@ public class TextFieldValidator {
             return false;
         }
     }
+
+    //buna ehtiyyac yoxdur is correctInt metodu hele bunu evezleyir
+    // cunki eger xanada hecne yoxdur sa parseInt() exception cixaracaq ki empity 
+    // yani boshdursa ve ya null dursa onsuzda isCorrectInt deyil o da false qaytacaq
+//    public Boolean isCorrectIntANDisNotZERO(TextField field) {
+//        if (isCorrectInt(field)) {
+//            if (Integer.parseInt(field.getText()) > 0) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+//    public Boolean isCorrectDoubleANDisNotZERO(TextField field) {
+//        if (isCorrectDouble(field)) {
+//            if (Double.parseDouble(field.getText()) > 0) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 }
