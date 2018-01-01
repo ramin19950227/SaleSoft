@@ -35,6 +35,9 @@ public class TextFieldValidator {
      * @return
      */
     public Boolean isCorrectInt(TextField field) {
+        if (field.getText() == null) {
+            return false;
+        }
         try {
             Integer.parseInt(field.getText());
             return true;
@@ -44,6 +47,9 @@ public class TextFieldValidator {
     }
 
     public Boolean isCorrectDouble(TextField field) {
+        if (field.getText() == null) {
+            return false;
+        }
         try {
             Double.parseDouble(field.getText());
             return true;
