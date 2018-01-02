@@ -53,6 +53,13 @@ public class Initializator {
             System.err.println("Creating Folder for Exception Logs ");
             f.mkdirs();
         }
+
+        File f2 = new File("Log\\UserOperations\\");
+        if (!f2.exists()) {
+            System.err.println("Creating Folder for UserOperation Logs ");
+            f2.mkdirs();
+        }
+
     }
 
     private static void initPropertiesFolders() {

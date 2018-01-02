@@ -72,13 +72,13 @@
                               <Font name="System Italic" size="16.0" />
                            </font>
                         </Text>
-                        <Text fill="#f5efef" layoutX="14.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Proqramla bağlı hər hansı bir sualınız, təklifiniz və ya iradınız varsa bizimlə aşağıdakı əlaqə vasitəsi ilə  müraciət edı bilərsiniz." wrappingWidth="341.9999902378768">
+                        <Text fill="#f5efef" layoutX="14.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Proqramla bağlı hər hansı bir sualınız, təklifiniz və ya iradınız varsa bizə aşağıdakı əlaqə vasitəsi ilə  müraciət edə bilərsiniz." wrappingWidth="341.9999902378768">
                            <font>
                               <Font name="System Italic" size="16.0" />
                            </font>
                         </Text>
                         <Label layoutX="14.0" layoutY="271.0" text="E-mail:  ramin19950227@gmail.com" textFill="#e8d9d9" />
-                        <Label layoutX="14.0" layoutY="300.0" text="TEL    :  (055) 453-50-35" textFill="#e8d9d9" />
+                        <Label layoutX="14.0" layoutY="300.0" text="TEL    :  (055) 453-50-35 , Ramin İsmayılov" textFill="#e8d9d9" />
                      </children>
                   </AnchorPane>
                </children>
