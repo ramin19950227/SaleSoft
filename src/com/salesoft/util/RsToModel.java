@@ -9,7 +9,7 @@ import com.salesoft.database.DBUtil;
 import com.salesoft.model.Invoice;
 import com.salesoft.model.InvoiceItem;
 import com.salesoft.model.Product;
-import com.salesoft.model.PurchaseProduct;
+import com.salesoft.model.ProductImportWrapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,8 +23,8 @@ import java.util.Date;
  */
 public class RsToModel {
 
-    public static ArrayList<PurchaseProduct> rsToPurchaseProductList(ResultSet rs) throws SQLException {
-        ArrayList<PurchaseProduct> list = new ArrayList<>();
+    public static ArrayList<ProductImportWrapper> rsToPurchaseProductList(ResultSet rs) throws SQLException {
+        ArrayList<ProductImportWrapper> list = new ArrayList<>();
 
         try {
             while (rs.next()) {
@@ -42,7 +42,7 @@ public class RsToModel {
                 product.setBarCode(rs.getString(8));
                 product.setNote(rs.getString(9));
 
-                PurchaseProduct pp = new PurchaseProduct(id, uDate, totalPrice, product);
+                ProductImportWrapper pp = new ProductImportWrapper(id, uDate, totalPrice, product);
                 list.add(pp);
             }
             return list;
@@ -63,7 +63,7 @@ public class RsToModel {
      * @return
      * @throws SQLException
      */
-    public static PurchaseProduct rsToPurchaseProduct(ResultSet rs) throws SQLException {
+    public static ProductImportWrapper rsToPurchaseProduct(ResultSet rs) throws SQLException {
         try {
             if (rs.next()) {
                 Integer id = rs.getInt(1);
@@ -79,7 +79,7 @@ public class RsToModel {
                 product.setBarCode(rs.getString(8));
                 product.setNote(rs.getString(9));
 
-                PurchaseProduct pp = new PurchaseProduct(id, date, totalPrice, product);
+                ProductImportWrapper pp = new ProductImportWrapper(id, date, totalPrice, product);
                 return pp;
             }
             return null;

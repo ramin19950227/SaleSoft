@@ -6,6 +6,7 @@ import com.salesoft.DAO.impl.ProductDAO;
 import com.salesoft.model.Invoice;
 import com.salesoft.model.InvoiceItem;
 import com.salesoft.model.Product;
+import com.salesoft.util.MyJRViewer;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -18,7 +19,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 /**
  * FXML Controller class Bu Class Qaime nomresi ile Qaimelere baxish ve redakte
@@ -186,7 +186,7 @@ public class SaleInvoiceDetailsTableController implements Initializable {
     @FXML
     private void onActionPrintButton() {
         if (invoice != null) {
-            new PrintInvoice(new Stage(), invoice).start();
+            MyJRViewer.showSATISH_QAIMESI(invoice);
         } else {
             errorAlert("Zehmet olmasa Qaime nomresini yazin", "Zehmet olmasa Qaime nomresini yazin", "Sonra qaimeni gosterin daha sonra cap edin");
         }

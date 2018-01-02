@@ -227,6 +227,15 @@ public class SQL {
                     + "  UNIQUE KEY `Id` (`Id`)\n"
                     + ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;");
 
+            queryList.add("CREATE TABLE IF NOT EXISTS `" + DB_NAME + "`.`UserOperationLogger` (\n"
+                    + "  `id` int(11) NOT NULL AUTO_INCREMENT,\n"
+                    + "  `userName` text,\n"
+                    + "  `sql` text,\n"
+                    + "  `createTimeStamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,\n"
+                    + "  PRIMARY KEY (`id`),\n"
+                    + "  UNIQUE KEY `id` (`id`)\n"
+                    + ") ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+
             return queryList;
         }
 
@@ -255,7 +264,7 @@ public class SQL {
         }
 
         public static String GET(String barCode) {
-            return "SELECT * FROM `" + DB_NAME + "`.Product WHERE barCode=" + barCode + " ORDER BY `id` DESC LIMIT 1";
+            return "SELECT * FROM `" + DB_NAME + "`.Product WHERE barCode='" + barCode + "' ORDER BY `id` DESC LIMIT 1";
         }
 
         public static String GET_ALL() {
@@ -267,7 +276,7 @@ public class SQL {
         }
 
         public static String SEARCH_BY_BARODE(String barCode) {
-            return "SELECT * FROM `" + DB_NAME + "`.Product WHERE barCode=" + barCode;
+            return "SELECT * FROM `" + DB_NAME + "`.Product WHERE barCode='" + barCode + "'";
         }
 
         /**

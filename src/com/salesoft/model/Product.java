@@ -142,7 +142,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" + "id=" + id + ", name=" + name + ", qty=" + qty + ", purchasePrice=" + purchasePrice + ", barCode=" + barCode + ", note=" + note + '}';
+        return "Product{" + "id=" + id.get() + ", name=" + name.get() + ", qty=" + qty.get() + ", purchasePrice=" + purchasePrice.get() + ", barCode=" + barCode.get() + ", note=" + note.get() + '}';
     }
 
     /**

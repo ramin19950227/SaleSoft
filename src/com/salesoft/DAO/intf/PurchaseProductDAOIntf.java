@@ -1,6 +1,6 @@
 package com.salesoft.DAO.intf;
 
-import com.salesoft.model.PurchaseProduct;
+import com.salesoft.model.ProductImportWrapper;
 import java.util.ArrayList;
 
 /**
@@ -10,14 +10,14 @@ import java.util.ArrayList;
  */
 public interface PurchaseProductDAOIntf {
 
-    void create(PurchaseProduct purchaseProduct);
+    void create(ProductImportWrapper purchaseProduct);
 
-    void update(PurchaseProduct purchaseProduct);
+    void update(ProductImportWrapper purchaseProduct);
 
     void delete(Integer id);
 
-    PurchaseProduct getById(Integer id);
+    ProductImportWrapper getById(Integer id);
 
-    ArrayList<PurchaseProduct> getAll();
+    ArrayList<ProductImportWrapper> getAll();
 
 }

@@ -1,7 +1,7 @@
 package com.salesoft.controller.anbar;
 
 import com.salesoft.DAO.impl.PurchaseProductDAO;
-import com.salesoft.model.PurchaseProduct;
+import com.salesoft.model.ProductImportWrapper;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -21,25 +21,25 @@ public class ProductImportTableController implements Initializable {
 
     //cedvel ve List-i Elan edirik
     @FXML
-    private TableView<PurchaseProduct> purchaseProductTable;
+    private TableView<ProductImportWrapper> purchaseProductTable;
 
-    private final ObservableList<PurchaseProduct> purchaseProductList = FXCollections.observableArrayList();
+    private final ObservableList<ProductImportWrapper> purchaseProductList = FXCollections.observableArrayList();
 
-    // Bu Propertiler PurchaseProduct - obyektinde saxlanacaq
+    // Bu Propertiler ProductImportWrapper - obyektinde saxlanacaq
     @FXML
-    private TableColumn<PurchaseProduct, Number> idColumn;
+    private TableColumn<ProductImportWrapper, Number> idColumn;
     @FXML
-    private TableColumn<PurchaseProduct, Number> totalPriceColumn;
+    private TableColumn<ProductImportWrapper, Number> totalPriceColumn;
     @FXML
-    private TableColumn<PurchaseProduct, String> purchaseDateColumn;
+    private TableColumn<ProductImportWrapper, String> purchaseDateColumn;
 
-    // Bu Propertiler ise PurchaseProduct-Obyektinin icinde olan Product Obyektinden Alinacaq
+    // Bu Propertiler ise ProductImportWrapper-Obyektinin icinde olan Product Obyektinden Alinacaq
     @FXML
-    private TableColumn<PurchaseProduct, String> productNameColumn;
+    private TableColumn<ProductImportWrapper, String> productNameColumn;
     @FXML
-    private TableColumn<PurchaseProduct, Number> productQtyColumn;
+    private TableColumn<ProductImportWrapper, Number> productQtyColumn;
     @FXML
-    private TableColumn<PurchaseProduct, Number> productPurchasePriceColumn;
+    private TableColumn<ProductImportWrapper, Number> productPurchasePriceColumn;
 
     /**
      * Initializes the controller class.
@@ -50,13 +50,13 @@ public class ProductImportTableController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        // PurchaseProduct- obyekti nin Propertileri
+        // ProductImportWrapper- obyekti nin Propertileri
         idColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
         productNameColumn.setCellValueFactory(cellData -> cellData.getValue().getProduct().nameProperty());
         totalPriceColumn.setCellValueFactory(cellData -> cellData.getValue().totalPriceProperty());
         purchaseDateColumn.setCellValueFactory(cellData -> cellData.getValue().purchaseDateProperty());
 
-        // PurchaseProduct -in Icindeki Product Obyekyinin - Propertileri
+        // ProductImportWrapper -in Icindeki Product Obyekyinin - Propertileri
         productNameColumn.setCellValueFactory(cellData -> cellData.getValue().getProduct().nameProperty());
         productQtyColumn.setCellValueFactory(cellData -> cellData.getValue().getProduct().qtyProperty());
         productPurchasePriceColumn.setCellValueFactory(cellData -> cellData.getValue().getProduct().purchasePriceProperty());
@@ -66,7 +66,7 @@ public class ProductImportTableController implements Initializable {
 
     public void updateTable() {
 
-        ArrayList<PurchaseProduct> list = new PurchaseProductDAO().getAll();
+        ArrayList<ProductImportWrapper> list = new PurchaseProductDAO().getAll();
 
         if (!list.isEmpty()) {
             purchaseProductList.clear();

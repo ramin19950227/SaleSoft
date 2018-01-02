@@ -130,9 +130,9 @@ public class ProductTableController implements Initializable {
 
         //Heleki Qerara aldiq ki ad ve Qeyd-den bashqa hecneyi Redakte etmek olmasin
         // hele SAYI hec olmaz
-        qtyField.setDisable(true);
-        purchasePriceField.setDisable(true);
-        barCodeField.setDisable(true);
+        qtyField.setEditable(false);
+        purchasePriceField.setEditable(false);
+        barCodeField.setEditable(false);
 
         //cedvelimizde Excelde oldugu kimi xanalari REDAKTE ede bilmek ucun
         //bu metodun parametrine true vermek lazimdir 

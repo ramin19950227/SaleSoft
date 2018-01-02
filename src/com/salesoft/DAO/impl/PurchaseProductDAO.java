@@ -8,7 +8,7 @@ package com.salesoft.DAO.impl;
 import com.salesoft.DAO.intf.PurchaseProductDAOIntf;
 import com.salesoft.database.DBUtil;
 import com.salesoft.database.SQL;
-import com.salesoft.model.PurchaseProduct;
+import com.salesoft.model.ProductImportWrapper;
 import com.salesoft.util.MyExceptionLogger;
 import com.salesoft.util.RsToModel;
 import com.salesoft.util.UserOperationLogger;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class PurchaseProductDAO implements PurchaseProductDAOIntf {
 
     @Override
-    public void create(PurchaseProduct purchaseProduct) {
+    public void create(ProductImportWrapper purchaseProduct) {
 
         try {
             String SQLQuery = SQL.PurchaseProductSQL.CREATE(purchaseProduct.getDate(), purchaseProduct.getTotalPrice().toString(), purchaseProduct.getProduct().getId().toString(), purchaseProduct.getProduct().getName(), purchaseProduct.getProduct().getQty().toString(), purchaseProduct.getProduct().getPurchasePrice().toString(), purchaseProduct.getProduct().getBarCode(), purchaseProduct.getProduct().getNote());
@@ -39,7 +39,7 @@ public class PurchaseProductDAO implements PurchaseProductDAOIntf {
     }
 
     @Override
-    public void update(PurchaseProduct purchaseProduct) {
+    public void update(ProductImportWrapper purchaseProduct) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -49,7 +49,7 @@ public class PurchaseProductDAO implements PurchaseProductDAOIntf {
     }
 
     @Override
-    public PurchaseProduct getById(Integer id) {
+    public ProductImportWrapper getById(Integer id) {
         try {
             String SQLQuery = SQL.PurchaseProductSQL.GET(id);
 
@@ -66,8 +66,8 @@ public class PurchaseProductDAO implements PurchaseProductDAOIntf {
     }
 
     @Override
-    public ArrayList<PurchaseProduct> getAll() {
-        ArrayList<PurchaseProduct> list = new ArrayList<>();
+    public ArrayList<ProductImportWrapper> getAll() {
+        ArrayList<ProductImportWrapper> list = new ArrayList<>();
 
         try {
             String SQLQuery = SQL.PurchaseProductSQL.GET_ALL();

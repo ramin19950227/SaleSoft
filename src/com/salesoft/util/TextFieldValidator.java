@@ -27,6 +27,13 @@ public class TextFieldValidator {
         return true;
     }
 
+    public Boolean isNull(TextField field) {
+        if (field.getText() == null || field.getText().length() == 0 || field.getText().equals("")) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Verilen TextField-in icindeki yazi Kecerli Tam eded olub olmadigini
      * yoxlayir
@@ -35,7 +42,7 @@ public class TextFieldValidator {
      * @return
      */
     public Boolean isCorrectInt(TextField field) {
-        if (field.getText() == null) {
+        if (isNull(field)) {
             return false;
         }
         try {
@@ -47,7 +54,7 @@ public class TextFieldValidator {
     }
 
     public Boolean isCorrectDouble(TextField field) {
-        if (field.getText() == null) {
+        if (isNull(field)) {
             return false;
         }
         try {
@@ -56,6 +63,16 @@ public class TextFieldValidator {
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    public Boolean isNotZero(TextField field) {
+        if (isNull(field)) {
+            return false;
+        }
+        if (field.getText().equals("0") || field.getText().equals("0.0")) {
+            return false;
+        }
+        return true;
     }
 
     //buna ehtiyyac yoxdur is correctInt metodu hele bunu evezleyir

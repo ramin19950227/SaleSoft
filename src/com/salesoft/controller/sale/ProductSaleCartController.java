@@ -14,6 +14,7 @@ import com.salesoft.model.CartItem;
 import com.salesoft.model.Invoice;
 import com.salesoft.model.InvoiceItem;
 import com.salesoft.model.Product;
+import com.salesoft.util.MyJRViewer;
 import java.awt.Toolkit;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -777,7 +778,7 @@ public class ProductSaleCartController implements Initializable {
         // o zaman  qaime nomresi ile cap bolumune kec bir basha printe
         // heleki hele edecem bir basha printe sonra dizayn vererem
         //cap et funksiyasi Yeni Construktor ile
-        new PrintInvoice(invoiceId).start();
+        MyJRViewer.showSATISH_QAIMESI(new InvoiceDAO().get(invoiceId));
 
     }
 }
