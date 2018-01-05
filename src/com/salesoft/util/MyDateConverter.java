@@ -40,7 +40,8 @@ public class MyDateConverter {
     public static class utilDate {
 
         /**
-         * Default Format is = "dd-MM-yyyy, HH:mm:ss"
+         * Default Format is = "dd-MM-yyyy, HH:mm:ss", if wont use this string
+         * for file name use replaceAll(":", "-")
          *
          * @param date - Java Util Date
          * @return - String of date = "dd-MM-yyyy, HH:mm:ss"

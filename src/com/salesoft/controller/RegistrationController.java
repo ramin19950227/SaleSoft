@@ -1,4 +1,3 @@
- 
 package com.salesoft.controller;
 
 import com.salesoft.DAO.impl.UserDAO;
@@ -15,15 +14,8 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -135,11 +127,8 @@ public class RegistrationController implements Initializable {
                 Optional<ButtonType> result = alert.showAndWait();
 
                 if (result.isPresent() && result.get() == ButtonType.OK) {
-                    try {
-                        hlLogin(event);
-                    } catch (IOException ex) {
-                        Logger.getLogger(RegistrationController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    Stage stage = (Stage) btnClearPass.getScene().getWindow();
+                    stage.close();
                 }
             };
 

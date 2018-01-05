@@ -40,9 +40,9 @@ public class DBUtil {
         // MySQL driverini hazirlayiriq teyin edirik
         try {
             Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            System.out.println("ClassNotFoundException -  DBUtil.static{}: " + e);
-            MyExceptionLogger.logException("ClassNotFoundException - DBUtil.static{}", e);
+        } catch (ClassNotFoundException ex) {
+            new ExceptionShowDialog(ex).showAndWait();
+            MyExceptionLogger.logException("ClassNotFoundException - DBUtil.static{}", ex);
         }
     }
 
@@ -163,9 +163,9 @@ public class DBUtil {
         try {
             conn = DriverManager.getConnection(MyProperties.getDBProperties().getDirectUrl());
             return true;
-        } catch (SQLException e) {
-            System.out.println("SQLException -  DBUtil.hasConnetion(): " + e);
-            MyExceptionLogger.logException("SQLException - DBUtil.hasConnetion()", e);
+        } catch (SQLException ex) {
+            new ExceptionShowDialog(ex).showAndWait();
+            MyExceptionLogger.logException("SQLException - DBUtil.hasConnetion()", ex);
             return false;
         }
     }
@@ -182,9 +182,9 @@ public class DBUtil {
         try {
             conn = DriverManager.getConnection(MyProperties.getDBProperties().getDbUrl());
             return true;
-        } catch (SQLException e) {
-            System.out.println("SQLException -  DBUtil.hasDBConnetion(): " + e);
-            MyExceptionLogger.logException("SQLException - DBUtil.hasDBConnetion()", e);
+        } catch (SQLException ex) {
+            new ExceptionShowDialog(ex).showAndWait();
+            MyExceptionLogger.logException("SQLException - DBUtil.hasDBConnetion()", ex);
             return false;
         }
     }
@@ -218,19 +218,19 @@ public class DBUtil {
             socket.close();
             return true;
 
-        } catch (ConnectException e) {
-            System.out.println("ConnectException -  DBUtil.isServerRunning(): " + e);
-            MyExceptionLogger.logException("ConnectException - DBUtil.isServerRunning()", e);
+        } catch (ConnectException ex) {
+            System.err.println("ConnectException");
+            MyExceptionLogger.logException("ConnectException - DBUtil.isServerRunning()", ex);
             return false;
 
-        } catch (UnknownHostException e) {
-            System.out.println("UnknownHostException -  DBUtil.isServerRunning(): " + e);
-            MyExceptionLogger.logException("UnknownHostException - DBUtil.isServerRunning()", e);
+        } catch (UnknownHostException ex) {
+            System.err.println("UnknownHostException");
+            MyExceptionLogger.logException("UnknownHostException - DBUtil.isServerRunning()", ex);
             return false;
 
-        } catch (IOException e) {
-            System.out.println("IOException -  DBUtil.isServerRunning(): " + e);
-            MyExceptionLogger.logException("IOException - DBUtil.isServerRunning()", e);
+        } catch (IOException ex) {
+            System.err.println("IOException");
+            MyExceptionLogger.logException("IOException - DBUtil.isServerRunning()", ex);
             return false;
 
         }

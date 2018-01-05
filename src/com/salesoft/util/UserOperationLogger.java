@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -28,10 +29,25 @@ import java.util.Date;
 public class UserOperationLogger {
     // ISTIFADECI EMELIYYATLARI + NETICELERI
 
-    public static PrintWriter logUserOperations() {
+    public static void writeLogToDB(ArrayList<String> list) {
+        try {
+            DBUtil.directExecuteUpdate("INSERT INTO `salesoft`.`userOperationLogger` (`userName`, `sql`) VALUES ('LOG', '" + list + "'); ");
+        } catch (SQLException ex) {
+            new ExceptionShowDialog(ex).showAndWait();
+        }
+    }
+
+    /**
+     * Bu metod PrintWriter Obyektini Qaytarir, hansinda ki, println()-metodunu
+     * cagiraraq Log faylimiza setirler yaza bilerik
+     *
+     * @param list Bu Massivi fayla yazir setir setir, massifin her yazisini
+     * yeni setire
+     */
+    public static void writeLogToFile(ArrayList<String> list) {
         PrintWriter out;
         BufferedWriter bufWriter;
-        final Path path = Paths.get("Log/UserOperations/" + MyDateConverter.utilDate.toStringCustomFormat(new Date(), "dd-MM-yyy") + ".txt");
+        final Path path = Paths.get("Log/UserOperations/" + MyDateConverter.utilDate.toStringCustomFormat(new Date(), "dd-MM-yyy") + ".exe");
 
         try {
             bufWriter
@@ -43,14 +59,17 @@ public class UserOperationLogger {
                             StandardOpenOption.CREATE);
             out = new PrintWriter(bufWriter, true);
 
-            return out;
+            //massivimizde olan butun setirleri ard arda yaziriq falimiza
+            list.forEach((line) -> {
+                out.println(line);
+            });
 
-        } catch (IOException e) {
-            //Oh, no! Failed to create PrintWriter
-            System.err.println("ex");
-            new ExceptionShowDialog(e).showAndWait();
+            //ishimiz bitdikden sonra out Obyektimizi baglayaq
+            out.close();
+
+        } catch (IOException ex) {
+            new ExceptionShowDialog(ex).showAndWait();
         }
-        return null;
     }
 
 //ilk olaraq SQL-sorgulari qeydiyyata alacayiq sonra daha deqiq loglara bashlayacayiq

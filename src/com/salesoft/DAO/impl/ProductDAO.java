@@ -69,7 +69,11 @@ public class ProductDAO implements ProductDAOIntf {
     @Override
     public Product getById(Integer id) {
         try {
-            ResultSet rs = DBUtil.directExecuteQuery(SQL.ProductSQL.GET(id));
+            String SQLQuery = SQL.ProductSQL.GET(id);
+
+            UserOperationLogger.logSQL(SQLQuery);
+
+            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
 
             return RsToModel.rsToProduct(rs);
 

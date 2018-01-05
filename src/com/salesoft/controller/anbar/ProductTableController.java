@@ -114,6 +114,26 @@ public class ProductTableController implements Initializable {
     }
 
     /**
+     * Edit Bolumu
+     * ///////////////////////////////////////////////////////////////////////////////////////////////
+     *
+     *
+     *
+     */
+    @FXML
+    private Label idLabel;
+    @FXML
+    private TextField nameField;
+    @FXML
+    private TextField qtyField;
+    @FXML
+    private TextField purchasePriceField;
+    @FXML
+    private TextField barCodeField;
+    @FXML
+    private TextField noteField;
+
+    /**
      * Controllerin inicializasiyasi ucun bu metod istifade olunur bu sehife
      * yuklenende avtomatik cagrilir burada biz tablemizi init ede bilerik yani
      * hazirlaya bilerik Mehsullari gosteren sehife yuklenen kimi bosh
@@ -307,26 +327,6 @@ public class ProductTableController implements Initializable {
             productTable.setItems(productList);
         }
     }
-
-    /**
-     * Edit Bolumu
-     * ///////////////////////////////////////////////////////////////////////////////////////////////
-     *
-     *
-     *
-     */
-    @FXML
-    private Label idLabel;
-    @FXML
-    private TextField nameField;
-    @FXML
-    private TextField qtyField;
-    @FXML
-    private TextField purchasePriceField;
-    @FXML
-    private TextField barCodeField;
-    @FXML
-    private TextField noteField;
 
     /**
      * edit bolumunde yadda saxla duymesini basanda bu ishde dushur
