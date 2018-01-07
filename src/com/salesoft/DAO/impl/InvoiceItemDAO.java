@@ -29,7 +29,7 @@ public class InvoiceItemDAO implements InvoiceItemDAOIntf {
 
             UserOperationLogger.logSQL(SQLQuery);
 
-            DBUtil.directExecuteUpdate(SQLQuery);
+            DBUtil.mySQLExecuteUpdate(SQLQuery);
         } catch (SQLException ex) {
             MyExceptionLogger.logException("SQLException - InvoiceItemDAO.create(InvoiceItem item)", ex);
         }
@@ -42,7 +42,7 @@ public class InvoiceItemDAO implements InvoiceItemDAOIntf {
 
             UserOperationLogger.logSQL(SQLQuery);
 
-            DBUtil.directExecuteUpdate(SQLQuery);
+            DBUtil.mySQLExecuteUpdate(SQLQuery);
         } catch (SQLException ex) {
             MyExceptionLogger.logException("SQLException - InvoiceItemDAO.create(InvoiceItem item)", ex);
         }
@@ -72,7 +72,7 @@ public class InvoiceItemDAO implements InvoiceItemDAOIntf {
 
             ArrayList<InvoiceItem> list;
 
-            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
+            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
 
             list = RsToModel.rsToInvoiceItemList(rs);
 

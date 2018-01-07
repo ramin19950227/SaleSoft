@@ -6,10 +6,13 @@
 package com.salesoft.controller.anbar;
 
 import com.salesoft.DAO.impl.ProductDAO;
-import com.salesoft.MainApp;
 import com.salesoft.model.Product;
+import com.salesoft.util.MyDateConverter;
+import com.salesoft.util.UserOperationLogger;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -35,91 +38,21 @@ import javafx.scene.input.KeyEvent;
  */
 public class ProductTableController implements Initializable {
 
-    /**
-     * mainApp bu properti esas Java Klass olan MainApp klasinin Obyektinin
-     * linkini saxlayacaq ozunde bunu setMainApp(MainApp mainApp) metodu ile
-     * sehifeni Yukledimiz zaman linkin set edirik ki bize bashqa bir sehifeni
-     * yuklemek lazim olduqda bunu rahatliqla ede bilek
-     */
-    private MainApp mainApp;
-
-    public void setMainApp(MainApp mainApp) {
-        this.mainApp = mainApp;
-        searchField.requestFocus();
-    }
-
-    /**
-     * bu properti ozunde cedvelde gosterilecek melumatlari saxlayir ve Bazadan
-     * yenilendikden sonra bu ObservableList-de saxlanacaq
-     *
-     */
-    private final ObservableList<Product> productList = FXCollections.observableArrayList();
-
-    /**
-     * productTable - cedvelimizin obyekti
-     */
     @FXML
     private TableView<Product> productTable;
-
-    /**
-     * nameColumn - Ad Sutunu
-     */
     @FXML
     private TableColumn<Product, String> nameColumn;
-
-    /**
-     * qtyColumn - Say Sutunu diqqet integer tipli sutun ucun Product, Integer
-     * yox Product, Number yazmaq lazimdir
-     */
     @FXML
     private TableColumn<Product, Number> qtyColumn;
-
-    /**
-     * purchasePriceColumn - Alih Qiymeti Sutunu diqqet Double tipli sutun ucun
-     * Product, Double yox Product, Number yazmaq lazimdir
-     */
     @FXML
     private TableColumn<Product, Number> purchasePriceColumn;
-
-    /**
-     * barCodeColumn - Barcod Sutunu
-     */
     @FXML
     private TableColumn<Product, String> barCodeColumn;
-
-    /**
-     * noteColumn - Qeyd Sutunu
-     */
     @FXML
     private TableColumn<Product, String> noteColumn;
 
-    /**
-     * Axtarish ucun istifade olunur
-     */
-    @FXML
-    private TextField searchField;
+    private final ObservableList<Product> productObservableList = FXCollections.observableArrayList();
 
-    //cedvelden mehsulu secdikde bura yazilir
-    Product selectedProduct = null;
-    private final ProductDAO ProductDAO = new ProductDAO();
-
-    /**
-     * searchFieldReleased method
-     */
-    @FXML
-    private void searchFieldReleased() {
-        String data = searchField.getText();
-        System.out.println(data);
-        updateTable(data);
-    }
-
-    /**
-     * Edit Bolumu
-     * ///////////////////////////////////////////////////////////////////////////////////////////////
-     *
-     *
-     *
-     */
     @FXML
     private Label idLabel;
     @FXML
@@ -132,6 +65,14 @@ public class ProductTableController implements Initializable {
     private TextField barCodeField;
     @FXML
     private TextField noteField;
+
+    @FXML
+    private TextField searchField;
+
+    //cedvelden mehsulu secdikde bura yazilir
+    private Product selectedProduct = null;
+    private final ProductDAO ProductDAO = new ProductDAO();
+    private final PrintWriter LOGWriter = UserOperationLogger.getLogWriter();
 
     /**
      * Controllerin inicializasiyasi ucun bu metod istifade olunur bu sehife
@@ -147,184 +88,188 @@ public class ProductTableController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        LOGWriter.println("");
+        LOGWriter.println("__________________________________________________________________________");
+        LOGWriter.println("ProductTableController.initialize()");
+        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
 
         //Heleki Qerara aldiq ki ad ve Qeyd-den bashqa hecneyi Redakte etmek olmasin
-        // hele SAYI hec olmaz
         qtyField.setEditable(false);
         purchasePriceField.setEditable(false);
         barCodeField.setEditable(false);
 
-        //cedvelimizde Excelde oldugu kimi xanalari REDAKTE ede bilmek ucun
-        //bu metodun parametrine true vermek lazimdir 
+        nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        qtyColumn.setCellValueFactory(cellData -> cellData.getValue().qtyProperty());
+        purchasePriceColumn.setCellValueFactory(cellData -> cellData.getValue().purchasePriceProperty());
+        barCodeColumn.setCellValueFactory(cellData -> cellData.getValue().barCodeProperty());
+        noteColumn.setCellValueFactory(cellData -> cellData.getValue().noteProperty());
+        noteColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+
         productTable.setEditable(true);
-
-        productTable.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> {
-
-                    // bazada axtarish verdikde Error cixirdi
-                    // bu JavaFx-de table view cox qeribedir eee oz ozune avtomatik bu metodu cagirir
-                    // ona gore birinci yoxlayiram sonra.
-                    // yoxsa gonderirem ve error cixir nullPointerException
-                    if (newValue != null) {
-                        setProductToEdit(newValue);
-                    }
-                });
-
-        // delduyymesi basildiqda mehsulu silir (Secilmish mehsulu Bazadan Silir)
-        productTable.setOnKeyReleased((KeyEvent t) -> {
-            KeyCode key = t.getCode();
-            if (key == KeyCode.DELETE) {
-                handleDelete();
+        productTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                setProductToEdit(newValue);
             }
-
         });
 
-        // (nameColumn) bu Sutundaki emeliyyatlari aciqlayaraq gosterecem obirileri qisaca edecem
-        //Cedvelimizin sutunlarini inicializasiya edirik
-        //adlarimiz cedvelde gosteririk
-        nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        // del duymesi basildiqda mehsulu silir (Secilmish mehsulu Bazadan Silir)
+        productTable.setOnKeyReleased((KeyEvent event) -> {
+            if (event.getCode() == KeyCode.DELETE) {
+                handleDelete();
+            }
+        });
 
-        //mehsul adini edit etmek ucun bu metodlardan istifade olunur
-        nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-
-        // xanaya tiklayib deyishiklik edib ve enteri basdiqda 
-        // bu metod acilir
         nameColumn.setOnEditCommit((CellEditEvent<Product, String> t) -> {
-            //mehsulumuz redakte olunduqdn sonra enteri basdiqda bu metod ishe dushur
 
-            // mehsulumuzi aldiq AMMA icindeki kohne addir
-            Product product = t.getRowValue();
+            LOGWriter.println("");
+            LOGWriter.println("__________________________________________________________________________");
+            LOGWriter.println("ProductTableController.nameColumnOnEditCommit()");
+            LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+            LOGWriter.println("Old Name: " + t.getOldValue());
+            LOGWriter.println("New Name: " + t.getNewValue());
 
-            //teyin etdiyimiz yeni ADI-da alaq
-            String newName = t.getNewValue();
+            Product oldProduct = t.getRowValue();
+            Product newProduct = t.getRowValue().dublicateThisProduct();
 
-            // yeni adi yazaq mehsula
-            product.setName(newName);
+            newProduct.setName(t.getNewValue());
 
-            //mehsulu bazadada yenileyek
-            ProductDAO.update(product);
+            ProductDAO.update(newProduct);
+
+            LOGWriter.println("Product Updated");
+            LOGWriter.println("");
+            LOGWriter.println("Product OLD State: " + oldProduct);
+            LOGWriter.println("Product New State: " + newProduct);
 
             //redakte tamamlandiqdan sonra yenilenmish melumati ve mehsulun id-sini
             //gonderirik DAO class-ina ki, Melumat bazasinda yenileyek
             //ProductUpdateDAO.updateProductNameById(t.getRowValue().getId(), t.getNewValue());
             // mehsulun yeni adini melumat bazasina gonderib yeniledikden sonra Cedvelimizi yenileyirik
             // yani mehsullarin siyahisini bazadan yeniden yukleyirik
-            updateTable("");
+            showAllProductInTable();
 
             // cedvelimizi bazadan yeniledikden sonra mehsulumuzu 
             //  select edirik, yani secirik ki Edit panelinede dushsun yeni melumatlar
             productTable.getSelectionModel().select(t.getRowValue());
         });
 
-        qtyColumn.setCellValueFactory(cellData -> cellData.getValue().qtyProperty());
-
-//        qtyColumn.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
-//        qtyColumn.setOnEditCommit((CellEditEvent<Product, Number> t) -> {
-//            t.getRowValue().setQty(t.getNewValue().intValue());
-//            ProductDAO.update(t.getRowValue());
-//            updateTable("");
-//            productTable.getSelectionModel().select(t.getRowValue());
-//
-//        });
-        purchasePriceColumn.setCellValueFactory(cellData -> cellData.getValue().purchasePriceProperty());
-//        purchasePriceColumn.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
-//        purchasePriceColumn.setOnEditCommit((CellEditEvent<Product, Number> t) -> {
-//            t.getRowValue().setPurchasePrice(t.getNewValue().doubleValue());
-//            ProductDAO.update(t.getRowValue());
-//            updateTable("");
-//            productTable.getSelectionModel().select(t.getRowValue());
-//
-//        });
-
-        barCodeColumn.setCellValueFactory(cellData -> cellData.getValue().barCodeProperty());
-//        barCodeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-//        barCodeColumn.setOnEditCommit((CellEditEvent<Product, String> t) -> {
-//            t.getRowValue().setBarCode(t.getNewValue());
-//            ProductDAO.update(t.getRowValue());
-//            updateTable("");
-//            productTable.getSelectionModel().select(t.getRowValue());
-//
-//        });
-
-        noteColumn.setCellValueFactory(cellData -> cellData.getValue().noteProperty());
-        noteColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         noteColumn.setOnEditCommit((CellEditEvent<Product, String> t) -> {
-            t.getRowValue().setNote(t.getNewValue());
-            ProductDAO.update(t.getRowValue());
-            updateTable("");
+            LOGWriter.println("");
+            LOGWriter.println("__________________________________________________________________________");
+            LOGWriter.println("ProductTableController.noteColumnOnEditCommit()");
+            LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+
+            LOGWriter.println("Old Note: " + t.getOldValue());
+            LOGWriter.println("New Note: " + t.getNewValue());
+
+            Product oldProduct = t.getRowValue();
+            Product newProduct = t.getRowValue().dublicateThisProduct();
+
+            newProduct.setNote(t.getNewValue());
+
+            ProductDAO.update(newProduct);
+
+            LOGWriter.println("Product Updated");
+            LOGWriter.println("");
+            LOGWriter.println("Product OLD State: " + oldProduct);
+            LOGWriter.println("Product New State: " + newProduct);
+
+            showAllProductInTable();
             productTable.getSelectionModel().select(t.getRowValue());
 
         });
 
-        // bu cedvel bosh olduqda xeberdarliq cixarir yani meselen mehsul yoxdur ve s.
-        productTable.setPlaceholder(new Label("Məhsul Yoxdur"));
-
-        updateTable("");
+        showAllProductInTable();
         setProductToEdit(null);
     }
 
     /**
-     * Cedveli Yenilemek ucun bu metodu cagirmaq lazimdir bu metod
-     * ProductDAO-dan malumatlari ArrayListde alir ve yoxlayir bosh deyilse o
-     * zaman Tableye yerleshdirir.
-     *
-     * @param data - demeli ele bu metod bele ishleyir, daxil olan melumati
-     * birinci probelleri silir evvelden ve axirdan tirim() ile sonra onu
-     * yoxlayir eger *(Ulduz)-dursa ve ya boshdursa o zaman hamsini gosterir YOX
-     * EGER deyilse o zaman barcod olub olmadigini yoxlayir ve EGER barcod ile
-     * axtarish ugurlu alinirsa o zaman o neticeni gosterir YOX EGER barcod
-     * alinmadisa o zaman ad ile axtarish edir axtarishi da GLOBAL (global match
-     * % ? %) edir bu o demek dirki evvelden ortadan ve ya axirdan her hansi
-     * hisse uygun gelse onu gosterecek meselen b herfi yazsam hansi mehsulun
-     * adinda b varsa onlari gosterecek YOX EGER ad ile axtarishda ugurlu
-     * alinmadisa o zaman hecne gostermir ObservableList-i .clear() edir yani
-     * temizleyir ve bosh listi cedvele yerleshdirir yani hecne gostermir bosh
-     * cedvel gorsenir ve bu da o demekdirki hecne tapmadiq :)))
-     *
-     *
+     * Bu metod Axtarish xanasinda Klaviaturadan her hansi bir duyme basilib
+     * buraxildiqdan sonra avtomatik ishe dushur
      */
-    private void updateTable(String data) {
-        data = data.trim();
+    @FXML
+    private void searchFieldReleased() {
+        String searchData = searchField.getText().trim();
 
-        if (data.equals("*") || data.equals("")) {//eger daxil olan  * dursa ve ya bosh setirdirse o zaman hamsini goster
-            //eger daxil olan data ULDUZ-durza (*) onda hamsini goster
-            //bazya sorgu edirik ve butun mehsullari isteyirik
-            //varsa qaytaracaq yoxdursa null qaytaracaq
-            ArrayList<Product> requestList = ProductDAO.getAll();
+        //balaca bir yoxlama edek, eger daxil edilen melumat probeldirse ve ya boshdursa o zaman davam etmeyek
+        // bu veziyyetde updateTable(); cagiraq ki sadece butun mehsullari goster yani hec bir axtarish etmiyek
+        //ve Metod-dan cixaq return; ile
+        if (searchData.isEmpty()) {
+            //butun mehsullari goster
+            showAllProductInTable();
+            //ve bu metodu artiq sonlandir ve davam etme
+            return;
+        }
 
-            // yoxlayiriq eger requestList bosh deyilse
-            // onda if blokundaki emirleri edirik
-            if (requestList != null) {
+        LOGWriter.println("");
+        LOGWriter.println("__________________________________________________________________________");
+        LOGWriter.println("ProductTableController.searchFieldReleased()");
+        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
 
-                // Listimizi temizleyirik
-                productList.clear();
+        LOGWriter.println("searchData: " + searchData);
 
-                // Bazadan DAO sayesinde aldigimiz listi -> ObservableList-e keciririk
-                productList.addAll(requestList);
+        if (!ProductDAO.searchByNameLike(searchData).isEmpty()) {//adla axtarib tapdisa bu blok ishe dushecek
+            ArrayList<Product> requestList = ProductDAO.searchByNameLike(searchData);
+            LOGWriter.println("Find by Name Like: " + searchData);
+            LOGWriter.println(requestList);
 
-                //Observable Listde olan melumatlari 
-                //cedvelimize yerleshdiririk
-                productTable.setItems(productList);
-            } else {
+            productObservableList.clear();
+            productObservableList.addAll(requestList);
+            productTable.setItems(productObservableList);
 
-            }
-            //yoxlama Eger daxil edilen melumat barcoddursa o zaman songu gonderib  cavabini
-            // yoxlayiriq ve eger barcoddursao zaman sorgunun cavabina mehsul Listi gelmelidir
-        } else if (!ProductDAO.searchByNameLike(data).isEmpty()) {//adla axtarib tapdisa bu blok ishe dushecek
-            ArrayList<Product> requestList = ProductDAO.searchByNameLike(data);
+        } else if (!ProductDAO.searchByBarcode(searchData).isEmpty()) {// barcodla tapdisa bu blok ishe dushecek
+            ArrayList<Product> requestList = ProductDAO.searchByBarcode(searchData);
+            LOGWriter.println("Find by Barcode: " + searchData);
+            LOGWriter.println(requestList);
 
-            productList.clear();
-            productList.addAll(requestList);
-            productTable.setItems(productList);
-        } else if (!ProductDAO.searchByBarcode(data).isEmpty()) {// barcodla tapdisa bu blok ishe dushecek
-            ArrayList<Product> requestList = ProductDAO.searchByBarcode(data);
+            productObservableList.clear();
+            productObservableList.addAll(requestList);
+            productTable.setItems(productObservableList);
 
-            productList.clear();
-            productList.addAll(requestList);
-            productTable.setItems(productList);
-        } else { // hec biri deyilse o zaman bu ishe dushecek
-            productList.clear();
-            productTable.setItems(productList);
+        } else {
+            LOGWriter.println("No thins find");
+            productTable.setPlaceholder(new Label("Axtardiginiz Melumata ( " + searchData + " ) uygun hecbir mehsul tapilmadi"));
+            productTable.setItems(null);
+        }
+    }
+
+    /**
+     * Bu Metod sadece Bazada Olan butun mehsullari gosterir
+     */
+    private void showAllProductInTable() {
+
+        LOGWriter.println("");
+        LOGWriter.println("__________________________________________________________________________");
+        LOGWriter.println("ProductTableController.showAllProductInTable()");
+        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+
+        ArrayList<Product> productList = ProductDAO.getAll();
+
+        if (productList == null) {
+            LOGWriter.println("productList isNull");
+
+        } else if (productList.isEmpty()) {
+            LOGWriter.println("productList isEmpty");
+
+            // cedvel bosh olduqda xeberdarliq cixaririq yani meselen mehsul yoxdur ve s.
+            productTable.setPlaceholder(new Label(""
+                    + "Anbarda Qeydiyyata alınmış Məhsul Yoxdur \n\n"
+                    + "Yeni məhsul Qeydiyyata Almaq üçün  "
+                    + "\nÜst Panelde yerləşən Qeydiyyat bölümünə daxil olun"
+                    + "\nVə ya Yeni Məhsul Mədaxil edin"));
+
+            productTable.setItems(null);
+
+        } else if (!productList.isEmpty()) {
+            LOGWriter.println("productList.size()=" + productList.size());
+
+            productList.forEach(p -> {
+                LOGWriter.println(p);
+            });
+
+            productObservableList.clear();
+            productObservableList.addAll(productList);
+            productTable.setItems(productObservableList);
         }
     }
 
@@ -333,29 +278,54 @@ public class ProductTableController implements Initializable {
      */
     @FXML
     private void handleSave() {
+        LOGWriter.println("");
+        LOGWriter.println("__________________________________________________________________________");
+        LOGWriter.println("ProductTableController.handleSave()");
+        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
 
-        boolean isValid = isInputValid();
+        LOGWriter.println("nameField: " + nameField.getText());
+        LOGWriter.println("qtyField: " + qtyField.getText());
+        LOGWriter.println("purchasePriceField: " + purchasePriceField.getText());
+        LOGWriter.println("barCodeField: " + barCodeField.getText());
+        LOGWriter.println("noteField: " + noteField.getText());
 
-        if (isValid && selectedProduct != null) {
+        if (isInputValid()) {
+            LOGWriter.println("");
+            LOGWriter.println("Input is Valid");
 
-            selectedProduct.setName(nameField.getText());
-            selectedProduct.setQty(Integer.valueOf(qtyField.getText()));
-            selectedProduct.setPurchasePrice(Double.valueOf(purchasePriceField.getText()));
-            selectedProduct.setBarCode(barCodeField.getText());
-            selectedProduct.setNote(noteField.getText());
+            if (selectedProduct != null) {
 
-            ProductDAO.update(selectedProduct);
+                LOGWriter.println("Product is Selected");
+                LOGWriter.println("Product Updated");
 
-            updateTable("");
+                LOGWriter.println("Product OLD state: " + selectedProduct);
 
-        } else if (isValid && selectedProduct == null) {
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("Mehsulu Secin");
-            alert.setHeaderText("Zehmet olmasa Mehsulu Cedvelden Secin");
-            alert.setContentText("Redakte etmek istediyiniz mehsulu secin");
+                selectedProduct.setName(nameField.getText());
+                selectedProduct.setQty(Integer.valueOf(qtyField.getText()));
+                selectedProduct.setPurchasePrice(Double.valueOf(purchasePriceField.getText()));
+                selectedProduct.setBarCode(barCodeField.getText());
+                selectedProduct.setNote(noteField.getText());
 
-            alert.showAndWait();
+                ProductDAO.update(selectedProduct);
+                LOGWriter.println("Product NEW state: " + selectedProduct);
+
+                showAllProductInTable();
+
+            } else if (selectedProduct == null) {
+                LOGWriter.println("");
+                LOGWriter.println("Selected Product is Null");
+                LOGWriter.println("Showing Alert");
+
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Mehsulu Secin");
+                alert.setHeaderText("Zehmet olmasa Mehsulu Cedvelden Secin");
+                alert.setContentText("Redakte etmek istediyiniz mehsulu secin");
+
+                alert.showAndWait();
+            }
+        } else {
+            LOGWriter.println("");
+            LOGWriter.println("Input is NOT Valid");
         }
     }
 
@@ -364,6 +334,12 @@ public class ProductTableController implements Initializable {
      */
     @FXML
     private void handleCansel() {
+        LOGWriter.println("");
+        LOGWriter.println("__________________________________________________________________________");
+        LOGWriter.println("ProductTableController.handleCansel()");
+        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+
+        productTable.getSelectionModel().clearSelection();
         setProductToEdit(null);
         searchField.requestFocus();
     }
@@ -373,14 +349,24 @@ public class ProductTableController implements Initializable {
      */
     @FXML
     private void handleDelete() {
+        LOGWriter.println("");
+        LOGWriter.println("__________________________________________________________________________");
+        LOGWriter.println("ProductTableController.handleDelete()");
+        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+
         if (selectedProduct == null) {
+            LOGWriter.println("Selected Product is NULL");
+            LOGWriter.println("Showing Alert");
+
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Mehsulu Secin");
             alert.setHeaderText("Zehmet olmasa Mehsulu Secin");
             alert.setContentText("Zehmet Olmasa Silmek istediyiniz Mehsulu Secin");
-
             alert.showAndWait();
+
         } else {
+            LOGWriter.println("Selected Product is: " + selectedProduct);
+            LOGWriter.println("User Confirmation Waiting");
 
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Mehsulun Bazadan Silinmesi");
@@ -389,15 +375,19 @@ public class ProductTableController implements Initializable {
             Optional<ButtonType> action = alert.showAndWait();
 
             if (action.get() == ButtonType.OK) {
+                LOGWriter.println("Deleting Confirmed, OK button is Pressed");
+                LOGWriter.println("Deleting Product: " + selectedProduct);
                 ProductDAO.delete(selectedProduct.getId());
+                LOGWriter.println("DELETED!!!");
+            } else {
+                LOGWriter.println("Deleting Cancelled");
             }
-
-            updateTable("");
-
-            //Mesulu Sildikden sonra xanalari da temizleyek
-            handleCansel();
-
         }
+
+        showAllProductInTable();
+
+        //Mesulu Sildikden sonra xanalari da temizleyek
+        handleCansel();
     }
 
     /**
@@ -408,8 +398,15 @@ public class ProductTableController implements Initializable {
      */
     private void setProductToEdit(Product product) {
         selectedProduct = product;
-
         if (product != null) {
+
+            LOGWriter.println("");
+            LOGWriter.println("__________________________________________________________________________");
+            LOGWriter.println("ProductTableController.setProductToEdit()");
+            LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+
+            LOGWriter.println("Selected Product is: " + product);
+
             // Заполняем метки информацией из объекта person.
             idLabel.setText(product.getId().toString());
             nameField.setText(product.getName());
@@ -491,7 +488,6 @@ public class ProductTableController implements Initializable {
         } else {
             // Показываем сообщение об ошибке.
             Alert alert = new Alert(AlertType.ERROR);
-            alert.initOwner(mainApp.getPrimaryStage());
             alert.setTitle("Dogru Daxil edin");
             alert.setHeaderText("Zehmet olmasa Mehsulun melumatlarini dogru daxil edin");
             alert.setContentText(errorMessage);

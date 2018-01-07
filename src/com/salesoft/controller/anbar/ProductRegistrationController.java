@@ -8,8 +8,12 @@ package com.salesoft.controller.anbar;
 import com.salesoft.DAO.impl.ProductDAO;
 import com.salesoft.controller.ApplicationController;
 import com.salesoft.model.Product;
+import com.salesoft.util.MyDateConverter;
 import com.salesoft.util.MyView;
+import com.salesoft.util.UserOperationLogger;
+import java.io.PrintWriter;
 import java.net.URL;
+import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,7 +34,6 @@ public class ProductRegistrationController implements Initializable {
 
     @FXML
     private TextField bTF, nTF;
-    private String lastCorrectBarCode;
 
     @FXML
     private Label bWL, nWL;
@@ -39,7 +42,8 @@ public class ProductRegistrationController implements Initializable {
     private Button saveButton, clearButton;
 
     private final ProductDAO productDAO = new ProductDAO();
-    MyView myView = new MyView();
+    private final MyView myView = new MyView();
+    private final PrintWriter LOGWriter = UserOperationLogger.getLogWriter();
 
     /**
      * Initializes the controller class.
@@ -49,6 +53,10 @@ public class ProductRegistrationController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        System.out.println("");
+        System.out.println("__________________________________________________________________________");
+        System.out.println("ProductRegistrationController.initialize()");
+        System.out.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
 
         saveButton.setOnAction(value -> {
             okButtonOnAction();
@@ -71,26 +79,40 @@ public class ProductRegistrationController implements Initializable {
             nameFieldOnKeyReleased();
         });
 
-        // her ehtimala qarshi init edirem ki birden NullPoiter Cixar))
-        lastCorrectBarCode = "";
-
         bWL.setText(null);
         nWL.setText(null);
     }
 
     private void barCodeFieldOnKeyReleased() {
+        System.out.println("");
+        System.out.println("__________________________________________________________________________");
+        System.out.println("ProductRegistrationController.barCodeFieldOnKeyReleased()");
+        System.out.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
 
-        if (isBarcodeInputValid()) {
-            // eger Yoxlamadan kecdise Yadda saxlayaq
-            lastCorrectBarCode = bTF.getText();
+        System.out.println("");
+        System.out.println("Field State:");
+        System.out.println("BarCode Field: " + bTF.getText());
 
-            if (productDAO.getByBarcode(bTF.getText()) == null) {
+        Boolean isBarcodeInputValid = isBarcodeInputValid();
+
+        System.out.println("isBarcodeInputValid: " + isBarcodeInputValid);
+
+        if (isBarcodeInputValid) {
+            Product product = productDAO.getByBarcode(bTF.getText());
+
+            if (product == null) {
+
+                System.out.println("Product Not Exist. Can be Registered");
+                System.out.println(product);
 
                 myView.showOk(bIV);
                 checkButtonEnableStatus();
 
             } else {
                 checkButtonEnableStatus();
+
+                System.out.println("Product is Exist. Can NOT be Registered");
+                System.out.println(product);
 
                 myView.showNo(bIV);
                 bWL.setText("Məhsul artıq Qeytiyyatdan Keçib");
@@ -101,15 +123,24 @@ public class ProductRegistrationController implements Initializable {
 
             myView.showNo(bIV);
 
-            // eger mushteririn daxil elediyi yazi Yoxlamani kecmedise onu evvelki dogru ile evez edek
-            bTF.setText(lastCorrectBarCode);
         }
 
     }
 
     private void nameFieldOnKeyReleased() {
+        System.out.println("");
+        System.out.println("__________________________________________________________________________");
+        System.out.println("ProductRegistrationController.nameFieldOnKeyReleased()");
+        System.out.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
 
-        if (isNameInputValid()) {
+        System.out.println("");
+        System.out.println("Field State:");
+        System.out.println("Name Field: " + nTF.getText());
+
+        Boolean isNameInputValid = isNameInputValid();
+        System.out.println("isNameInputValid: " + isNameInputValid);
+
+        if (isNameInputValid) {
             myView.showOk(nIV);
 
             checkButtonEnableStatus();
@@ -126,7 +157,6 @@ public class ProductRegistrationController implements Initializable {
         if (bTF.getText() == null || bTF.getText().length() == 0) {
             bWL.setText("BarCod Daxil Edin!");
 
-            lastCorrectBarCode = "";
             return false;
         } else {
             bWL.setText(null);
@@ -167,12 +197,24 @@ public class ProductRegistrationController implements Initializable {
     }
 
     private void okButtonOnAction() {
+        System.out.println("");
+        System.out.println("__________________________________________________________________________");
+        System.out.println("ProductRegistrationController.okButtonOnAction()");
+        System.out.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+
         Product product = new Product();
 
         product.setBarCode(bTF.getText());
         product.setName(nTF.getText());
 
+        System.out.println("Registering Product");
+
         productDAO.create(product);
+
+        System.out.println(product);
+        System.out.println("Product Succes Registered");
+        System.out.println("Product Last State (After Registration) IS:");
+        System.out.println(productDAO.getByBarcode(bTF.getText()));
 
         //Anbari Gosterek
         ApplicationController.getApplicationController().btnStockOnClick();

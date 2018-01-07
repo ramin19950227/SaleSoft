@@ -51,7 +51,7 @@ public class UserDAO implements UserDAOIntf {
             UserOperationLogger.logSQL(SQLQuery);
 
             //indi ise ishimize davam edek
-            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
+            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
             if (rs.next()) {
                 return true;
             } else {
@@ -73,7 +73,7 @@ public class UserDAO implements UserDAOIntf {
             //Sorgumuzu Qeyde alaq
             UserOperationLogger.logSQL(SQLQuery);
 
-            DBUtil.directExecuteUpdate(SQLQuery);
+            DBUtil.mySQLExecuteUpdate(SQLQuery);
             return true;
 
         } catch (SQLException ex) {

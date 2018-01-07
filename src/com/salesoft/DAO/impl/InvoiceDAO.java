@@ -23,7 +23,7 @@ public class InvoiceDAO implements InvoiceDAOIntf<Invoice, Integer, String> {
             //Sorgumuzu Qeyde alaq
             UserOperationLogger.logSQL(SQLQuery);
 
-            DBUtil.directExecuteUpdate(SQLQuery);
+            DBUtil.mySQLExecuteUpdate(SQLQuery);
 
         } catch (SQLException ex) {
             MyExceptionLogger.logException("SQLException - InvoiceDAO.create(Invoice invoice)", ex);
@@ -38,7 +38,7 @@ public class InvoiceDAO implements InvoiceDAOIntf<Invoice, Integer, String> {
             //Sorgumuzu Qeyde alaq
             UserOperationLogger.logSQL(SQLQuery);
 
-            DBUtil.directExecuteUpdate(SQLQuery);
+            DBUtil.mySQLExecuteUpdate(SQLQuery);
         } catch (SQLException ex) {
             MyExceptionLogger.logException("SQLException - InvoiceDAO.update(Invoice invoice)", ex);
         }
@@ -61,7 +61,7 @@ public class InvoiceDAO implements InvoiceDAOIntf<Invoice, Integer, String> {
 
             ArrayList<InvoiceItem> list = invoiceItemDAO.getAllById(id);
 
-            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
+            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
 
             while (rs.next()) {
                 invoice = new Invoice(
@@ -92,7 +92,7 @@ public class InvoiceDAO implements InvoiceDAOIntf<Invoice, Integer, String> {
             //Sorgumuzu Qeyde alaq
             UserOperationLogger.logSQL(SQLQuery);
 
-            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
+            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
 
             while (rs.next()) {
                 list.add(new Invoice(
@@ -119,7 +119,7 @@ public class InvoiceDAO implements InvoiceDAOIntf<Invoice, Integer, String> {
 
             UserOperationLogger.logSQL(SQLQuery);
 
-            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
+            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
             while (rs.next()) {
                 list.add(
                         new Invoice(
@@ -144,7 +144,7 @@ public class InvoiceDAO implements InvoiceDAOIntf<Invoice, Integer, String> {
 
             UserOperationLogger.logSQL(SQLQuery);
 
-            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
+            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
             if (rs.next()) {
                 return rs.getInt("MAX(id)");
             } else {

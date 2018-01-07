@@ -5,10 +5,10 @@
  */
 package com.salesoft.controller.sale;
 
-import com.salesoft.controller.sale.PrintInvoice;
 import com.salesoft.DAO.impl.InvoiceDAO;
 import com.salesoft.DAO.impl.InvoiceItemDAO;
 import com.salesoft.DAO.impl.ProductDAO;
+import com.salesoft.controller.ApplicationController;
 import com.salesoft.model.Cart;
 import com.salesoft.model.CartItem;
 import com.salesoft.model.Invoice;
@@ -17,6 +17,7 @@ import com.salesoft.model.Product;
 import com.salesoft.util.MyJRViewer;
 import java.awt.Toolkit;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,6 +25,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -768,17 +770,19 @@ public class ProductSaleCartController implements Initializable {
             }
         });
 
-        String content = "Qaime №: " + invoiceId + ", Müştəri: " + customerName;
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Satish Tamamlandi");
+        alert.setHeaderText("Qaime Cap etmek isteyirsiniz?");
+        alert.setContentText("Qaime №: " + invoiceId + ", Müştəri: " + customerName);
 
-        MyAlert("Satish Tamamlandi", "Satish Tamamlandi", content);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            MyJRViewer.showSATISH_QAIMESI(new InvoiceDAO().get(invoiceId));
+            ApplicationController.getApplicationController().btnStockOnClick();
+        } else {
+            ApplicationController.getApplicationController().btnStockOnClick();
 
-        //indi satishi tamamladiqdan sonra Qaimeni gostermek lazimdir ki adam baxib cap ede bilsin
-        // yada adama confirm Alert cixartmaq lazimdir ki eger cap etmek isteyirse cap edek
-        // MISAL: confirm dialog goster eger adam ok basdisa
-        // o zaman  qaime nomresi ile cap bolumune kec bir basha printe
-        // heleki hele edecem bir basha printe sonra dizayn vererem
-        //cap et funksiyasi Yeni Construktor ile
-        MyJRViewer.showSATISH_QAIMESI(new InvoiceDAO().get(invoiceId));
+        }
 
     }
 }

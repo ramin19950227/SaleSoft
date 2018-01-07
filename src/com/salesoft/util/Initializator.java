@@ -165,7 +165,7 @@ public class Initializator {
 
     public static void checkServer() {
 
-        if (DBUtil.isServerRunning()) {
+        if (DBUtil.mySQLIsServerRunning()) {
             System.out.println("Initializator.initDataBase() - Server Is Running");
 
         } else {
@@ -178,7 +178,7 @@ public class Initializator {
 
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 System.out.println("ok");
-                DBUtil.showServerConfigView();
+                DBUtil.showmySQLServerConfigView();
 
                 //Bu sebebden Yoxlamalar metoda kecirtdim
                 // yoxsa initDataBase() metodunun icinde hele if else ile hell ede bilirdim
@@ -199,7 +199,7 @@ public class Initializator {
 
     public static void checkConnetion() {
 
-        if (DBUtil.hasConnetion()) {
+        if (DBUtil.mySQLHasConnetion()) {
             System.out.println("Initializator.initDataBase() - Connection is Correct");
 
         } else {
@@ -211,7 +211,7 @@ public class Initializator {
                     "Ayarlari Control etmek ucun OK duymesine tiklayin");
 
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                DBUtil.showServerConfigView();
+                DBUtil.showmySQLServerConfigView();
                 checkConnetion();
 
             } else {
@@ -222,7 +222,7 @@ public class Initializator {
 
     public static void checkDBConnetion() {
 
-        if (DBUtil.hasDBConnetion()) {
+        if (DBUtil.mySQLHasDBConnetion()) {
             System.out.println("Initializator.initDataBase() - DBConnection is Correct");
 
         } else {
@@ -233,7 +233,7 @@ public class Initializator {
 //            System.out.println("Initializator.initDataBase() - DBConnection is NOT Correct");
 //
 //            Optional<ButtonType> result = MyAlert.alertOptionalConfirmation(164,
-//                    "DBUtil.hasDBConnetion() = false",
+//                    "DBUtil.mySQLHasDBConnetion() = false",
 //                    "Server ishlek veziyyetdedir, Ve Serverle Baglanti Qurulub",
 //                    "AMMA Melumat Bazasi Qurulmayib "
 //                    + "\nMelumat bazasini Qurmaq ucun OK duymesini basin"
@@ -248,7 +248,7 @@ public class Initializator {
 //            } else if (result.isPresent() && result.get() == ButtonType.CANCEL) {
 //
 //                //bu metod Acilan pencerede X-i basaraq baglandiqda true qaytarir
-//                Boolean isClosed = DBUtil.showServerConfigView();
+//                Boolean isClosed = DBUtil.showmySQLServerConfigView();
 //                if (isClosed) {
 //                    System.exit(241);
 //                }
@@ -265,7 +265,7 @@ public class Initializator {
         //Sorgularimizi ArrayListe yigib Sonra tek tek Gonderirem Sorgularimi ))
         queryList.forEach((query) -> {
             try {
-                DBUtil.directExecuteUpdate(query);
+                DBUtil.mySQLExecuteUpdate(query);
             } catch (SQLException ex) {
                 MyExceptionLogger.logException("SQLException - Initializator.setupDataBase()", ex);
                 MyAlert.alertAndExitByCodeAndContent(263, "Məlumat bazasının qurrashdirilması zamanı Xəta bash verdi\n"

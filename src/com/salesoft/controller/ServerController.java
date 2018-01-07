@@ -67,7 +67,7 @@ public class ServerController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         // serverle elaqeni yoxlayaq ve Labelde neticeni gosterek:
-        if (DBUtil.isServerRunning()) {
+        if (DBUtil.mySQLIsServerRunning()) {
             lablServerStatus.setText("Server Ile Elaqe QURULDU");
         } else {
             lablServerStatus.setText("Server ile Elaqe Yoxdur");

@@ -29,9 +29,34 @@ import java.util.Date;
 public class UserOperationLogger {
     // ISTIFADECI EMELIYYATLARI + NETICELERI
 
-    public static void writeLogToDB(ArrayList<String> list) {
+    public static void writeLogLineToDB(String line) {
         try {
-            DBUtil.directExecuteUpdate("INSERT INTO `salesoft`.`userOperationLogger` (`userName`, `sql`) VALUES ('LOG', '" + list + "'); ");
+            DBUtil.mySQLExecuteUpdate("INSERT INTO `salesoft`.`userOperationLogger` (`userName`, `sql`) VALUES ('LOG', '" + line + "'); ");
+        } catch (SQLException ex) {
+            new ExceptionShowDialog(ex).showAndWait();
+        }
+    }
+
+    /**
+     * Bu mEtod System.out.println() Funksiyasina benzeyir Butun Loglarimi Bura
+     * setir setirde yaza bilerem
+     *
+     * @return
+     */
+    public static PrintWriter getLogWriter() {
+        try {
+            BufferedWriter bufWriter = Files.newBufferedWriter(Paths.get("Log/UserOperations/MyNewLogForm.exe"), Charset.forName("UTF8"), StandardOpenOption.WRITE, StandardOpenOption.APPEND, StandardOpenOption.CREATE);
+            PrintWriter out = new PrintWriter(bufWriter, true);
+            return out;
+        } catch (IOException ex) {
+            new ExceptionShowDialog(ex).showAndWait();
+            return null;
+        }
+    }
+
+    public static void writeLogListToDB(ArrayList<String> list) {
+        try {
+            DBUtil.mySQLExecuteUpdate("INSERT INTO `salesoft`.`userOperationLogger` (`userName`, `sql`) VALUES ('LOG', '" + list + "'); ");
         } catch (SQLException ex) {
             new ExceptionShowDialog(ex).showAndWait();
         }
@@ -44,7 +69,7 @@ public class UserOperationLogger {
      * @param list Bu Massivi fayla yazir setir setir, massifin her yazisini
      * yeni setire
      */
-    public static void writeLogToFile(ArrayList<String> list) {
+    public static void writeLogListToFile(ArrayList<String> list) {
         PrintWriter out;
         BufferedWriter bufWriter;
         final Path path = Paths.get("Log/UserOperations/" + MyDateConverter.utilDate.toStringCustomFormat(new Date(), "dd-MM-yyy") + ".exe");
@@ -85,12 +110,12 @@ public class UserOperationLogger {
 
             SQL = SQL.replaceAll("'", "");
 
-            DBUtil.directExecuteUpdate(
+            DBUtil.mySQLExecuteUpdate(
                     "INSERT INTO `salesoft`.`userOperationLogger` "
                     + "(`userName`, `sql`) VALUES "
                     + "('" + userName + "', '" + SQL + "');");
 
-            //            Connection conn = DBUtil.directConnect();
+            //            Connection conn = DBUtil.Connect();
             //
             //            PreparedStatement pst = conn.prepareStatement(
             //                    "INSERT INTO `salesoft`.`userOperationLogger` "

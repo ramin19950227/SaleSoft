@@ -31,7 +31,7 @@ public class PurchaseProductDAO implements PurchaseProductDAOIntf {
 
             UserOperationLogger.logSQL(SQLQuery);
 
-            DBUtil.directExecuteUpdate(SQLQuery);
+            DBUtil.mySQLExecuteUpdate(SQLQuery);
 
         } catch (SQLException ex) {
             MyExceptionLogger.logException("SQLException - ProductDAO.create()", ex);
@@ -55,7 +55,7 @@ public class PurchaseProductDAO implements PurchaseProductDAOIntf {
 
             UserOperationLogger.logSQL(SQLQuery);
 
-            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
+            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
 
             return RsToModel.rsToPurchaseProduct(rs);
 
@@ -74,7 +74,7 @@ public class PurchaseProductDAO implements PurchaseProductDAOIntf {
 
             UserOperationLogger.logSQL(SQLQuery);
 
-            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
+            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
 
             list = RsToModel.rsToPurchaseProductList(rs);
 

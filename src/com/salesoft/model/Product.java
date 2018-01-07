@@ -68,6 +68,27 @@ public class Product {
         this.note = new SimpleStringProperty(note);
     }
 
+    /**
+     *
+     * Metod Bu Obyektin Yeni Clonunu Qaytarir Yeni Obyekt Bu obyekt ile eyni
+     * Unvana yonllendirmiller, bir soznen Heap-da yeni obyekt qurur ve unvanini
+     * qaytarir
+     *
+     * @return
+     */
+    public Product dublicateThisProduct() {
+        Product newProduct = new Product();
+
+        newProduct.setId(this.getId());
+        newProduct.setName(this.getName());
+        newProduct.setBarCode(this.getBarCode());
+        newProduct.setNote(this.getNote());
+        newProduct.setPurchasePrice(this.getPurchasePrice());
+        newProduct.setQty(this.getQty());
+
+        return newProduct;
+    }
+
     public final void setId(int value) {
         id.set(value);
     }

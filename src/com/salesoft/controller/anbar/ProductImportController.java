@@ -34,59 +34,27 @@ import org.controlsfx.control.textfield.TextFields;
  */
 public class ProductImportController implements Initializable {
 
-    /**
-     * TextField-s
-     */
     @FXML
     private TextField bTF, nTF, qTF, pTF;
-
-    /**
-     * DatePicer
-     */
     @FXML
     private DatePicker datePicker;
-
-    /**
-     * TextArea - Note
-     */
     @FXML
     private TextArea nTA;
-
-    /**
-     * ImageView-s
-     */
     @FXML
     private ImageView bIV, nIV, qIV, pIV, dIV;
-
-    /**
-     * Label-s For Warnings
-     */
     @FXML
     private Label bWL, nWL, qWL, pWL, dWL;
-
-    /**
-     * Buttons
-     */
     @FXML
     private Button saveButton, clearButton;
 
-    /**
-     * ProductDAO
-     */
     private final ProductDAO productDAO = new ProductDAO();
-    /**
-     * PurchaseProductDAO
-     */
     private final PurchaseProductDAO purchaseProductDAO = new PurchaseProductDAO();
-
-    /**
-     * Util's
-     */
     private final MyView myView = new MyView();
     private final TextFieldValidator TFValidator = new TextFieldValidator();
-    private Product product;
+    private final Set<String> barCodeSet = new HashSet<>();
+
     private AutoCompletionBinding<String> bindAutoCompletion;
-    Set<String> barCodeSet = new HashSet<>();
+    private Product product;
 
     /**
      * Initializes the controller class.
@@ -96,8 +64,12 @@ public class ProductImportController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // barcodlari saxlamaq ucun setimizi elan edirik
+        System.out.println("");
+        System.out.println("__________________________________________________________________________");
+        System.out.println("ProductImportController.initialize()");
+        System.out.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
 
+        // barcodlari saxlamaq ucun setimizi elan edirik
         //butun mehsullari aliriq ve butun mehsullarin barcodlarini yaaziriq set'e 
         // hele ki
         // butun mehsullarin barcodlarini bu cur alacam amma irelide lazim gelse optimize edecem
@@ -229,45 +201,50 @@ public class ProductImportController implements Initializable {
     }
 
     private void saveButtonOnAction() {
-        System.err.println("Method Start: saveButtonOnAction()");
+        System.out.println("");
+        System.out.println("__________________________________________________________________________");
+        System.out.println("ProductImportController.saveButtonOnAction()");
+        System.out.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+
         System.out.println("Fields Status");
-        System.out.println("bTF: " + bTF.getText());
-        System.out.println("nTF: " + nTF.getText());
-        System.out.println("qTF: " + qTF.getText());
-        System.out.println("pTF: " + pTF.getText());
+        System.out.println("BarCode Field: " + bTF.getText());
+        System.out.println("Name Field: " + nTF.getText());
+        System.out.println("QTY Field: " + qTF.getText());
+        System.out.println("price Field: " + pTF.getText());
 
         if (product != null) {
-            System.out.println("product NOT NULL");
+            System.out.println("Product is Exist and well Importer (Updated)");
+            System.out.println("Product Fist State");
+            System.out.println(product);
 
-            System.out.println("Setting qty price and note  to product" + product);
             product.setQty(Integer.parseInt(qTF.getText()));
             product.setPurchasePrice(Double.parseDouble(pTF.getText()));
             product.setNote(nTA.getText());
 
-            System.out.println("data is Settedto product: " + product);
-
             LocalDate localDate = datePicker.getValue();
             Date date = MyDateConverter.asDate(localDate);
 
-            System.out.println("date is: " + date);
-
             //birinci alish haqqinda melumati yazaq sonra ise mehsulun sayini cemleyib yenileyek
             ProductImportWrapper pp = new ProductImportWrapper(date, product);
-            purchaseProductDAO.create(pp);
 
-            System.out.println("Product Import Wrapper is: " + pp);
+            System.out.println("Product is READY to Write Import History");
+            System.out.println(product);
+            System.out.println(pp);
+
+            purchaseProductDAO.create(pp);
 
             //saylari yenileyek ki evvelki say silinmesin
             Integer oldQty = productDAO.getByBarcode(product.getBarCode()).getQty();
             product.plusQty(oldQty);
 
-            productDAO.update(product);
+            System.out.println("Product old qty= " + oldQty);
+            System.out.println("Product Last State Is: ");
+            System.out.println(product);
 
-            System.out.println("product updated and writed to DB.Product: " + product);
+            productDAO.update(product);
+            System.out.println("Product is Succes Imported");
 
             ApplicationController.getApplicationController().btnStockOnClick();
-
-            System.err.println("Method END: saveButtonOnAction()");
 
         } else {
             System.err.println("Product is NULL");
@@ -341,6 +318,11 @@ public class ProductImportController implements Initializable {
     }
 
     private void clearAll() {
+        System.out.println("");
+        System.out.println("__________________________________________________________________________");
+        System.out.println("ProductImportController.clearAll()");
+        System.out.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+
         // null to TextField's
         bTF.setText(null);
         nTF.setText(null);
@@ -373,6 +355,11 @@ public class ProductImportController implements Initializable {
     }
 
     private void clearTextFields() {
+        System.out.println("");
+        System.out.println("__________________________________________________________________________");
+        System.out.println("ProductImportController.clearTextFields()");
+        System.out.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+
         // null to TextField's
         bTF.setText(null);
         nTF.setText(null);
@@ -390,9 +377,15 @@ public class ProductImportController implements Initializable {
     }
 
     private void bTFOnKeyReleased() {
+        System.out.println("");
+        System.out.println("__________________________________________________________________________");
+        System.out.println("ProductImportController.bTFOnKeyReleased()");
+        System.out.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+
+        System.out.println("Fields:");
+        System.out.println("BarCode Field: " + bTF.getText());
 
         String input = bTF.getText();
-        System.err.println("input: " + input);
 
         clearAll();
 
@@ -403,25 +396,30 @@ public class ProductImportController implements Initializable {
             bTF.appendText(input);
         }
 
-        if (TFValidator.isNotNull(bTF)) {
+        Boolean isBarCodeTextFieldInputValid = TFValidator.isNotNull(bTF);
+        System.out.println("isBarCodeTextFieldInputValid: " + isBarCodeTextFieldInputValid);
+
+        if (isBarCodeTextFieldInputValid) {
 
             product = productDAO.getByBarcode(bTF.getText());
 
             if (product != null) {
                 myView.showOk(bIV);
                 bWL.setText("Mehsul Qeydiyyatdan Kecib");
+                System.out.println("Mehsul Qeydiyyatdan Kecib");
+                System.out.println(product);
 
                 //melumatlari Productdan Alib Set edek
                 nTF.setText(product.getName());
+
+                //SUPER bir shey gelib aglima mehsul sayini Promt text olarq gosterecem say xanasinda
+                qTF.setPromptText("Anbarda olan say: " + product.getQty());
 
                 //eger qiymet 0.0 dirsa demeli mehsul yeni qeydiyytdan kecib ve alish olmayib ve qiymeti set etmirik
                 // yox eger qiymet 0.0-dan coxdursa demeli ok Alish olub ve qiymet var ve Qiymeti set edirik
                 if (product.getPurchasePrice() > 0.0) {
                     pTF.setText(product.getPurchasePrice().toString());
                 }
-
-                //SUPER bir shey gelib aglima mehsul sayini Promt text olarq gosterecem say xanasinda
-                qTF.setPromptText("Anbarda olan say: " + product.getQty());
 
                 //ad xanasini sondurek ki redakte etmek olmasin
                 nTF.setDisable(true);
@@ -432,6 +430,8 @@ public class ProductImportController implements Initializable {
             } else {
                 myView.showWarning(bIV);
                 bWL.setText("Mehsul Qeydiyyatdan KECMEYIB, Yeni olaraq Qeydiyyata Alinacaq");
+                System.out.println("Mehsul Qeydiyyatdan KECMEYIB, Yeni olaraq Qeydiyyata Alinacaq");
+                System.out.println(product);
 
                 qTF.setPromptText("Sayı daxil edin");
             }

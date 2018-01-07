@@ -25,7 +25,7 @@ public class ProductDAO implements ProductDAOIntf {
 
             UserOperationLogger.logSQL(SQLQuery);
 
-            DBUtil.directExecuteUpdate(SQLQuery);
+            DBUtil.mySQLExecuteUpdate(SQLQuery);
 //            return true;
 
         } catch (SQLException ex) {
@@ -42,7 +42,7 @@ public class ProductDAO implements ProductDAOIntf {
 
             UserOperationLogger.logSQL(SQLQuery);
 
-            DBUtil.directExecuteUpdate(SQLQuery);
+            DBUtil.mySQLExecuteUpdate(SQLQuery);
 
         } catch (SQLException ex) {
             MyExceptionLogger.logException("SQLException - ProductDAO.update()", ex);
@@ -56,7 +56,7 @@ public class ProductDAO implements ProductDAOIntf {
 
             UserOperationLogger.logSQL(SQLQuery);
 
-            DBUtil.directExecuteUpdate(SQLQuery);
+            DBUtil.mySQLExecuteUpdate(SQLQuery);
             return true;
 
         } catch (SQLException ex) {
@@ -73,7 +73,7 @@ public class ProductDAO implements ProductDAOIntf {
 
             UserOperationLogger.logSQL(SQLQuery);
 
-            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
+            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
 
             return RsToModel.rsToProduct(rs);
 
@@ -91,7 +91,7 @@ public class ProductDAO implements ProductDAOIntf {
 
             UserOperationLogger.logSQL(SQLQuery);
 
-            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
+            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
 
             return RsToModel.rsToProduct(rs);
 
@@ -110,7 +110,7 @@ public class ProductDAO implements ProductDAOIntf {
 
             UserOperationLogger.logSQL(SQLQuery);
 
-            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
+            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
 
             list = RsToModel.rsToProductList(rs);
 
@@ -131,7 +131,7 @@ public class ProductDAO implements ProductDAOIntf {
 
             UserOperationLogger.logSQL(SQLQuery);
 
-            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
+            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
 
             list = RsToModel.rsToProductList(rs);
 
@@ -151,7 +151,7 @@ public class ProductDAO implements ProductDAOIntf {
 
             UserOperationLogger.logSQL(SQLQuery);
 
-            ResultSet rs = DBUtil.directExecuteQuery(SQLQuery);
+            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
 
             list = RsToModel.rsToProductList(rs);
 

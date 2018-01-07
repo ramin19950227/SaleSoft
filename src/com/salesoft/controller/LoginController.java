@@ -93,8 +93,8 @@ public class LoginController implements Initializable {
         try {
             /// biz indi ne edeceyik
             // demeli eger 1-eded qeydiyyat varsa bazada burdan qeydiyyat mumkun olmasin ve qeydiyyat linkini sondurek
-            if ((DBUtil.directExecuteQuery(("SELECT Id FROM " + db + ".User ORDER BY Id ASC LIMIT 1"))).next()) {
-                DBUtil.allDisconnect();
+            if ((DBUtil.mySQLExecuteQuery(("SELECT Id FROM " + db + ".User ORDER BY Id ASC LIMIT 1"))).next()) {
+                DBUtil.mySQLDisconnect();
                 //demeli qeydiyyat var
                 //ne edirik ? -> linki not managed edirik
                 hlCreateAccount.setManaged(false);
@@ -132,8 +132,8 @@ public class LoginController implements Initializable {
             list.add("inputValid = " + inputValid + "\n");
             list.add("isUserValid = " + isUserValid + "\n");
 
-            UserOperationLogger.writeLogToFile(list);
-            UserOperationLogger.writeLogToDB(list);
+//            UserOperationLogger.writeLogToFile(list);
+//            UserOperationLogger.writeLogToDB(list);
             ////////////////////////////////////////////////LOG - END//////////////////////////////////////////////////
 
             if (isUserValid) {
@@ -186,7 +186,7 @@ public class LoginController implements Initializable {
     private void hlCreateAnAccount(ActionEvent event) throws IOException {
 
         try {
-            ResultSet rs = DBUtil.directExecuteQuery(("SELECT Id FROM " + db + ".User ORDER BY Id ASC LIMIT 1"));
+            ResultSet rs = DBUtil.mySQLExecuteQuery(("SELECT Id FROM " + db + ".User ORDER BY Id ASC LIMIT 1"));
             if (rs.next()) {
                 System.out.println(rs.getString(1));
                 apMother.setOpacity(0.7);
@@ -201,7 +201,7 @@ public class LoginController implements Initializable {
                 }
                 return;
             }
-            DBUtil.allDisconnect();
+            DBUtil.mySQLDisconnect();
 
             loadRegistration();
         } catch (SQLException ex) {
@@ -224,7 +224,7 @@ public class LoginController implements Initializable {
 
     @FXML
     private void hlDbOnAction(ActionEvent event) {
-        DBUtil.showServerConfigView();
+        DBUtil.showmySQLServerConfigView();
     }
 
 }
