@@ -16,12 +16,15 @@ public class DBUtil {
     private static Statement stmt = null;
     private static ResultSet rs = null;
 
+    private static final String MS_ACCESS_DB_FILE_NAME = "SaleSoftAccessDB.accdb";
+
+    ////////////////////////////////////////////MySQL////////////////////////////////////////////////////////
     public static void mySQLConnect() throws SQLException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             new ExceptionShowDialog(ex).showAndWait();
-            MyExceptionLogger.logException("ClassNotFoundException - DBUtil.static{}", ex);
+            MyExceptionLogger.logException("ClassNotFoundException - DBUtil.mySQLConnect{}", ex);
         }
         try {
             conn = DriverManager.getConnection(MyProperties.getDBProperties().getDirectUrl());
@@ -35,7 +38,7 @@ public class DBUtil {
         }
     }
 
-    public static void mySQLDisconnect() throws SQLException {
+    public static void AllDisconnect() throws SQLException {
         try {
             if (rs != null) {
                 //Close resultSet
@@ -88,7 +91,7 @@ public class DBUtil {
             MyExceptionLogger.logException("SQLException - DBUtil.dbExecuteUpdate()", e);
             throw e;
         } finally {
-            mySQLDisconnect();
+            AllDisconnect();
         }
     }
 
@@ -154,4 +157,63 @@ public class DBUtil {
         nStage.showAndWait();
         return true;
     }
+
+    ////////////////////////////////////////////MS ACCESS////////////////////////////////////////////////////////
+    public static void msAccessConnect() {
+        try {
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+        } catch (ClassNotFoundException ex) {
+            System.err.println("Class.forName error");
+        }
+
+        try {
+            //conn = DriverManager.getConnection("jdbc:ucanaccess://test.accdb;jackcessOpener=com.salesoft.database.CryptCodecOpener", "hamreen", "12345");
+            conn = DriverManager.getConnection("jdbc:ucanaccess://" + MS_ACCESS_DB_FILE_NAME + ";");
+            System.out.println("Connected to DB: " + conn);
+
+        } catch (SQLException e) {
+            System.err.println(e);
+            new ExceptionShowDialog(e).showAndWait();
+            System.exit(0);
+        }
+
+    }
+
+    public static ResultSet msAccessExecuteQuery(String selectSQLQuery) throws SQLException {
+
+        //old
+        //CachedRowSetImpl crs = new CachedRowSetImpl();
+        try {
+            //Connect to DBProperties (Establish MySQL Connection)
+            msAccessConnect();
+            System.out.println("selectSQLQuery: " + selectSQLQuery + "\n");
+
+            stmt = conn.createStatement();
+
+            //Execute select (query) operation
+            rs = stmt.executeQuery(selectSQLQuery);
+
+            return rs;
+        } catch (SQLException e) {
+            MyExceptionLogger.logExceptionV2("SQLException - DBUtil.dbExecuteQuery()", "selectSQLQuery: " + selectSQLQuery, "null", e);
+            throw e;
+        }
+    }
+
+    public static void msAccessExecuteUpdate(String updateSQLQuery) throws SQLException {
+        try {
+            msAccessConnect();
+            //System.out.println("updateSQLQuery :" + updateSQLQuery);
+
+            stmt = conn.createStatement();
+            stmt.executeUpdate(updateSQLQuery);
+        } catch (SQLException e) {
+            System.out.println("SQLException -  DBUtil.dbExecuteUpdate(): " + e);
+            MyExceptionLogger.logException("SQLException - DBUtil.dbExecuteUpdate()", e);
+            throw e;
+        } finally {
+            AllDisconnect();
+        }
+    }
+
 }

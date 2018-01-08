@@ -29,9 +29,9 @@ public class MyProperties {
     private static UIProperties UIProperties;
 
     public static void init() {
-        updateDBProperties();
+        //updateDBProperties();
         updateURLProperties();
-        updateUIProperties();
+        //updateUIProperties();
     }
 
     /**

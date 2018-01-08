@@ -27,11 +27,12 @@ public class PurchaseProductDAO implements PurchaseProductDAOIntf {
     public void create(ProductImportWrapper purchaseProduct) {
 
         try {
-            String SQLQuery = SQL.PurchaseProductSQL.CREATE(purchaseProduct.getDate(), purchaseProduct.getTotalPrice().toString(), purchaseProduct.getProduct().getId().toString(), purchaseProduct.getProduct().getName(), purchaseProduct.getProduct().getQty().toString(), purchaseProduct.getProduct().getPurchasePrice().toString(), purchaseProduct.getProduct().getBarCode(), purchaseProduct.getProduct().getNote());
+//            String SQLQuery = SQL.PurchaseProductSQL.CREATE(purchaseProduct.getDate(), purchaseProduct.getTotalPrice().toString(), purchaseProduct.getProduct().getId().toString(), purchaseProduct.getProduct().getName(), purchaseProduct.getProduct().getQty().toString(), purchaseProduct.getProduct().getPurchasePrice().toString(), purchaseProduct.getProduct().getBarCode(), purchaseProduct.getProduct().getNote());
+//            UserOperationLogger.logSQL(SQLQuery);
+//            DBUtil.mySQLExecuteUpdate(SQLQuery);
 
-            UserOperationLogger.logSQL(SQLQuery);
-
-            DBUtil.mySQLExecuteUpdate(SQLQuery);
+            String SQLQuery = SQL.PurchaseProductSQL.CREATE_FOR_ACCES(purchaseProduct.getDate(), purchaseProduct.getTotalPrice().toString(), purchaseProduct.getProduct().getId().toString(), purchaseProduct.getProduct().getName(), purchaseProduct.getProduct().getQty().toString(), purchaseProduct.getProduct().getPurchasePrice().toString(), purchaseProduct.getProduct().getBarCode(), purchaseProduct.getProduct().getNote());
+            DBUtil.msAccessExecuteUpdate(SQLQuery);
 
         } catch (SQLException ex) {
             MyExceptionLogger.logException("SQLException - ProductDAO.create()", ex);
@@ -51,11 +52,12 @@ public class PurchaseProductDAO implements PurchaseProductDAOIntf {
     @Override
     public ProductImportWrapper getById(Integer id) {
         try {
-            String SQLQuery = SQL.PurchaseProductSQL.GET(id);
+//            String SQLQuery = SQL.PurchaseProductSQL.GET(id);
+//            UserOperationLogger.logSQL(SQLQuery);
+//            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
 
-            UserOperationLogger.logSQL(SQLQuery);
-
-            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
+            //            return "SELECT * FROM `" + DB_NAME + "`.PurchaseProduct WHERE id=" + id;
+            ResultSet rs = DBUtil.msAccessExecuteQuery("select * from PurchaseProduct where id=" + id);
 
             return RsToModel.rsToPurchaseProduct(rs);
 
@@ -70,11 +72,12 @@ public class PurchaseProductDAO implements PurchaseProductDAOIntf {
         ArrayList<ProductImportWrapper> list = new ArrayList<>();
 
         try {
-            String SQLQuery = SQL.PurchaseProductSQL.GET_ALL();
+//            String SQLQuery = SQL.PurchaseProductSQL.GET_ALL();
+//            UserOperationLogger.logSQL(SQLQuery);
+//            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
+//
 
-            UserOperationLogger.logSQL(SQLQuery);
-
-            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
+            ResultSet rs = DBUtil.msAccessExecuteQuery("SELECT * FROM PurchaseProduct ORDER BY `id` DESC LIMIT 1000");
 
             list = RsToModel.rsToPurchaseProductList(rs);
 

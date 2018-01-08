@@ -44,14 +44,16 @@ public class UserDAO implements UserDAOIntf {
     @Override
     public boolean login(String UsrName, String Password) {
         try {
-            // Sorgumuzu Hazirlayaq
+            ////////////////////////////////////////////MYSQL/////////////////////////////////////////////
+//            String SQLQuery = SQL.UserSQL.LOGIN(UsrName, Password);
+//            UserOperationLogger.logSQL(SQLQuery);
+//            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
+
+            ////////////////////////////////////////////MS ACCESS/////////////////////////////////////////////
             String SQLQuery = SQL.UserSQL.LOGIN(UsrName, Password);
+//            UserOperationLogger.logSQL(SQLQuery);
+            ResultSet rs = DBUtil.msAccessExecuteQuery("select * from User where name=" + UsrName + " and password=" + Password);
 
-            //Sorgumuzu Qeyde alaq
-            UserOperationLogger.logSQL(SQLQuery);
-
-            //indi ise ishimize davam edek
-            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
             if (rs.next()) {
                 return true;
             } else {
@@ -68,12 +70,14 @@ public class UserDAO implements UserDAOIntf {
     public boolean registration(String userName, String userPassword, String fullName, Integer status) {
 
         try {
-            String SQLQuery = SQL.UserSQL.REGISTRATON(userName, userPassword, fullName, status);
+            ////////////////////////////////////////////MYSQL/////////////////////////////////////////////
 
-            //Sorgumuzu Qeyde alaq
-            UserOperationLogger.logSQL(SQLQuery);
+//            String SQLQuery = SQL.UserSQL.REGISTRATON(userName, userPassword, fullName, status);
+//            UserOperationLogger.logSQL(SQLQuery);
+//            DBUtil.mySQLExecuteUpdate(SQLQuery);
+            ////////////////////////////////////////////MS ACCESS/////////////////////////////////////////////
+            DBUtil.msAccessExecuteUpdate("INSERT INTO User VALUES (null, '" + userName + "','" + userPassword + "'," + status + " );");
 
-            DBUtil.mySQLExecuteUpdate(SQLQuery);
             return true;
 
         } catch (SQLException ex) {

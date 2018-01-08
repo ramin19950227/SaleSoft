@@ -18,12 +18,12 @@ public class InvoiceDAO implements InvoiceDAOIntf<Invoice, Integer, String> {
     @Override
     public void create(Invoice invoice) {
         try {
-            String SQLQuery = SQL.InvoiceSQL.CREATE(invoice);
+//            String SQLQuery = SQL.InvoiceSQL.CREATE(invoice);
+//            UserOperationLogger.logSQL(SQLQuery);
+//            DBUtil.mySQLExecuteUpdate(SQLQuery);
 
-            //Sorgumuzu Qeyde alaq
-            UserOperationLogger.logSQL(SQLQuery);
-
-            DBUtil.mySQLExecuteUpdate(SQLQuery);
+            String SQLQuery = SQL.InvoiceSQL.CREATE_FOR_ACCES(invoice);
+            DBUtil.msAccessExecuteUpdate(SQLQuery);
 
         } catch (SQLException ex) {
             MyExceptionLogger.logException("SQLException - InvoiceDAO.create(Invoice invoice)", ex);
@@ -33,12 +33,13 @@ public class InvoiceDAO implements InvoiceDAOIntf<Invoice, Integer, String> {
     @Override
     public void update(Invoice invoice) {
         try {
-            String SQLQuery = SQL.InvoiceSQL.UPDATE(invoice);
+//            String SQLQuery = SQL.InvoiceSQL.UPDATE(invoice);
+//            UserOperationLogger.logSQL(SQLQuery);
+//            DBUtil.mySQLExecuteUpdate(SQLQuery);
 
-            //Sorgumuzu Qeyde alaq
-            UserOperationLogger.logSQL(SQLQuery);
+            String SQLQuery = SQL.InvoiceSQL.CREATE_FOR_ACCES(invoice);
+            DBUtil.msAccessExecuteUpdate(SQLQuery);
 
-            DBUtil.mySQLExecuteUpdate(SQLQuery);
         } catch (SQLException ex) {
             MyExceptionLogger.logException("SQLException - InvoiceDAO.update(Invoice invoice)", ex);
         }
@@ -53,17 +54,15 @@ public class InvoiceDAO implements InvoiceDAOIntf<Invoice, Integer, String> {
     public Invoice get(Integer id) {
         Invoice invoice = null;
         try {
-
-            String SQLQuery = SQL.InvoiceSQL.GET(id);
-
-            //Sorgumuzu Qeyde alaq
-            UserOperationLogger.logSQL(SQLQuery);
+//            String SQLQuery = SQL.InvoiceSQL.GET(id);
+//            UserOperationLogger.logSQL(SQLQuery);
+//            ArrayList<InvoiceItem> list = invoiceItemDAO.getAllById(id);
+//            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
 
             ArrayList<InvoiceItem> list = invoiceItemDAO.getAllById(id);
+            ResultSet rs = DBUtil.msAccessExecuteQuery("SELECT * FROM Invoice WHERE id=" + id);
 
-            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
-
-            while (rs.next()) {
+            if (rs.next()) {
                 invoice = new Invoice(
                         rs.getInt(1),
                         rs.getString(2),
@@ -86,13 +85,11 @@ public class InvoiceDAO implements InvoiceDAOIntf<Invoice, Integer, String> {
     public ArrayList<Invoice> getAll() {
         ArrayList<Invoice> list = new ArrayList<>();
         try {
+//            String SQLQuery = SQL.InvoiceSQL.GET_ALL();
+//            UserOperationLogger.logSQL(SQLQuery);
+//            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
 
-            String SQLQuery = SQL.InvoiceSQL.GET_ALL();
-
-            //Sorgumuzu Qeyde alaq
-            UserOperationLogger.logSQL(SQLQuery);
-
-            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
+            ResultSet rs = DBUtil.msAccessExecuteQuery("SELECT * FROM Invoice ORDER BY `id` DESC LIMIT 1000");
 
             while (rs.next()) {
                 list.add(new Invoice(
@@ -115,11 +112,11 @@ public class InvoiceDAO implements InvoiceDAOIntf<Invoice, Integer, String> {
     public ArrayList<Invoice> getAllByNameLike(String name) {
         ArrayList<Invoice> list = new ArrayList<>();
         try {
-            String SQLQuery = SQL.InvoiceSQL.GET_ALL_BY_NAME_LIKE(name);
+//            String SQLQuery = SQL.InvoiceSQL.GET_ALL_BY_NAME_LIKE(name);
+//            UserOperationLogger.logSQL(SQLQuery);
+//            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
 
-            UserOperationLogger.logSQL(SQLQuery);
-
-            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
+            ResultSet rs = DBUtil.msAccessExecuteQuery("SELECT * FROM Invoice WHERE customer LIKE '%" + name + "%'");
             while (rs.next()) {
                 list.add(
                         new Invoice(
@@ -140,13 +137,15 @@ public class InvoiceDAO implements InvoiceDAOIntf<Invoice, Integer, String> {
     @Override
     public Integer getLastId() {
         try {
-            String SQLQuery = SQL.InvoiceSQL.GET_LAST_ID();
+//            String SQLQuery = SQL.InvoiceSQL.GET_LAST_ID();
+//            UserOperationLogger.logSQL(SQLQuery);
+//            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
 
-            UserOperationLogger.logSQL(SQLQuery);
+            ResultSet rs = DBUtil.msAccessExecuteQuery("select * from Invoice order by ID DESC LIMIT 1");
 
-            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
             if (rs.next()) {
-                return rs.getInt("MAX(id)");
+//                return rs.getInt("MAX(id)");
+                return rs.getInt(1);
             } else {
                 return null;
             }

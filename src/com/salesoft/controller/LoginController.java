@@ -9,7 +9,6 @@ import com.salesoft.util.MyDateConverter;
 import com.salesoft.util.MyFXMLLoader;
 import com.salesoft.util.MyExceptionLogger;
 import com.salesoft.util.MyProperties;
-import com.salesoft.util.UserOperationLogger;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
@@ -72,7 +71,7 @@ public class LoginController implements Initializable {
     CustomPf cPF = new CustomPf();
 
     UserDAO UserDAO = new UserDAO();
-    private final String db = MyProperties.getDBProperties().getDbName();
+    //private final String db = MyProperties.getDBProperties().getDbName();
 
     /**
      * Initializes the controller class.
@@ -93,8 +92,8 @@ public class LoginController implements Initializable {
         try {
             /// biz indi ne edeceyik
             // demeli eger 1-eded qeydiyyat varsa bazada burdan qeydiyyat mumkun olmasin ve qeydiyyat linkini sondurek
-            if ((DBUtil.mySQLExecuteQuery(("SELECT Id FROM " + db + ".User ORDER BY Id ASC LIMIT 1"))).next()) {
-                DBUtil.mySQLDisconnect();
+            if ((DBUtil.msAccessExecuteQuery(("SELECT Id FROM User ORDER BY Id ASC LIMIT 1"))).next()) {
+                DBUtil.AllDisconnect();
                 //demeli qeydiyyat var
                 //ne edirik ? -> linki not managed edirik
                 hlCreateAccount.setManaged(false);
@@ -103,7 +102,7 @@ public class LoginController implements Initializable {
                 //mence men qurrashdirdiqdan sonra istifadeci niye deyishsin ki
                 hlDatabase.setManaged(false);
             } else {
-                hlDbOnAction(new ActionEvent());
+                //hlDbOnAction(new ActionEvent()); mysql da lazim olacaq
                 loadRegistration();
             }
         } catch (SQLException ex) {
@@ -120,21 +119,6 @@ public class LoginController implements Initializable {
         if (inputValid) {
 
             isUserValid = UserDAO.login(userNameField.getText(), userPasswordField.getText());
-
-            ////////////////////////////////////////////////LOG - START//////////////////////////////////////////////////
-            ArrayList<String> list = new ArrayList<>();
-            list.add("");
-            list.add("__________________________________________________" + "\n");
-            list.add("LOGIN" + "\n");
-            list.add("DATE: " + MyDateConverter.utilDate.toString(new Date()) + "\n");
-            list.add("userNameField = " + userNameField.getText() + "\n");
-            list.add("userPasswordField = " + userPasswordField.getText() + "\n");
-            list.add("inputValid = " + inputValid + "\n");
-            list.add("isUserValid = " + isUserValid + "\n");
-
-//            UserOperationLogger.writeLogToFile(list);
-//            UserOperationLogger.writeLogToDB(list);
-            ////////////////////////////////////////////////LOG - END//////////////////////////////////////////////////
 
             if (isUserValid) {
 
@@ -186,7 +170,7 @@ public class LoginController implements Initializable {
     private void hlCreateAnAccount(ActionEvent event) throws IOException {
 
         try {
-            ResultSet rs = DBUtil.mySQLExecuteQuery(("SELECT Id FROM " + db + ".User ORDER BY Id ASC LIMIT 1"));
+            ResultSet rs = DBUtil.mySQLExecuteQuery(("SELECT Id FROM User ORDER BY Id ASC LIMIT 1"));
             if (rs.next()) {
                 System.out.println(rs.getString(1));
                 apMother.setOpacity(0.7);
@@ -201,7 +185,7 @@ public class LoginController implements Initializable {
                 }
                 return;
             }
-            DBUtil.mySQLDisconnect();
+            DBUtil.AllDisconnect();
 
             loadRegistration();
         } catch (SQLException ex) {

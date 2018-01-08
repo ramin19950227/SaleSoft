@@ -5,14 +5,12 @@
  */
 package com.salesoft.util;
 
-import com.salesoft.database.DBUtil;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -29,14 +27,13 @@ import java.util.Date;
 public class UserOperationLogger {
     // ISTIFADECI EMELIYYATLARI + NETICELERI
 
-    public static void writeLogLineToDB(String line) {
-        try {
-            DBUtil.mySQLExecuteUpdate("INSERT INTO `salesoft`.`userOperationLogger` (`userName`, `sql`) VALUES ('LOG', '" + line + "'); ");
-        } catch (SQLException ex) {
-            new ExceptionShowDialog(ex).showAndWait();
-        }
-    }
-
+//    public static void writeLogLineToDB(String line) {
+//        try {
+//            DBUtil.mySQLExecuteUpdate("INSERT INTO `salesoft`.`userOperationLogger` (`userName`, `sql`) VALUES ('LOG', '" + line + "'); ");
+//        } catch (SQLException ex) {
+//            new ExceptionShowDialog(ex).showAndWait();
+//        }
+//    }
     /**
      * Bu mEtod System.out.println() Funksiyasina benzeyir Butun Loglarimi Bura
      * setir setirde yaza bilerem
@@ -54,14 +51,13 @@ public class UserOperationLogger {
         }
     }
 
-    public static void writeLogListToDB(ArrayList<String> list) {
-        try {
-            DBUtil.mySQLExecuteUpdate("INSERT INTO `salesoft`.`userOperationLogger` (`userName`, `sql`) VALUES ('LOG', '" + list + "'); ");
-        } catch (SQLException ex) {
-            new ExceptionShowDialog(ex).showAndWait();
-        }
-    }
-
+//    public static void writeLogListToDB(ArrayList<String> list) {
+//        try {
+//            DBUtil.mySQLExecuteUpdate("INSERT INTO `salesoft`.`userOperationLogger` (`userName`, `sql`) VALUES ('LOG', '" + list + "'); ");
+//        } catch (SQLException ex) {
+//            new ExceptionShowDialog(ex).showAndWait();
+//        }
+//    }
     /**
      * Bu metod PrintWriter Obyektini Qaytarir, hansinda ki, println()-metodunu
      * cagiraraq Log faylimiza setirler yaza bilerik
@@ -97,39 +93,36 @@ public class UserOperationLogger {
         }
     }
 
-//ilk olaraq SQL-sorgulari qeydiyyata alacayiq sonra daha deqiq loglara bashlayacayiq
-// SQL loqlari bazaya vuracam - eger sql zamani Exception cixasa o zaman MyExceptionLogger onu fayla yazacaq
-    public static void logSQL(String SQL) {
-
-        // heleki username null gelecek sonra onu alib verecem bura
-        String userName = "null";
-        try {
-            // SQL sorgumuzu alaq
-            // sonra onu yazaq bazaya
-            // heleki bunun ucun DAO duzeltmirem irelide lazim olsa ederem
-
-            SQL = SQL.replaceAll("'", "");
-
-            DBUtil.mySQLExecuteUpdate(
-                    "INSERT INTO `salesoft`.`userOperationLogger` "
-                    + "(`userName`, `sql`) VALUES "
-                    + "('" + userName + "', '" + SQL + "');");
-
-            //            Connection conn = DBUtil.Connect();
-            //
-            //            PreparedStatement pst = conn.prepareStatement(
-            //                    "INSERT INTO `salesoft`.`userOperationLogger` "
-            //                    + "(`userName`, `sql`) VALUES "
-            //                    + "('?', '?');");
-            //
-            //            pst.setString(1, userName);
-            //            pst.setString(2, SQL);
-            //
-            //            pst.executeUpdate();
-        } catch (SQLException ex) {
-            MyExceptionLogger.logExceptionV2("SQLException - UserOperationLogger.logSQL(String userName, String SQL)", "userName: " + userName, "SQL: " + SQL, ex);
-        }
-
-    }
-
+////ilk olaraq SQL-sorgulari qeydiyyata alacayiq sonra daha deqiq loglara bashlayacayiq
+//// SQL loqlari bazaya vuracam - eger sql zamani Exception cixasa o zaman MyExceptionLogger onu fayla yazacaq
+//    public static void logSQL(String SQL) {
+//
+//        // heleki username null gelecek sonra onu alib verecem bura
+//        String userName = "null";
+//        try {
+//            // SQL sorgumuzu alaq
+//            // sonra onu yazaq bazaya
+//            // heleki bunun ucun DAO duzeltmirem irelide lazim olsa ederem
+//
+//            SQL = SQL.replaceAll("'", "");
+//
+//            DBUtil.mySQLExecuteUpdate(
+//                    "INSERT INTO `salesoft`.`userOperationLogger` "
+//                    + "(`userName`, `sql`) VALUES "
+//                    + "('" + userName + "', '" + SQL + "');");
+//
+//            //            Connection conn = DBUtil.Connect();
+//            //
+//            //            PreparedStatement pst = conn.prepareStatement(
+//            //                    "INSERT INTO `salesoft`.`userOperationLogger` "
+//            //                    + "(`userName`, `sql`) VALUES "
+//            //                    + "('?', '?');");
+//            //
+//            //            pst.setString(1, userName);
+//            //            pst.setString(2, SQL);
+//            //
+//            //            pst.executeUpdate();
+//        } catch (SQLException ex) {
+//            MyExceptionLogger.logExceptionV2("SQLException - UserOperationLogger.logSQL(String userName, String SQL)", "userName: " + userName, "SQL: " + SQL, ex);
+//        }
 }

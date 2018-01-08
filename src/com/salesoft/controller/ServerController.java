@@ -1,43 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.salesoft.controller;
 
-import com.salesoft.MainApp;
 import com.salesoft.database.DBUtil;
 import com.salesoft.model.Properties.DBProperties;
 import com.salesoft.util.Initializator;
 import com.salesoft.util.MyProperties;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.URL;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
-/**
- * FXML Controller class
- *
- * @author rifat
- */
 public class ServerController implements Initializable {
 
     @FXML
@@ -57,12 +34,6 @@ public class ServerController implements Initializable {
     @FXML
     private TextField tfUserName;
 
-    /**
-     * Initializes the controller class.
-     *
-     * @param url
-     * @param rb
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -72,9 +43,8 @@ public class ServerController implements Initializable {
         } else {
             lablServerStatus.setText("Server ile Elaqe Yoxdur");
         }
-        
-        loadProperties();
 
+        loadProperties();
     }
 
     @FXML
@@ -89,8 +59,7 @@ public class ServerController implements Initializable {
             stage.close();
 
             //ve bashlayiriq InitDataBase() - metoduna bashdan yoxlamaga
-            Initializator.initDataBase();
-
+            //Initializator.initDataBase();
         } else {
             System.err.println("Kecerli Melumat Daxil edin");
         }

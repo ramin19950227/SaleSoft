@@ -51,7 +51,7 @@ public class RsToModel {
             throw ex;
 
         } finally {
-            DBUtil.mySQLDisconnect();
+            DBUtil.AllDisconnect();
         }
     }
 
@@ -88,7 +88,7 @@ public class RsToModel {
             throw ex;
 
         } finally {
-            DBUtil.mySQLDisconnect();
+            DBUtil.AllDisconnect();
         }
     }
 
@@ -122,7 +122,7 @@ public class RsToModel {
             throw ex;
 
         } finally {
-            DBUtil.mySQLDisconnect();
+            DBUtil.AllDisconnect();
         }
     }
 
@@ -153,7 +153,7 @@ public class RsToModel {
             throw ex;
 
         } finally {
-            DBUtil.mySQLDisconnect();
+            DBUtil.AllDisconnect();
         }
     }
 
@@ -175,7 +175,7 @@ public class RsToModel {
             throw ex;
 
         } finally {
-            DBUtil.mySQLDisconnect();
+            DBUtil.AllDisconnect();
         }
     }
 
@@ -203,7 +203,7 @@ public class RsToModel {
             throw ex;
 
         } finally {
-            DBUtil.mySQLDisconnect();
+            DBUtil.AllDisconnect();
         }
     }
 
@@ -222,7 +222,7 @@ public class RsToModel {
 //            throw ex;
 //
 //        } finally {
-//            DBUtil.mySQLDisconnect();
+//            DBUtil.AllDisconnect();
 //        }
 //    }
 }

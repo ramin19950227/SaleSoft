@@ -60,7 +60,7 @@
                                  </children>
                               </GridPane>
                               <Button fx:id="btnLogin" layoutX="96.0" layoutY="203.0" mnemonicParsing="false" onAction="#btnLogin" text="Daxıl ol" />
-                              <Hyperlink fx:id="hlDatabase" layoutX="236.0" layoutY="255.0" onAction="#hlDbOnAction" text="DB Setup">
+                              <Hyperlink fx:id="hlDatabase" layoutX="236.0" layoutY="255.0" onAction="#hlDbOnAction" text="DB Setup" visible="false">
                                  <font>
                                     <Font size="11.0" />
                                  </font>

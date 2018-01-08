@@ -19,16 +19,15 @@ import java.util.ArrayList;
  */
 public class SQL {
 
-    private static final String DB_NAME;
+    private static final String DB_NAME = "";
 
-    static {
-        //ilk Muracietde Melumat Bazamizin adini alaq
-        DB_NAME = MyProperties.getDBProperties().getDbName();
-        System.err.println("DB Name: " + DB_NAME);
-        //istifade Yontemi 
-        //      `" + dbName + "`.
-    }
-
+//    static {
+//        //ilk Muracietde Melumat Bazamizin adini alaq
+//        DB_NAME = MyProperties.getDBProperties().getDbName();
+//        System.err.println("DB Name: " + DB_NAME);
+//        //istifade Yontemi 
+//        //      `" + dbName + "`.
+//    }
     /**
      * InvoiceItemSQL Modeli ile aparilan emeliyatlarin SQL-sorgulari
      */
@@ -43,8 +42,21 @@ public class SQL {
                     + "'" + p.getId() + "', '" + p.getName() + "', '" + p.getQty() + "', '" + p.getPurchasePrice() + "', '" + p.getBarCode() + "', '" + p.getNote() + "');";
         }
 
+        public static String CREATE_FOR_ACCESS(InvoiceItem item) {
+            Product p = item.getProduct();
+            return "INSERT INTO InvoiceItem "
+                    + "(`invoiceId`, `totalPrice`, "
+                    + "`product_id`, `product_name`, `product_qty`, `product_purchasePrice`, `product_barCode`, `product_note`) "
+                    + "VALUES ('" + item.getInvoiceId() + "', '" + item.getTotalPrice() + "', "
+                    + "'" + p.getId() + "', '" + p.getName() + "', '" + p.getQty() + "', '" + p.getPurchasePrice() + "', '" + p.getBarCode() + "', '" + p.getNote() + "');";
+        }
+
         public static String UPDATE(InvoiceItem item) {
             return "UPDATE `" + DB_NAME + "`.InvoiceItem SET product_qty='" + item.getProduct().getQty() + "', totalPrice='" + item.getTotalPrice() + "' WHERE  id=" + item.getId();
+        }
+
+        public static String UPDATE_FOR_ACCESS(InvoiceItem item) {
+            return "UPDATE InvoiceItem SET product_qty='" + item.getProduct().getQty() + "', totalPrice='" + item.getTotalPrice() + "' WHERE  id=" + item.getId();
         }
 
         public static String GET_ALL_BY_INVOICE_ID(Integer id) {
@@ -62,8 +74,16 @@ public class SQL {
             return "INSERT INTO `" + DB_NAME + "`.Invoice (customerName,totalPrice) VALUES ('" + invoice.getCustomerName() + "', " + invoice.getTotalPrice() + ")";
         }
 
+        public static String CREATE_FOR_ACCES(Invoice invoice) {
+            return "INSERT INTO Invoice (customerName,totalPrice) VALUES ('" + invoice.getCustomerName() + "', " + invoice.getTotalPrice() + ")";
+        }
+
         public static String UPDATE(Invoice invoice) {
             return "UPDATE `" + DB_NAME + "`.Invoice SET `customerName`='" + invoice.getCustomerName() + "', `totalPrice`='" + invoice.getTotalPrice() + "' WHERE  `id`=" + invoice.getId();
+        }
+
+        public static String UPDATE_FOR_ACCESS(Invoice invoice) {
+            return "UPDATE Invoice SET `customerName`='" + invoice.getCustomerName() + "', `totalPrice`='" + invoice.getTotalPrice() + "' WHERE  `id`=" + invoice.getId();
         }
 
         public static String DELETE(Integer id) {
@@ -111,6 +131,10 @@ public class SQL {
         public static String CREATE(java.util.Date purchaseDate, String totalPrice, String product_id, String product_name, String product_qty, String product_purchasePrice, String product_barCode, String product_note) {
             return "INSERT INTO `" + DB_NAME + "`.PurchaseProduct (`purchaseDate`, `totalPrice`, `product_id`, `product_name`, `product_qty`, `product_purchasePrice`, `product_barCode`, `product_note`) "
                     + "VALUES ('" + MyDateConverter.utilDate.toStringCustomFormat(purchaseDate, "yyyy-MM-dd") + "', '" + totalPrice + "', '" + product_id + "', '" + product_name + "', '" + product_qty + "', '" + product_purchasePrice + "', '" + product_barCode + "','" + product_note + "');";
+        }
+
+        public static String CREATE_FOR_ACCES(java.util.Date purchaseDate, String totalPrice, String product_id, String product_name, String product_qty, String product_purchasePrice, String product_barCode, String product_note) {
+            return "INSERT INTO PurchaseProduct VALUES (null, '" + MyDateConverter.utilDate.toStringCustomFormat(purchaseDate, "yyyy-MM-dd") + "', '" + totalPrice + "', '" + product_id + "', '" + product_name + "', '" + product_qty + "', '" + product_purchasePrice + "', '" + product_barCode + "','" + product_note + "');";
         }
 
         public static String UPDATE() {
@@ -251,12 +275,25 @@ public class SQL {
                     + "VALUES ('" + product.getName() + "', '" + product.getQty().toString() + "', '" + product.getPurchasePrice().toString() + "', '" + product.getBarCode() + "', '" + product.getNote() + "')";
         }
 
+        public static String CREATE_FOR_ACCESS(Product product) {
+            return "INSERT INTO Product (name, qty, purchasePrice, barCode, note) "
+                    + "VALUES ('" + product.getName() + "', '" + product.getQty().toString() + "', '" + product.getPurchasePrice().toString() + "', '" + product.getBarCode() + "', '" + product.getNote() + "')";
+        }
+
         public static String UPDATE(Product product) {
             return "UPDATE `" + DB_NAME + "`.`Product` SET `name`='" + product.getName() + "', `qty`='" + product.getQty().toString() + "', `purchasePrice`='" + product.getPurchasePrice().toString() + "', `barCode`='" + product.getBarCode() + "', `note`='" + product.getNote() + "' WHERE  `id`=" + product.getId() + ";";
         }
 
+        public static String UPDATE_FOR_ACCESS(Product product) {
+            return "UPDATE Product SET `name`='" + product.getName() + "', `qty`='" + product.getQty().toString() + "', `purchasePrice`='" + product.getPurchasePrice().toString() + "', `barCode`='" + product.getBarCode() + "', `note`='" + product.getNote() + "' WHERE  `id`=" + product.getId() + ";";
+        }
+
         public static String DELETE(Integer id) {
             return "DELETE FROM `" + DB_NAME + "`.`Product` WHERE id=" + id;
+        }
+
+        public static String DELETE_FOR_ACCESS(Integer id) {
+            return "DELETE FROM Product WHERE id=" + id;
         }
 
         public static String GET(Integer id) {

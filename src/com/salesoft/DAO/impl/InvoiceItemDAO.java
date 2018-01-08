@@ -25,11 +25,12 @@ public class InvoiceItemDAO implements InvoiceItemDAOIntf {
     @Override
     public void create(InvoiceItem item) {
         try {
-            String SQLQuery = SQL.InvoiceItemSQL.CREATE(item);
+//            String SQLQuery = SQL.InvoiceItemSQL.CREATE(item);
+//            UserOperationLogger.logSQL(SQLQuery);
+//            DBUtil.mySQLExecuteUpdate(SQLQuery);
 
-            UserOperationLogger.logSQL(SQLQuery);
-
-            DBUtil.mySQLExecuteUpdate(SQLQuery);
+            String SQLQuery = SQL.InvoiceItemSQL.CREATE_FOR_ACCESS(item);
+            DBUtil.msAccessExecuteUpdate(SQLQuery);
         } catch (SQLException ex) {
             MyExceptionLogger.logException("SQLException - InvoiceItemDAO.create(InvoiceItem item)", ex);
         }
@@ -38,11 +39,13 @@ public class InvoiceItemDAO implements InvoiceItemDAOIntf {
     @Override
     public void update(InvoiceItem item) {
         try {
-            String SQLQuery = SQL.InvoiceItemSQL.UPDATE(item);
+//            String SQLQuery = SQL.InvoiceItemSQL.UPDATE(item);
+//            UserOperationLogger.logSQL(SQLQuery);
+//            DBUtil.mySQLExecuteUpdate(SQLQuery);
 
-            UserOperationLogger.logSQL(SQLQuery);
+            String SQLQuery = SQL.InvoiceItemSQL.UPDATE_FOR_ACCESS(item);
+            DBUtil.msAccessExecuteUpdate(SQLQuery);
 
-            DBUtil.mySQLExecuteUpdate(SQLQuery);
         } catch (SQLException ex) {
             MyExceptionLogger.logException("SQLException - InvoiceItemDAO.create(InvoiceItem item)", ex);
         }
@@ -66,17 +69,13 @@ public class InvoiceItemDAO implements InvoiceItemDAOIntf {
     @Override
     public ArrayList<InvoiceItem> getAllById(Integer id) {
         try {
-            String SQLQuery = SQL.InvoiceItemSQL.GET_ALL_BY_INVOICE_ID(id);
+//            String SQLQuery = SQL.InvoiceItemSQL.GET_ALL_BY_INVOICE_ID(id);
+//            UserOperationLogger.logSQL(SQLQuery);
+//            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
 
-            UserOperationLogger.logSQL(SQLQuery);
+            ResultSet rs = DBUtil.mySQLExecuteQuery("SELECT * FROM InvoiceItem WHERE invoiceId=" + id + " ORDER BY `id` DESC");
 
-            ArrayList<InvoiceItem> list;
-
-            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
-
-            list = RsToModel.rsToInvoiceItemList(rs);
-
-            return list;
+            return RsToModel.rsToInvoiceItemList(rs);
 
         } catch (SQLException ex) {
             MyExceptionLogger.logException("SQLException - InvoiceDAO.getAllInvoiceItemListById(Integer id)", ex);
