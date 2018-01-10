@@ -153,47 +153,32 @@ public class ProductRegistrationController implements Initializable {
     }
 
     private boolean isBarcodeInputValid() {
-
-        if (bTF.getText() == null || bTF.getText().length() == 0) {
+        if (bTF.getText() == null || bTF.getText().trim().length() == 0) {
             bWL.setText("BarCod Daxil Edin!");
-
             return false;
         } else {
             bWL.setText(null);
-            // пытаемся преобразовать в int.
-            try {
-                Integer.parseInt(bTF.getText());
-            } catch (NumberFormatException e) {
-                bWL.setText("Kecərli BarCod daxil edin (Tam eded olmalidir)!");
-
-                return false;
-            }
+            return true;
         }
-
-        return true;
     }
 
     private boolean isNameInputValid() {
-
-        if (nTF.getText() == null || nTF.getText().length() == 0) {
+        if (nTF.getText() == null || nTF.getText().trim().length() == 0) {
             nWL.setText("Məhsulun adını daxil edin!");
             return false;
         } else {
             nWL.setText(null);
+            return true;
         }
-
-        return true;
     }
 
     private void checkButtonEnableStatus() {
 
         if (isBarcodeInputValid() && isNameInputValid() && productDAO.getByBarcode(bTF.getText()) == null) {
             saveButton.setDisable(false);
-
         } else {
             saveButton.setDisable(true);
         }
-
     }
 
     private void okButtonOnAction() {
