@@ -73,7 +73,7 @@ public class InvoiceItemDAO implements InvoiceItemDAOIntf {
 //            UserOperationLogger.logSQL(SQLQuery);
 //            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
 
-            ResultSet rs = DBUtil.mySQLExecuteQuery("SELECT * FROM InvoiceItem WHERE invoiceId=" + id + " ORDER BY `id` DESC");
+            ResultSet rs = DBUtil.msAccessExecuteQuery("SELECT * FROM InvoiceItem WHERE invoiceId=" + id + " ORDER BY `id` DESC");
 
             return RsToModel.rsToInvoiceItemList(rs);
 

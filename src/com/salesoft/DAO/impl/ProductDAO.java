@@ -137,7 +137,7 @@ public class ProductDAO implements ProductDAOIntf {
 //            UserOperationLogger.logSQL(SQLQuery);
 //            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
 
-            ResultSet rs = DBUtil.mySQLExecuteQuery("SELECT * FROM Product WHERE name LIKE '%" + name + "%'");
+            ResultSet rs = DBUtil.msAccessExecuteQuery("SELECT * FROM Product WHERE name LIKE '%" + name + "%'");
 
             list = RsToModel.rsToProductList(rs);
 

@@ -195,7 +195,10 @@ public class DBUtil {
 
             return rs;
         } catch (SQLException e) {
-            MyExceptionLogger.logExceptionV2("SQLException - DBUtil.dbExecuteQuery()", "selectSQLQuery: " + selectSQLQuery, "null", e);
+            System.out.println("SQLException -  DBUtil.msAccessExecuteQuery(): " + e);
+
+            new ExceptionShowDialog(e).showAndWait();
+            MyExceptionLogger.logExceptionV2("SQLException - DBUtil.msAccessExecuteUpdate()", "selectSQLQuery: " + selectSQLQuery, "null", e);
             throw e;
         }
     }
@@ -203,13 +206,15 @@ public class DBUtil {
     public static void msAccessExecuteUpdate(String updateSQLQuery) throws SQLException {
         try {
             msAccessConnect();
-            //System.out.println("updateSQLQuery :" + updateSQLQuery);
+            System.out.println("updateSQLQuery :" + updateSQLQuery);
 
             stmt = conn.createStatement();
             stmt.executeUpdate(updateSQLQuery);
         } catch (SQLException e) {
-            System.out.println("SQLException -  DBUtil.dbExecuteUpdate(): " + e);
-            MyExceptionLogger.logException("SQLException - DBUtil.dbExecuteUpdate()", e);
+            System.out.println("SQLException -  DBUtil.msAccessExecuteUpdate(): " + e);
+            new ExceptionShowDialog(e).showAndWait();
+
+            MyExceptionLogger.logException("SQLException - DBUtil.msAccessExecuteUpdate()", e);
             throw e;
         } finally {
             AllDisconnect();

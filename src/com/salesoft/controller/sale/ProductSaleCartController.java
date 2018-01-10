@@ -17,6 +17,7 @@ import com.salesoft.model.Product;
 import com.salesoft.util.MyJRViewer;
 import java.awt.Toolkit;
 import java.net.URL;
+import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -707,6 +708,7 @@ public class ProductSaleCartController implements Initializable {
         Invoice invoice = new Invoice();
         invoice.setCustomerName(customerName);
         invoice.setTotalPrice(totalPrice);
+        invoice.setDate(new Date());
 
         // Qaime syahisina yaziriq ve id aliriq
         invoiceDAO.create(invoice);

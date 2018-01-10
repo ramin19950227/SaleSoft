@@ -10,6 +10,7 @@ import com.salesoft.model.InvoiceItem;
 import com.salesoft.model.Product;
 import com.salesoft.util.MyDateConverter;
 import com.salesoft.util.MyProperties;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 /**
@@ -75,7 +76,7 @@ public class SQL {
         }
 
         public static String CREATE_FOR_ACCES(Invoice invoice) {
-            return "INSERT INTO Invoice (customerName,totalPrice) VALUES ('" + invoice.getCustomerName() + "', " + invoice.getTotalPrice() + ")";
+            return "INSERT INTO Invoice (customerName,totalPrice, dateTime) VALUES ('" + invoice.getCustomerName() + "', " + invoice.getTotalPrice() + ", '" + new Timestamp(invoice.getDate().getTime())+ "')";
         }
 
         public static String UPDATE(Invoice invoice) {

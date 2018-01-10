@@ -56,7 +56,7 @@ public class MyDateConverter {
          * second,
          *
          * @param date - Java Util Date
-         * @param format - give the String type format
+         * @param format - give the String type formatDate
          * @return
          */
         public static String toStringCustomFormat(Date date, String format) {
@@ -101,12 +101,16 @@ public class MyDateConverter {
      * Шаблон даты, используемый для преобразования. Можно поменять на свой.
      */
     private static final String DATE_PATTERN = "dd.MM.yyyy";
+    private static final String DATE_TIME_PATTERN = "dd-MM-yyyy, HH:mm:ss";
 
     /**
      * Форматировщик даты.
      */
     private static final DateTimeFormatter DATE_FORMATTER
             = DateTimeFormatter.ofPattern(DATE_PATTERN);
+
+    private static final DateTimeFormatter DATE_TIME_FORMATTER
+            = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
 
     /**
      * Возвращает полученную дату в виде хорошо отформатированной строки.
@@ -115,11 +119,18 @@ public class MyDateConverter {
      * @param date - дата, которая будет возвращена в виде строки
      * @return отформатированную строку
      */
-    public static String format(LocalDate date) {
+    public static String formatDate(LocalDate date) {
         if (date == null) {
             return null;
         }
         return DATE_FORMATTER.format(date);
+    }
+
+    public static String formatDateTime(LocalDate date) {
+        if (date == null) {
+            return null;
+        }
+        return DATE_TIME_FORMATTER.format(date);
     }
 
     /**
@@ -131,7 +142,7 @@ public class MyDateConverter {
      * @param dateString - дата в виде String
      * @return объект даты или null, если строка не может быть преобразована
      */
-    public static LocalDate parse(String dateString) {
+    public static LocalDate parseDate(String dateString) {
         try {
             return DATE_FORMATTER.parse(dateString, LocalDate::from);
         } catch (DateTimeParseException e) {
@@ -147,7 +158,7 @@ public class MyDateConverter {
      */
     public static boolean validDate(String dateString) {
         // Пытаемся разобрать строку.
-        return MyDateConverter.parse(dateString) != null;
+        return MyDateConverter.parseDate(dateString) != null;
     }
 
 }

@@ -170,7 +170,7 @@ public class LoginController implements Initializable {
     private void hlCreateAnAccount(ActionEvent event) throws IOException {
 
         try {
-            ResultSet rs = DBUtil.mySQLExecuteQuery(("SELECT Id FROM User ORDER BY Id ASC LIMIT 1"));
+            ResultSet rs = DBUtil.msAccessExecuteQuery(("SELECT Id FROM User ORDER BY Id ASC LIMIT 1"));
             if (rs.next()) {
                 System.out.println(rs.getString(1));
                 apMother.setOpacity(0.7);

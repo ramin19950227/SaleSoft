@@ -5,11 +5,12 @@ import com.salesoft.database.DBUtil;
 import com.salesoft.database.SQL;
 import com.salesoft.model.Invoice;
 import com.salesoft.model.InvoiceItem;
+import com.salesoft.util.MyDateConverter;
 import com.salesoft.util.MyExceptionLogger;
-import com.salesoft.util.UserOperationLogger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class InvoiceDAO implements InvoiceDAOIntf<Invoice, Integer, String> {
 
@@ -96,7 +97,7 @@ public class InvoiceDAO implements InvoiceDAOIntf<Invoice, Integer, String> {
                         rs.getInt(1),
                         rs.getString(2),
                         rs.getDouble(3),
-                        new java.util.Date(rs.getTimestamp(4).getTime()),
+                        rs.getTimestamp(4),
                         new ArrayList<>()
                 ));
             }
