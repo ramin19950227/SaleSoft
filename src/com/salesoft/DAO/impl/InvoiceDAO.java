@@ -38,7 +38,7 @@ public class InvoiceDAO implements InvoiceDAOIntf<Invoice, Integer, String> {
 //            UserOperationLogger.logSQL(SQLQuery);
 //            DBUtil.mySQLExecuteUpdate(SQLQuery);
 
-            String SQLQuery = SQL.InvoiceSQL.CREATE_FOR_ACCES(invoice);
+            String SQLQuery = SQL.InvoiceSQL.UPDATE_FOR_ACCESS(invoice);
             DBUtil.msAccessExecuteUpdate(SQLQuery);
 
         } catch (SQLException ex) {
