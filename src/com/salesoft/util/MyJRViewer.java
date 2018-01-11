@@ -81,7 +81,7 @@ public class MyJRViewer {
             //JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
             // Bu kod ile Hazirladigimiz JasperPrint Obyektimizi Gosteririk 
             //bu formada olanda Istesek PDF-e ve ya bashqaformatlara cevire bilerik ve hetta capda eve bilerik
-            JasperViewer jasperViewer = new JasperViewer(jasperPrint);
+            JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
             jasperViewer.setVisible(true);
 
             System.out.println("MyJasperViewer is Generated");
