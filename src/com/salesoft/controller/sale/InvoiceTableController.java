@@ -1,6 +1,7 @@
 package com.salesoft.controller.sale;
 
 import com.salesoft.DAO.impl.InvoiceDAO;
+import com.salesoft.controller.ControllersRef;
 import com.salesoft.model.Invoice;
 import java.net.URL;
 import java.util.ArrayList;
@@ -54,8 +55,7 @@ public class InvoiceTableController implements Initializable {
 
         invoiceTable.setOnMousePressed((MouseEvent event) -> {
             if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
-                Integer invoice_id = invoiceTable.getSelectionModel().getSelectedItem().getId();
-                //TODO
+                handleShowInvoiceDetails();
             }
         });
 
@@ -117,7 +117,7 @@ public class InvoiceTableController implements Initializable {
     @FXML
     private TextField searchField;
 
-    Invoice selectedInvoice = null;
+    public static Invoice selectedInvoice = null;
 
     /**
      * searchFieldReleased
@@ -174,8 +174,7 @@ public class InvoiceTableController implements Initializable {
             alert.setContentText("Qaimeni Secib Sonra Duymeye basin");
             alert.showAndWait();
         } else {
-            Integer id = selectedInvoice.getId();
-            //mainApp.showSaleInvoiceDetailsTable(id);
+            ControllersRef.srlc.toggleButtonSaleInvoiceDetailsOnAction();
         }
     }
 

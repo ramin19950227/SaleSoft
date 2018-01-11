@@ -192,6 +192,8 @@ public class ApplicationController implements Initializable {
 
         //Obyektimizi Statik Deyishkene yaziram ki Qiraqdan muraciet ede bilim
         applicationController = this;
+        //artiq referanslar ucun yeni classimiz var
+        ControllersRef.ac = this;
 
     }
 
@@ -289,7 +291,7 @@ public class ApplicationController implements Initializable {
     }
 
     @FXML
-    private void btnSellOnClick(ActionEvent event) {
+    public void btnSellOnClick(ActionEvent event) {
         sellActive();
 
         //bu Sehifemizin Controllerini almaq ucun istifade edeceyik
@@ -309,10 +311,11 @@ public class ApplicationController implements Initializable {
         }
 
         // controller obyektimizi loaderden aliriq
-        SaleRootLayoutController saleController = loader.getController();
+        //SaleRootLayoutController saleController = loader.getController();
+        ControllersRef.srlc = loader.getController();
 
         //ve controllerimizden bize lazim olan metodu cagiririq
-        saleController.toggleButtonSaleOnAction();
+        ControllersRef.srlc.toggleButtonSaleOnAction();
 
         acContent.getChildren().clear();
         acContent.getChildren().add(ap);

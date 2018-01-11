@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="700.0" stylesheets="@../../../../style/MainStyle.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.salesoft.controller.sale.SaleInvoiceTableController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="700.0" stylesheets="@../../../../style/MainStyle.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.salesoft.controller.sale.InvoiceTableController">
    <children>
       <TableView fx:id="invoiceTable" layoutX="14.0" layoutY="14.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="205.0" AnchorPane.topAnchor="0.0">
         <columns>
@@ -27,7 +27,7 @@
       <AnchorPane layoutX="606.0" layoutY="65.0" prefHeight="600.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label layoutX="44.0" layoutY="14.0" text="Mushteri adi ile axtarish" />
-            <TextField fx:id="searchField" layoutX="33.0" layoutY="39.0" onKeyReleased="#searchFieldReleased" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />
+            <TextField fx:id="searchField" disable="true" layoutX="33.0" layoutY="39.0" onKeyReleased="#searchFieldReleased" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" />
             <Label layoutX="64.0" layoutY="99.0" text="Redakte Bolumu" />
             <GridPane layoutX="12.0" layoutY="128.0" prefHeight="233.0" prefWidth="178.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="11.0">
               <columnConstraints>

@@ -108,6 +108,10 @@ public class InvoiceItemTableController implements Initializable {
                 });
         // HE Super Ishleyirrmish
         clearField();
+        Invoice i = InvoiceTableController.selectedInvoice;
+        if (i != null) {
+            initDataById(i.getId());
+        }
 
     }
 
@@ -118,7 +122,12 @@ public class InvoiceItemTableController implements Initializable {
      * @param id
      */
     @FXML
-    public void initDataById(int id) {
+    public void initDataById(Integer id) {
+        //BUGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+        //demeli bu Controllerde -> InvoiceTableController
+        // invoice obyektini bosh aliram ve bosh ishledirem invoiceItem-siz bu dogru deyil 
+        // bunu hemen aradan qaldirmaq lazimdir
+        //invoice = InvoiceTableController.selectedInvoice;
         invoice = invoiceDAO.get(id);
 
         if (invoice != null) {

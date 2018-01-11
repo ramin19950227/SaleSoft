@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="750.0" stylesheets="@../../../../style/MainStyle.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.salesoft.controller.sale.SaleInvoiceDetailsTableController">
+<AnchorPane prefHeight="600.0" prefWidth="750.0" stylesheets="@../../../../style/MainStyle.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.salesoft.controller.sale.InvoiceItemTableController">
    <children>
       <TableView fx:id="invoiceTable" layoutX="15.0" layoutY="165.0" prefHeight="400.0" prefWidth="575.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="165.0" AnchorPane.topAnchor="165.0">
          <columns>

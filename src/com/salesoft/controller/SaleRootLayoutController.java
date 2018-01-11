@@ -63,7 +63,7 @@ public class SaleRootLayoutController implements Initializable {
     }
 
     @FXML
-    private void toggleButtonSaleInvoiceOnAction() {
+    public void toggleButtonSaleInvoiceOnAction() {
         headLabel.setText("Satish Arxivi");
 
         stackPaneCenter.getChildren().clear();
@@ -72,16 +72,13 @@ public class SaleRootLayoutController implements Initializable {
     }
 
     @FXML
-    private void toggleButtonSaleInvoiceDetailsOnAction() {
+    public void toggleButtonSaleInvoiceDetailsOnAction() {
+        toggleButtonSaleInvoiceDetails.setSelected(true);
         headLabel.setText("Qaime Nomresi ile baxish");
 
         stackPaneCenter.getChildren().clear();
         stackPaneCenter.getChildren().add(MyFXMLLoader.getAnchorPaneFromURL(MyProperties.getURLProperties().getSaleInvoiceDetailsTableURL()));
 
-    }
-
-    public static void setRoot(ApplicationController input) {
-        appControl = input;
     }
 
 }
