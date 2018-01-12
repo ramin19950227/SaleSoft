@@ -24,7 +24,7 @@ public class MainApp extends Application {
         Scene loginViewScene = MyFXMLLoader.getSceneFromURL(loginViewURL);
         
         primaryStage.setScene(loginViewScene);
-        primaryStage.setTitle("SaleSoft Alpha versiyasi 1.11");
+        primaryStage.setTitle("SaleSoft Alpha versiyasi 1.12.5");
         primaryStage.getIcons().add(new Image("com/salesoft/image/icon.png"));
         primaryStage.setMaximized(false);
         primaryStage.setMinHeight(500.0);
