@@ -8,6 +8,8 @@ import com.salesoft.model.ProductImportWrapper;
 import com.salesoft.util.MyDateConverter;
 import com.salesoft.util.MyView;
 import com.salesoft.util.TextFieldValidator;
+import com.salesoft.util.UserOperationLogger;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -55,6 +57,7 @@ public class ProductImportController implements Initializable {
 
     private AutoCompletionBinding<String> bindAutoCompletion;
     private Product product;
+    private final PrintWriter LOGWriter = UserOperationLogger.getLogWriter();
 
     /**
      * Initializes the controller class.
@@ -64,10 +67,10 @@ public class ProductImportController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        System.out.println("");
-        System.out.println("__________________________________________________________________________");
-        System.out.println("ProductImportController.initialize()");
-        System.out.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+        LOGWriter.println("");
+        LOGWriter.println("__________________________________________________________________________");
+        LOGWriter.println("ProductImportController.initialize()");
+        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
 
         // barcodlari saxlamaq ucun setimizi elan edirik
         //butun mehsullari aliriq ve butun mehsullarin barcodlarini yaaziriq set'e 
@@ -110,9 +113,9 @@ public class ProductImportController implements Initializable {
         datePicker.setOnAction(event -> {
             //for Testing
 //            LocalDate date = datePicker.getValue();
-//            //System.out.println("Selected LocalDate: " + date);
+//            //LOGWriter.println("Selected LocalDate: " + date);
 //            Date d = MyDateConverter.asDate(date);
-//            //System.out.println("Selected util.Date: " + d);
+//            //LOGWriter.println("Selected util.Date: " + d);
 
         });
 
@@ -201,21 +204,21 @@ public class ProductImportController implements Initializable {
     }
 
     private void saveButtonOnAction() {
-        System.out.println("");
-        System.out.println("__________________________________________________________________________");
-        System.out.println("ProductImportController.saveButtonOnAction()");
-        System.out.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+        LOGWriter.println("");
+        LOGWriter.println("__________________________________________________________________________");
+        LOGWriter.println("ProductImportController.saveButtonOnAction()");
+        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
 
-        System.out.println("Fields Status");
-        System.out.println("BarCode Field: " + bTF.getText());
-        System.out.println("Name Field: " + nTF.getText());
-        System.out.println("QTY Field: " + qTF.getText());
-        System.out.println("price Field: " + pTF.getText());
+        LOGWriter.println("Fields Status");
+        LOGWriter.println("BarCode Field: " + bTF.getText());
+        LOGWriter.println("Name Field: " + nTF.getText());
+        LOGWriter.println("QTY Field: " + qTF.getText());
+        LOGWriter.println("price Field: " + pTF.getText());
 
         if (product != null) {
-            System.out.println("Product is Exist and well Importer (Updated)");
-            System.out.println("Product Fist State");
-            System.out.println(product);
+            LOGWriter.println("Product is Exist and well Importer (Updated)");
+            LOGWriter.println("Product Fist State");
+            LOGWriter.println(product);
 
             product.setQty(Integer.parseInt(qTF.getText()));
             product.setPurchasePrice(Double.parseDouble(pTF.getText()));
@@ -227,9 +230,9 @@ public class ProductImportController implements Initializable {
             //birinci alish haqqinda melumati yazaq sonra ise mehsulun sayini cemleyib yenileyek
             ProductImportWrapper pp = new ProductImportWrapper(date, product);
 
-            System.out.println("Product is READY to Write Import History");
-            System.out.println(product);
-            System.out.println(pp);
+            LOGWriter.println("Product is READY to Write Import History");
+            LOGWriter.println(product);
+            LOGWriter.println(pp);
 
             purchaseProductDAO.create(pp);
 
@@ -237,12 +240,12 @@ public class ProductImportController implements Initializable {
             Integer oldQty = productDAO.getByBarcode(product.getBarCode()).getQty();
             product.plusQty(oldQty);
 
-            System.out.println("Product old qty= " + oldQty);
-            System.out.println("Product Last State Is: ");
-            System.out.println(product);
+            LOGWriter.println("Product old qty= " + oldQty);
+            LOGWriter.println("Product Last State Is: ");
+            LOGWriter.println(product);
 
             productDAO.update(product);
-            System.out.println("Product is Succes Imported");
+            LOGWriter.println("Product is Succes Imported");
 
             ApplicationController.getApplicationController().btnStockOnClick();
 
@@ -255,17 +258,17 @@ public class ProductImportController implements Initializable {
             product.setBarCode(bTF.getText());
             product.setName(nTF.getText());
 
-            System.out.println("Registering Product" + product);
+            LOGWriter.println("Registering Product" + product);
             productDAO.create(product);
-            System.out.println("Product Registered");
+            LOGWriter.println("Product Registered");
 
-            System.out.println("getting product");
+            LOGWriter.println("getting product");
             // indi ise yeni qeydiyyatdan kecen mehsulumuzu alaq yeni id-si ile ve alish emri verek sonra
             product = productDAO.getByBarcode(bTF.getText());
 
-            System.out.println("product Received: " + product);
+            LOGWriter.println("product Received: " + product);
 
-            System.out.println("settings qty, purchase and note data's"
+            LOGWriter.println("settings qty, purchase and note data's"
                     + Integer.parseInt(qTF.getText())
                     + Double.parseDouble(pTF.getText())
                     + nTA.getText());
@@ -275,40 +278,40 @@ public class ProductImportController implements Initializable {
             product.setPurchasePrice(Double.parseDouble(pTF.getText()));
             product.setNote(nTA.getText());
 
-            System.out.println("get date from date picker");
+            LOGWriter.println("get date from date picker");
 
             LocalDate localDate = datePicker.getValue();
 
-            System.out.println("localDate is: " + localDate);
+            LOGWriter.println("localDate is: " + localDate);
 
-            System.out.println("converting localDate to util.Date");
+            LOGWriter.println("converting localDate to util.Date");
 
             Date date = MyDateConverter.asDate(localDate);
 
-            System.out.println("util.Date is: " + date);
+            LOGWriter.println("util.Date is: " + date);
 
-            System.out.println("Creating Wrapper for Import");
+            LOGWriter.println("Creating Wrapper for Import");
             //birinci alish haqqinda melumati yazaq sonra ise mehsulun sayini cemleyib yenileyek
             ProductImportWrapper pp = new ProductImportWrapper(date, product);
 
-            System.out.println("wrapper created and is: " + pp);
+            LOGWriter.println("wrapper created and is: " + pp);
 
             purchaseProductDAO.create(pp);
 
-            System.out.println("wrapper created and is: " + pp);
+            LOGWriter.println("wrapper created and is: " + pp);
 
             //saylari yenileyek ki evvelki say silinmesin
             Integer oldQty = productDAO.getByBarcode(product.getBarCode()).getQty();
 
             product.plusQty(oldQty);
 
-            System.out.println("Saveing Product do DB: " + product);
+            LOGWriter.println("Saveing Product do DB: " + product);
 
             productDAO.update(product);
 
-            System.out.println("Import is end:");
+            LOGWriter.println("Import is end:");
 
-            System.out.println("Showing Stock");
+            LOGWriter.println("Showing Stock");
 
             ApplicationController.getApplicationController().btnStockOnClick();
 
@@ -318,10 +321,10 @@ public class ProductImportController implements Initializable {
     }
 
     private void clearAll() {
-        System.out.println("");
-        System.out.println("__________________________________________________________________________");
-        System.out.println("ProductImportController.clearAll()");
-        System.out.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+        LOGWriter.println("");
+        LOGWriter.println("__________________________________________________________________________");
+        LOGWriter.println("ProductImportController.clearAll()");
+        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
 
         // null to TextField's
         bTF.setText(null);
@@ -355,10 +358,10 @@ public class ProductImportController implements Initializable {
     }
 
     private void clearTextFields() {
-        System.out.println("");
-        System.out.println("__________________________________________________________________________");
-        System.out.println("ProductImportController.clearTextFields()");
-        System.out.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+        LOGWriter.println("");
+        LOGWriter.println("__________________________________________________________________________");
+        LOGWriter.println("ProductImportController.clearTextFields()");
+        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
 
         // null to TextField's
         bTF.setText(null);
@@ -377,13 +380,13 @@ public class ProductImportController implements Initializable {
     }
 
     private void bTFOnKeyReleased() {
-        System.out.println("");
-        System.out.println("__________________________________________________________________________");
-        System.out.println("ProductImportController.bTFOnKeyReleased()");
-        System.out.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+        LOGWriter.println("");
+        LOGWriter.println("__________________________________________________________________________");
+        LOGWriter.println("ProductImportController.bTFOnKeyReleased()");
+        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
 
-        System.out.println("Fields:");
-        System.out.println("BarCode Field: " + bTF.getText());
+        LOGWriter.println("Fields:");
+        LOGWriter.println("BarCode Field: " + bTF.getText());
 
         String input = bTF.getText();
 
@@ -397,7 +400,7 @@ public class ProductImportController implements Initializable {
         }
 
         Boolean isBarCodeTextFieldInputValid = TFValidator.isNotNull(bTF);
-        System.out.println("isBarCodeTextFieldInputValid: " + isBarCodeTextFieldInputValid);
+        LOGWriter.println("isBarCodeTextFieldInputValid: " + isBarCodeTextFieldInputValid);
 
         if (isBarCodeTextFieldInputValid) {
 
@@ -406,8 +409,8 @@ public class ProductImportController implements Initializable {
             if (product != null) {
                 myView.showOk(bIV);
                 bWL.setText("Mehsul Qeydiyyatdan Kecib");
-                System.out.println("Mehsul Qeydiyyatdan Kecib");
-                System.out.println(product);
+                LOGWriter.println("Mehsul Qeydiyyatdan Kecib");
+                LOGWriter.println(product);
 
                 //melumatlari Productdan Alib Set edek
                 nTF.setText(product.getName());
@@ -430,8 +433,8 @@ public class ProductImportController implements Initializable {
             } else {
                 myView.showWarning(bIV);
                 bWL.setText("Mehsul Qeydiyyatdan KECMEYIB, Yeni olaraq Qeydiyyata Alinacaq");
-                System.out.println("Mehsul Qeydiyyatdan KECMEYIB, Yeni olaraq Qeydiyyata Alinacaq");
-                System.out.println(product);
+                LOGWriter.println("Mehsul Qeydiyyatdan KECMEYIB, Yeni olaraq Qeydiyyata Alinacaq");
+                LOGWriter.println(product);
 
                 qTF.setPromptText("Sayı daxil edin");
             }

@@ -53,10 +53,10 @@ public class ProductRegistrationController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        System.out.println("");
-        System.out.println("__________________________________________________________________________");
-        System.out.println("ProductRegistrationController.initialize()");
-        System.out.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+        LOGWriter.println("");
+        LOGWriter.println("__________________________________________________________________________");
+        LOGWriter.println("ProductRegistrationController.initialize()");
+        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
 
         saveButton.setOnAction(value -> {
             okButtonOnAction();
@@ -84,26 +84,26 @@ public class ProductRegistrationController implements Initializable {
     }
 
     private void barCodeFieldOnKeyReleased() {
-        System.out.println("");
-        System.out.println("__________________________________________________________________________");
-        System.out.println("ProductRegistrationController.barCodeFieldOnKeyReleased()");
-        System.out.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+        LOGWriter.println("");
+        LOGWriter.println("__________________________________________________________________________");
+        LOGWriter.println("ProductRegistrationController.barCodeFieldOnKeyReleased()");
+        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
 
-        System.out.println("");
-        System.out.println("Field State:");
-        System.out.println("BarCode Field: " + bTF.getText());
+        LOGWriter.println("");
+        LOGWriter.println("Field State:");
+        LOGWriter.println("BarCode Field: " + bTF.getText());
 
         Boolean isBarcodeInputValid = isBarcodeInputValid();
 
-        System.out.println("isBarcodeInputValid: " + isBarcodeInputValid);
+        LOGWriter.println("isBarcodeInputValid: " + isBarcodeInputValid);
 
         if (isBarcodeInputValid) {
             Product product = productDAO.getByBarcode(bTF.getText());
 
             if (product == null) {
 
-                System.out.println("Product Not Exist. Can be Registered");
-                System.out.println(product);
+                LOGWriter.println("Product Not Exist. Can be Registered");
+                LOGWriter.println(product);
 
                 myView.showOk(bIV);
                 checkButtonEnableStatus();
@@ -111,8 +111,8 @@ public class ProductRegistrationController implements Initializable {
             } else {
                 checkButtonEnableStatus();
 
-                System.out.println("Product is Exist. Can NOT be Registered");
-                System.out.println(product);
+                LOGWriter.println("Product is Exist. Can NOT be Registered");
+                LOGWriter.println(product);
 
                 myView.showNo(bIV);
                 bWL.setText("Məhsul artıq Qeytiyyatdan Keçib");
@@ -128,17 +128,17 @@ public class ProductRegistrationController implements Initializable {
     }
 
     private void nameFieldOnKeyReleased() {
-        System.out.println("");
-        System.out.println("__________________________________________________________________________");
-        System.out.println("ProductRegistrationController.nameFieldOnKeyReleased()");
-        System.out.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+        LOGWriter.println("");
+        LOGWriter.println("__________________________________________________________________________");
+        LOGWriter.println("ProductRegistrationController.nameFieldOnKeyReleased()");
+        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
 
-        System.out.println("");
-        System.out.println("Field State:");
-        System.out.println("Name Field: " + nTF.getText());
+        LOGWriter.println("");
+        LOGWriter.println("Field State:");
+        LOGWriter.println("Name Field: " + nTF.getText());
 
         Boolean isNameInputValid = isNameInputValid();
-        System.out.println("isNameInputValid: " + isNameInputValid);
+        LOGWriter.println("isNameInputValid: " + isNameInputValid);
 
         if (isNameInputValid) {
             myView.showOk(nIV);
@@ -149,6 +149,46 @@ public class ProductRegistrationController implements Initializable {
             myView.showNo(nIV);
             checkButtonEnableStatus();
         }
+
+    }
+
+    private void okButtonOnAction() {
+        LOGWriter.println("");
+        LOGWriter.println("__________________________________________________________________________");
+        LOGWriter.println("ProductRegistrationController.okButtonOnAction()");
+        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+
+        Product product = new Product();
+
+        product.setBarCode(bTF.getText());
+        product.setName(nTF.getText());
+
+        LOGWriter.println("Registering Product");
+
+        productDAO.create(product);
+
+        LOGWriter.println(product);
+        LOGWriter.println("Product Succes Registered");
+        LOGWriter.println("Product Last State (After Registration) IS:");
+        LOGWriter.println(productDAO.getByBarcode(bTF.getText()));
+
+        //Anbari Gosterek
+        ApplicationController.getApplicationController().btnStockOnClick();
+
+    }
+
+    private void clearButtonOnAction() {
+
+        bTF.setText(null);
+        nTF.setText(null);
+
+        bIV.setImage(null);
+        nIV.setImage(null);
+
+        nWL.setText(null);
+        bWL.setText(null);
+
+        bTF.requestFocus();
 
     }
 
@@ -179,46 +219,6 @@ public class ProductRegistrationController implements Initializable {
         } else {
             saveButton.setDisable(true);
         }
-    }
-
-    private void okButtonOnAction() {
-        System.out.println("");
-        System.out.println("__________________________________________________________________________");
-        System.out.println("ProductRegistrationController.okButtonOnAction()");
-        System.out.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
-
-        Product product = new Product();
-
-        product.setBarCode(bTF.getText());
-        product.setName(nTF.getText());
-
-        System.out.println("Registering Product");
-
-        productDAO.create(product);
-
-        System.out.println(product);
-        System.out.println("Product Succes Registered");
-        System.out.println("Product Last State (After Registration) IS:");
-        System.out.println(productDAO.getByBarcode(bTF.getText()));
-
-        //Anbari Gosterek
-        ApplicationController.getApplicationController().btnStockOnClick();
-
-    }
-
-    private void clearButtonOnAction() {
-
-        bTF.setText(null);
-        nTF.setText(null);
-
-        bIV.setImage(null);
-        nIV.setImage(null);
-
-        nWL.setText(null);
-        bWL.setText(null);
-
-        bTF.requestFocus();
-
     }
 
 }

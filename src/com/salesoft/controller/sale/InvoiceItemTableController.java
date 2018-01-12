@@ -6,8 +6,12 @@ import com.salesoft.DAO.impl.ProductDAO;
 import com.salesoft.model.Invoice;
 import com.salesoft.model.InvoiceItem;
 import com.salesoft.model.Product;
+import com.salesoft.util.MyDateConverter;
 import com.salesoft.util.MyJRViewer;
+import com.salesoft.util.UserOperationLogger;
+import java.io.PrintWriter;
 import java.net.URL;
+import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -70,6 +74,7 @@ public class InvoiceItemTableController implements Initializable {
     private final ProductDAO ProductDAO = new ProductDAO();
     private final InvoiceDAO invoiceDAO = new InvoiceDAO();
     private final InvoiceItemDAO invoiceItemDAO = new InvoiceItemDAO();
+    private final PrintWriter LOGWriter = UserOperationLogger.getLogWriter();
 
     // aldigimiz invoice obyektini burda saxlayiriq
     Invoice invoice = null;
@@ -84,6 +89,10 @@ public class InvoiceItemTableController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        LOGWriter.println("");
+        LOGWriter.println("__________________________________________________________________________");
+        LOGWriter.println("InvoiceItemTableController.initialize()");
+        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
 
         barCodeColumn.setCellValueFactory(cellData -> cellData.getValue().getProduct().barCodeProperty());
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().getProduct().nameProperty());
@@ -123,12 +132,20 @@ public class InvoiceItemTableController implements Initializable {
      */
     @FXML
     public void initDataById(Integer id) {
+        LOGWriter.println("");
+        LOGWriter.println("__________________________________________________________________________");
+        LOGWriter.println("InvoiceItemTableController.initDataById(Integer id)");
+        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+
+        LOGWriter.println("id: " + id);
+
         //BUGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
         //demeli bu Controllerde -> InvoiceTableController
         // invoice obyektini bosh aliram ve bosh ishledirem invoiceItem-siz bu dogru deyil 
         // bunu hemen aradan qaldirmaq lazimdir
         //invoice = InvoiceTableController.selectedInvoice;
         invoice = invoiceDAO.get(id);
+        LOGWriter.println("invoice: " + invoice);
 
         if (invoice != null) {
             cutomerNameLabel.setText(invoice.getCustomerName());
@@ -153,19 +170,29 @@ public class InvoiceItemTableController implements Initializable {
      */
     @FXML
     private void onActionShowInvoiceButton() {
-        System.err.println("com.salesoft.view.sale.SaleInvoiceDetailsTableController.onActionShowInvoiceButton()");
+        LOGWriter.println("");
+        LOGWriter.println("__________________________________________________________________________");
+        LOGWriter.println("InvoiceItemTableController.onActionShowInvoiceButton()");
+        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+
         if (idField.getText() == null || idField.getText().length() == 0) {
             errorAlert("Qaime nomresini daxil edin", "Qaime nomresini daxil edin", "Qaime nomresini daxil edin");
             idField.setStyle("-fx-border-color: red;-fx-border-width: 5;");
+            LOGWriter.println("idField.getText(): " + idField.getText());
+
         } else {
             // пытаемся преобразовать почтовый код в int.
             try {
                 Integer.parseInt(idField.getText());
                 initDataById(Integer.parseInt(idField.getText()));
                 idField.setStyle("-fx-border-color: white;-fx-border-width: 0;");
+                LOGWriter.println("idField.getText(): " + Integer.parseInt(idField.getText()));
+
             } catch (NumberFormatException e) {
                 errorAlert("Kecerli Qaime nomresini daxil edin", "Kecerli Qaime nomresini daxil edin", "Kecerli Qaime nomresini daxil edin (Tam eded olmalidir)");
                 idField.setStyle("-fx-border-color: red;-fx-border-width: 5;");
+                LOGWriter.println("idField.getText(): " + "NumberFormatException ");
+
             }
         }
         idField.requestFocus();
@@ -194,9 +221,17 @@ public class InvoiceItemTableController implements Initializable {
      */
     @FXML
     private void onActionPrintButton() {
+        LOGWriter.println("");
+        LOGWriter.println("__________________________________________________________________________");
+        LOGWriter.println("InvoiceItemTableController.onActionPrintButton()");
+        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+
         if (invoice != null) {
+            LOGWriter.println(invoice);
+
             MyJRViewer.showSATISH_QAIMESI(invoice);
         } else {
+            LOGWriter.println(invoice);
             errorAlert("Zehmet olmasa Qaime nomresini yazin", "Zehmet olmasa Qaime nomresini yazin", "Sonra qaimeni gosterin daha sonra cap edin");
         }
     }
@@ -206,6 +241,10 @@ public class InvoiceItemTableController implements Initializable {
      */
     @FXML
     private void onActionReturnButton() {
+        LOGWriter.println("");
+        LOGWriter.println("__________________________________________________________________________");
+        LOGWriter.println("InvoiceItemTableController.onActionReturnButton()");
+        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
 
         /**
          * Heleki bele Edirem mehsulu id ile deyil bar cod ile yoxlayiram bazada
@@ -222,6 +261,8 @@ public class InvoiceItemTableController implements Initializable {
             errorAlert("Zehmet olmasa Cedvelden Mehsul Secin", "Qaytarmaq istediyiniz Mehsulu Secin", "Mehsulu Secin");
             return;
         }
+        LOGWriter.println(selectedInvoiceItem);
+        LOGWriter.println("");
 
         // sayi yoxla gor invoice listde olan saydan cox deyil ve0-dan azdeyil 0deyil
         // sonra malin sayini invoice listde yazildigi qeder azald ve Mehsul bazasindada hemin qeder artir
@@ -236,6 +277,7 @@ public class InvoiceItemTableController implements Initializable {
 
             //eslinde bu yoxlamaya ehtiyyac yoxdur artiq
             if (enteredQty <= itemQty && enteredQty > 0) {
+                LOGWriter.println("enteredQty: " + enteredQty);
 
                 // mehsulun barcodunu aliriq
                 String productBarCode = selectedInvoiceItem.getProduct().getBarCode();
@@ -245,6 +287,7 @@ public class InvoiceItemTableController implements Initializable {
                 //ashagidakileri ele
                 //indi mehsulumuzu alaqki sayini bilek sonra onun ustune qaytarilani yazaq
                 Product returnedProduct = ProductDAO.getByBarcode(productBarCode);
+                LOGWriter.println("returnedProduct before: " + returnedProduct);
 
                 //yoxlyiriq eger bu barcod- ile bazada mehsul varsa davam edirik 
                 //yoxdursa NullPointerException cixacaq. bu olmasin deye yoxlayiram -
@@ -260,6 +303,7 @@ public class InvoiceItemTableController implements Initializable {
 
                     //aldgimiz neticeni bazaya gonderirik ki id ile uygun olan mehsulun sayini yenile
                     ProductDAO.update(returnedProduct);
+                    LOGWriter.println("returnedProduct after: " + returnedProduct);
 
                     // indi ise InvoiceItem-in sayini azaltmaliyiq
                     // ashagida itemimizin hal hazirdaki sayini aliriq
@@ -317,17 +361,23 @@ public class InvoiceItemTableController implements Initializable {
                     // ve hazir Invoice Obyektimizi yenileyirik
                     invoiceDAO.update(invoice);
 
+                    LOGWriter.println(invoice);
+                    LOGWriter.println("");
+
                     //yenilemeler bitdikden sonra indi Invoice Obyektimizi de yenilemeliyik
                     initDataById(invoice.getId());
 
                 } else {
                     System.err.println("Returner Product Not Found");
                     errorAlert("XETA", "Bu barcodla Bazada Mehsul Tapilmadi", "Mehsulu Yeniden Qeydiyyatdan kecirdin");
+                    LOGWriter.println("\"XETA\", \"Bu barcodla Bazada Mehsul Tapilmadi\", \"Mehsulu Yeniden Qeydiyyatdan kecirdin\"");
 
                 }
             } else {
                 System.err.println("Returner Product Qty is Not Correct");
-                errorAlert("Zehmet olmasa Qaytarma Sayini dogru Daxil edin", "Qaytarmaq sayini Dogru daxil edin", "Sayi Daxil edin");
+                errorAlert("Zehmet olmasa Qaytarma Sayini dogru Daxil edin", "Sayi Dogru daxil edin", "Sayi Daxil edin");
+                LOGWriter.println("Sayi Dogru daxil edin");
+
             }
         } else {
             System.err.println("Inputi is Not Valid");
@@ -358,6 +408,14 @@ public class InvoiceItemTableController implements Initializable {
      * @param invoiceItem
      */
     private void setInvoiceItemEditFields(InvoiceItem invoiceItem) {
+        LOGWriter.println("");
+        LOGWriter.println("__________________________________________________________________________");
+        LOGWriter.println("InvoiceItemTableController.setInvoiceItemEditFields(InvoiceItem invoiceItem)");
+        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
+        LOGWriter.println("");
+
+        LOGWriter.println(invoiceItem);
+
         productReturnQty.setText(invoiceItem.getProduct().getQty().toString());
         returnButton.requestFocus();
 

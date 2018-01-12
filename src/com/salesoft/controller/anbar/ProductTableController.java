@@ -263,9 +263,9 @@ public class ProductTableController implements Initializable {
         } else if (!productList.isEmpty()) {
             LOGWriter.println("productList.size()=" + productList.size());
 
-            productList.forEach(p -> {
-                LOGWriter.println(p);
-            });
+//            productList.forEach(p -> {
+//                LOGWriter.println(p);
+//            });
 
             productObservableList.clear();
             productObservableList.addAll(productList);
