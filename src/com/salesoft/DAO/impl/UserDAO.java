@@ -52,7 +52,7 @@ public class UserDAO implements UserDAOIntf {
             ////////////////////////////////////////////MS ACCESS/////////////////////////////////////////////
             String SQLQuery = SQL.UserSQL.LOGIN(UsrName, Password);
 //            UserOperationLogger.logSQL(SQLQuery);
-            ResultSet rs = DBUtil.msAccessExecuteQuery("select * from User where name=" + UsrName + " and password=" + Password);
+            ResultSet rs = DBUtil.msAccessExecuteQuery("select * from User where name='" + UsrName + "' and password=" + Password);
 
             if (rs.next()) {
                 return true;
