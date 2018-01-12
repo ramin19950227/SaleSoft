@@ -8,7 +8,7 @@ package com.salesoft.controller.sale;
 import com.salesoft.DAO.impl.InvoiceDAO;
 import com.salesoft.DAO.impl.InvoiceItemDAO;
 import com.salesoft.DAO.impl.ProductDAO;
-import com.salesoft.controller.ApplicationController;
+import com.salesoft.controller.ControllersRef;
 import com.salesoft.model.Cart;
 import com.salesoft.model.CartItem;
 import com.salesoft.model.Invoice;
@@ -17,9 +17,12 @@ import com.salesoft.model.Product;
 import com.salesoft.util.MyJRViewer;
 import java.awt.Toolkit;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -33,6 +36,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import org.controlsfx.control.textfield.AutoCompletionBinding;
+import org.controlsfx.control.textfield.TextFields;
 
 /**
  * FXML Controller class Mehsul satishi bolumu Sebet yani
@@ -41,43 +46,11 @@ import javafx.scene.input.KeyEvent;
  */
 public class ProductSaleCartController implements Initializable {
 
-    /**
-     * -----------------------------SAG EDIT PANEL PROPERTIES
-     *
-     *
-     *
-     * SagEditPanel Melumatlari
-     */
+    @FXML
+    private TextField barCodeField, nameField, qtyField, onePrice, totalPrice;
+
     @FXML
     private Label cartTotalPrice;
-    /**
-     * SagEditPanel Melumatlari
-     */
-    @FXML
-    private TextField barCodeField;
-    /**
-     * SagEditPanel Melumatlari
-     */
-    @FXML
-    private TextField nameField;
-    /**
-     * SagEditPanel Melumatlari
-     */
-    @FXML
-    private TextField qtyField;
-    /**
-     * SagEditPanel Melumatlari
-     */
-    @FXML
-    private TextField onePrice;
-    /**
-     * SagEditPanel Melumatlari
-     */
-    @FXML
-    private TextField totalPrice;
-    /**
-     * Elave Et Duymesi
-     */
     @FXML
     private Button addButton;
 
@@ -95,41 +68,13 @@ public class ProductSaleCartController implements Initializable {
     @FXML
     private TextField customerName;
 
-    /**
-     * -----------------------------TABLE, COLUMN PROPERTIES
-     *
-     *
-     *
-     *
-     *
-     * Cedvelin Melumatlari
-     */
     @FXML
     private TableView<CartItem> cartTable;
-    /**
-     * Sutun Melumatlari
-     */
     @FXML
     private TableColumn<CartItem, String> nameColumn;
-    /**
-     * Sutun Melumatlari
-     */
     @FXML
-    private TableColumn<CartItem, Number> sayColumn;
-    /**
-     * Sutun Melumatlari
-     */
-    @FXML
-    private TableColumn<CartItem, Number> meblegColumn;
+    private TableColumn<CartItem, Number> sayColumn, meblegColumn;
 
-    /**
-     * -----------------------------OTHER PROPERTIES
-     *
-     *
-     *
-     *
-     * Sebetimizin Listi ve Obyekti (Cart)
-     */
     private final ObservableList<CartItem> productList = FXCollections.observableArrayList();
     private final Cart cart = new Cart();
 
@@ -139,9 +84,13 @@ public class ProductSaleCartController implements Initializable {
     // barcodsuz mehsulu burda saxlayacam
     private Product nameEnteredProduct = null;
     private Integer nameEnteredProductCounter = 0;
-    private final ProductDAO ProductDAO = new ProductDAO();
+    private final ProductDAO productDAO = new ProductDAO();
     private final InvoiceDAO invoiceDAO = new InvoiceDAO();
     private final InvoiceItemDAO invoiceItemDAO = new InvoiceItemDAO();
+
+    //barcodu daxil elemeye bashladiqda avtomatik teklif elesin
+    private AutoCompletionBinding<String> bindAutoCompletion;
+    private final Set<String> barCodeSet = new HashSet<>();
 
     /**
      * Initializes the controller class.
@@ -151,7 +100,18 @@ public class ProductSaleCartController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        ArrayList<Product> list = productDAO.getAll();
+
+        list.forEach((p) -> {
+            barCodeSet.add(p.getBarCode());
+        });
+
+        bindAutoCompletion = TextFields.bindAutoCompletion(barCodeField, barCodeSet);
+
+        bindAutoCompletion.addEventHandler(javafx.event.EventType.ROOT, (event) -> {
+            //barCodeField.setText("");
+            onActionBarcodeField();
+        });
 
         barCodeField.setPromptText("Barcodu Daxil edin");
 
@@ -258,7 +218,7 @@ public class ProductSaleCartController implements Initializable {
         String barCode = barCodeField.getText();
 
         //aldigimiz mehsulu vururuq yaddasha
-        barCodeEnteredProduct = ProductDAO.getByBarcode(barCode);
+        barCodeEnteredProduct = productDAO.getByBarcode(barCode);
 
         // xanalarda daha evvelden qalmish melumatlar ola biler
         //onlari silek sonra emeliyyat aparaq
@@ -734,7 +694,7 @@ public class ProductSaleCartController implements Initializable {
                 // buna ProductDAO-da satish funksyasida yiga bilerik ve bir satish sayini vere bilerik
                 //qalanini ozude ede biler
                 // indi ise satishi elememisheden evvel mehsulumuzun sayini azaldaq
-                ProductDAO.update(product);
+                productDAO.update(product);
 
                 //Inner Object Product data's IN InvoiceItem
                 Integer id = ci.getId();
@@ -777,14 +737,13 @@ public class ProductSaleCartController implements Initializable {
         alert.setHeaderText("Qaime Cap etmek isteyirsiniz?");
         alert.setContentText("Qaime №: " + invoiceId + ", Müştəri: " + customerName);
 
+        InvoiceTableController.selectedInvoice = invoiceDAO.get(invoiceId);
+
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
-            MyJRViewer.showSATISH_QAIMESI(new InvoiceDAO().get(invoiceId));
-            ApplicationController.getApplicationController().btnStockOnClick();
-        } else {
-            ApplicationController.getApplicationController().btnStockOnClick();
-
+            MyJRViewer.showSATISH_QAIMESI(invoiceId);
         }
+        ControllersRef.srlc.toggleButtonSaleInvoiceDetailsOnAction();
 
     }
 }
