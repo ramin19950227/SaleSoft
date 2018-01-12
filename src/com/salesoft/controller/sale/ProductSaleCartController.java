@@ -650,8 +650,19 @@ public class ProductSaleCartController implements Initializable {
         // mushteri adimizi alar
         String customerName;
         if (getCustomerNameFormField() == null) {
-            MyAlert("Mushteri adi daxil edin", "Mushteri adi daxil edin", "Mushteri adi daxil edin");
-            return;
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("DIQQET");
+            alert.setHeaderText("DIQQET Mushteri ADini Daxil etmemisiniz");
+            alert.setContentText("Daxil etmek ucun Cansell-duymesine, davam etmek ucun ise Ok duymesine basin");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                customerName = "Client" + new Date().getTime();
+            } else {
+                this.customerName.requestFocus();
+                return;
+            }
         } else {
             customerName = getCustomerNameFormField();
         }
