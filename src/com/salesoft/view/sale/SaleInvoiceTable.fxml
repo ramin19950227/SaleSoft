@@ -49,14 +49,14 @@
                   <Label text="Mebleg" GridPane.rowIndex="4" />
                   <Label text="Tarix" GridPane.rowIndex="6" />
                   <TextField fx:id="idField" disable="true" editable="false" GridPane.rowIndex="1" />
-                  <TextField fx:id="nameField" onAction="#handleSave" GridPane.rowIndex="3" />
+                  <TextField fx:id="nameField" disable="true" onAction="#handleSave" GridPane.rowIndex="3" />
                   <TextField fx:id="totalPriceField" disable="true" editable="false" GridPane.rowIndex="5" />
                   <TextField fx:id="dateField" disable="true" editable="false" prefWidth="179.0" GridPane.rowIndex="7" />
                </children>
             </GridPane>
             <ButtonBar layoutX="2.0" layoutY="370.0" prefHeight="40.0" prefWidth="200.0">
               <buttons>
-                <Button mnemonicParsing="false" onAction="#handleSave" text="Yadda Saxla" />
+                <Button disable="true" mnemonicParsing="false" onAction="#handleSave" text="Yadda Saxla" />
                   <Button mnemonicParsing="false" onAction="#handleCansel" text="Legv et" />
               </buttons>
             </ButtonBar>
