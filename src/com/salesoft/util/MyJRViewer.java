@@ -46,7 +46,7 @@ public class MyJRViewer {
         });
 
         String title = "SaleSoft - Satish Proqrami: Satış Qaiməsi";
-        String jasperFileAddress = "src/com/salesoft/jasperReport/satish_qaimesi.jasper";
+        String jasperFileAddress = "satish_qaimesi.jasper";
 
         String qaimeNo = invoice.getId().toString();
         Double totalPrice = invoice.getTotalPrice();
@@ -86,7 +86,7 @@ public class MyJRViewer {
 
             System.out.println("MyJasperViewer is Generated");
         } catch (JRException ex) {
-            ex.printStackTrace();
+            MyExceptionLogger.logException("JRException - MyJRViewer.showSATISH_QAIMESI(Invoice invoice)", ex);
         }
     }
 
