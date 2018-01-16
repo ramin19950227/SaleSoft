@@ -69,14 +69,15 @@ public class RegistrationController implements Initializable {
         CustomTf cTF = new CustomTf();
 
         cTF.clearTextFieldByButton(tfUserName, btnClearUserName);
-        cTF.clearTextFieldByButton(tfFullName, btnClearFullName);
+        //cTF.clearTextFieldByButton(tfFullName, btnClearFullName);
         cPF.clearPassFieldByButton(pfUserPassword, btnClearPass);
         cPF.clearPassFieldByButton(pfReUserPassword, btnClearRePass);
 
         BooleanBinding boolenBinding = tfUserName.textProperty().isEmpty()
-                .or(tfFullName.textProperty().isEmpty()
-                        .or(pfUserPassword.textProperty().isEmpty())
-                        .or(pfReUserPassword.textProperty().isEmpty()));
+                // .or(tfFullName.textProperty().isEmpty()
+                .or(pfUserPassword.textProperty().isEmpty())
+                .or(pfReUserPassword.textProperty().isEmpty()) //)
+                ;
 
         btnSignUp.disableProperty().bind(boolenBinding);
     }
@@ -150,17 +151,16 @@ public class RegistrationController implements Initializable {
     private boolean nullChecq() {
         boolean nullChecq = false;
         if (tfUserName.getText().trim().isEmpty()
-                || tfFullName.getText().trim().isEmpty()
+                // || tfFullName.getText().trim().isEmpty() - heleki full nameni yigishdiriram
                 || pfUserPassword.getText().isEmpty()
                 || pfReUserPassword.getText().isEmpty()) {
 
             System.out.println("Empty user Name");
-            nullChecq = false;
+            return false;
         } else {
             System.out.println("User Name not Empty");
-            nullChecq = true;
+            return true;
         }
-        return nullChecq;
     }
 
     private boolean passMatch() {
