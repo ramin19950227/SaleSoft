@@ -1,0 +1,19 @@
+________________________________________________
+ * SaleSoft Alpha 1.18 *
+
+- Qeydiyyat zamani boshluq var idi 
+
+
+________________________________________________
+ * SaleSoft Alpha 1.12.6 *
+
+- Qeydiyyat ve medaxildeki Shekiller gorsenmirdi
+
+- Qaimeni cap etdikden sonra Jasper Proqrami ile birge
+esas proqramda baglanirdi
+
+
+________________________________________________
+ * SaleSoft Alpha 1.12.5 *
+
+Proqramin ilk Alpha versiyasi
