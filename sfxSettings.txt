@@ -1,6 +1,61 @@
-desctop link
-D, SaleSoft.jar, , SaleSoft., SaleSoft, appIcons/if_sale1_91828.ico
+Amma Ne edecem
+Lazim olan EXE fayli bir defe yigib hazirladim
+gelen versiyalarda Bazada deyishiklik olacaqsa Onuda Exe faylin icinde
+yenileyecem jar faylida
+ve yeni libler varsa onuda elave edecem sadece artiq yeniden yigmayacam
 
+Addimlar
+
+
+1. Proyekti Shitf+F11 ile Temizle Ve Toparla deyerek disk qovlugunda hazirlayiriq
+2. MelumatBazasi faylimizin kopyazini atiriq dist qovluguna
+3. appIcon.ico - faylinida copyaliyiriq dist qovluguna
+4. Sonra hamsini izleyib Winrar arxivine elave etme menyusuna daxil oluruq
+5. paramertler bolumunden SFX arxiv secirik
+6. USttden ikinci bolmeye daxil oluruq (Дополнительно)
+7. SFX Parametrlerine daxil oluruq ashagida sagdan
+8. Acilan Pencerede Put Bolumune Program Files Govlugunun icinde
+Bizim Proqram ucun ne adli qovluq yaratsin ve ora kocurtsun fayli hemin qovlugun
+adini daxil edin SaleSoft
+9. Dopolnitelno Bolmesinden Yarlik elave edirik
+D, SaleSoft.jar, , "SaleSoft Description", SaleSoft, appIcon.ico
+bu yazinida kopyalayib yerleshdirmek yeter
+10. Tekst i Qrafika Bolumunden Bashliq Yaziriq
+11. hele hemin bolumnen Aciqlama yaziriq ve Installer Proqramimiz ucunde Icon secirik
+
+Qeyd: Aciqlamaya ElediyimizDeyishiklikleri yaza Bilerik
+
+Bashliq:
 SaleSoft Satish Proqraminin Qurrashdirilmasi
 
-SaleSoft Barcod Destekleyen Satish Proqramidir
+Aciqlama
+
+SaleSoft - Barcod Destekleyen Satish Proqramidir
+
+ve ardinca meselen bele
+
+ * SaleSoft Alpha versiya 1.21 *
+
+- Satish Qiymeti yazmaq imkani elave edildi Product Obyektine
+
+- Anbar Sehifesinde Sag Redakte Paneli Legv Edildi - 
+Ehtiyyac Yox idi
+
+- RsToModel - utilini Legv edirem Cunki Bu Metodlar DAO-da
+yer almalidir = Heleki Product Obyektinde olan rsTo Metodlarini 
+kecirtdim ProductDAO-ya
+
+- Anbar Sehifesinde satish Qiymetinin gorsenmesi temin edildi
+
+- Medaxilde Satish Qiymetini yazma Imkani
+
+- Satish Qiymeti Funksiyasi Anbar Bolumunde Tam ishlek veziyyetdedi
+
+- Alish Qiymetine 0.15 yani 15 qepik yazmaq olmurdu Onu aradan Qaldirdim
+
+- Yeniliklerden SOnra Satishda Problem cixmishdi
+anbarda mehsul 10 ededdir amma 20 eded satish edebilirdin )))
+
+- Login Penceresinin Olcusunu Deyishmek artiq mumkun deyil
+
+- Satish Qaimesinde Qiymet Dogru Cap olunmurdu
