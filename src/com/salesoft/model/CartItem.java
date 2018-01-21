@@ -21,11 +21,11 @@ import javafx.beans.property.StringProperty;
  */
 public class CartItem {
 
-    private IntegerProperty id;//1 mehsulun id-si irelide Key kimi istifade olunacaq
-    private StringProperty name;//2 mehsulun adi
-    private IntegerProperty qty;//3  mehsulun satish sayi
-    private DoubleProperty salePrice;//4 mehsulunn 1- ededinin satish qiymeti 
-    private DoubleProperty totalPrice;//5 mehsulun cemi catish meblegi
+    private final IntegerProperty id;//1 mehsulun id-si irelide Key kimi istifade olunacaq
+    private final StringProperty name;//2 mehsulun adi
+    private final IntegerProperty qty;//3  mehsulun satish sayi
+    private final DoubleProperty salePrice;//4 mehsulunn 1- ededinin satish qiymeti 
+    private final DoubleProperty totalPrice;//5 mehsulun cemi catish meblegi
     private Product product;//6//6
 
     {

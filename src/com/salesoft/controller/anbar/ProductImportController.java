@@ -37,15 +37,15 @@ import org.controlsfx.control.textfield.TextFields;
 public class ProductImportController implements Initializable {
 
     @FXML
-    private TextField bTF, nTF, qTF, pTF;
+    private TextField bTF, nTF, qTF, pTF, sTF;
     @FXML
     private DatePicker datePicker;
     @FXML
     private TextArea nTA;
     @FXML
-    private ImageView bIV, nIV, qIV, pIV, dIV;
+    private ImageView bIV, nIV, qIV, pIV, sIV, dIV;
     @FXML
-    private Label bWL, nWL, qWL, pWL, dWL;
+    private Label bWL, nWL, qWL, pWL, sWL, dWL;
     @FXML
     private Button saveButton, clearButton;
 
@@ -95,7 +95,7 @@ public class ProductImportController implements Initializable {
         // ve hetta bundan sonra Say xanasini fokusda ede bilerik
         bindAutoCompletion.addEventHandler(javafx.event.EventType.ROOT, (event) -> {
             //bindAutoCompletion = null; -- bu nese ishe yaramadi yada ola biler men tam anlamamisham
-            //heleki bele qalsin mene ne lazimdir? secim edirsen vsyodaolur bitir
+            //heleki bele qalsin mene ne lazimdir? secim edirsen vsyoda olur bitir
             bTFOnKeyReleased();
             qTF.requestFocus();
         });
@@ -104,7 +104,8 @@ public class ProductImportController implements Initializable {
         BooleanBinding binding = bTF.textProperty().isEmpty()
                 .or(nTF.textProperty().isEmpty())
                 .or(qTF.textProperty().isEmpty())
-                .or(pTF.textProperty().isEmpty());
+                .or(pTF.textProperty().isEmpty())
+                .or(sTF.textProperty().isEmpty());
 
         saveButton.disableProperty().bind(binding);
 
@@ -177,7 +178,7 @@ public class ProductImportController implements Initializable {
         });
 
         pTF.setOnKeyReleased(value -> {
-            if (TFValidator.isCorrectDouble(pTF) && TFValidator.isNotZero(pTF)) {
+            if (TFValidator.isCorrectDouble(pTF)) {
                 myView.showOk(pIV);
                 pWL.setText(null);
 
@@ -190,9 +191,25 @@ public class ProductImportController implements Initializable {
         });
 
         pTF.setOnAction(value -> {
-            datePicker.requestFocus();
+            sTF.requestFocus();
         });
 
+        sTF.setOnKeyReleased(value -> {
+            if (TFValidator.isCorrectDouble(sTF)) {
+                myView.showOk(sIV);
+                sWL.setText(null);
+
+            } else {
+                myView.showNo(sIV);
+                sWL.setText("Zehmet Olmasa Keçərli Qiymet daxil edin");
+
+                sTF.setText("");
+            }
+        });
+
+        sTF.setOnAction(value -> {
+            datePicker.requestFocus();
+        });
         saveButton.setOnAction(value -> {
             saveButtonOnAction();
         });
@@ -216,12 +233,13 @@ public class ProductImportController implements Initializable {
         LOGWriter.println("price Field: " + pTF.getText());
 
         if (product != null) {
-            LOGWriter.println("Product is Exist and well Importer (Updated)");
+            LOGWriter.println("Product is Exist and will Imported (Updated)");
             LOGWriter.println("Product Fist State");
             LOGWriter.println(product);
 
             product.setQty(Integer.parseInt(qTF.getText()));
             product.setPurchasePrice(Double.parseDouble(pTF.getText()));
+            product.setSalePrice(Double.parseDouble(sTF.getText()));
             product.setNote(nTA.getText());
 
             LocalDate localDate = datePicker.getValue();
@@ -276,6 +294,7 @@ public class ProductImportController implements Initializable {
             // indi ise alish edek
             product.setQty(Integer.parseInt(qTF.getText()));
             product.setPurchasePrice(Double.parseDouble(pTF.getText()));
+            product.setSalePrice(Double.parseDouble(sTF.getText()));
             product.setNote(nTA.getText());
 
             LOGWriter.println("get date from date picker");
@@ -326,17 +345,19 @@ public class ProductImportController implements Initializable {
         LOGWriter.println("ProductImportController.clearAll()");
         LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
 
-        // null to TextField's
-        bTF.setText(null);
-        nTF.setText(null);
-        qTF.setText(null);
-        pTF.setText(null);
+        // Clear TextField's
+        bTF.setText("");
+        nTF.setText("");
+        qTF.setText("");
+        pTF.setText("");
+        sTF.setText("");
 
         //ad xanasini Enable edek
         nTF.setDisable(false);
 
         //null to TextAre = note
-        nTA.setText(null);
+        //bura null yox bosh String yazacam ki Product cedveline de null dushmesin yoxsa hele sozle null yazilir
+        nTA.setText("");
 
         //tarixe Bugungu tarixi yaziriq
         datePicker.setValue(LocalDate.now());
@@ -346,34 +367,35 @@ public class ProductImportController implements Initializable {
         nIV.setImage(null);
         qIV.setImage(null);
         pIV.setImage(null);
+        sIV.setImage(null);
         dIV.setImage(null);
 
         //labelleri sifirlayaq
-        bWL.setText(null);
+        bWL.setText("");
         nWL.setText(null);
         qWL.setText(null);
         pWL.setText(null);
+        sWL.setText(null);
         dWL.setText(null);
 
     }
 
-    private void clearTextFields() {
+    private void clearFields() {
         LOGWriter.println("");
         LOGWriter.println("__________________________________________________________________________");
         LOGWriter.println("ProductImportController.clearTextFields()");
         LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
 
-        // null to TextField's
-        bTF.setText(null);
-        nTF.setText(null);
-        qTF.setText(null);
-        pTF.setText(null);
+        // Clear TextField's
+        bTF.setText("");
+        nTF.setText("");
+        qTF.setText("");
+        pTF.setText("");
+        sTF.setText("");
+        nTA.setText("");
 
         //ad xanasini Enable edek
         nTF.setDisable(false);
-
-        //null to TextAre = note
-        nTA.setText(null);
 
         //tarixe Bugungu tarixi yaziriq
         datePicker.setValue(LocalDate.now());
@@ -422,6 +444,12 @@ public class ProductImportController implements Initializable {
                 // yox eger qiymet 0.0-dan coxdursa demeli ok Alish olub ve qiymet var ve Qiymeti set edirik
                 if (product.getPurchasePrice() > 0.0) {
                     pTF.setText(product.getPurchasePrice().toString());
+                }
+
+                //eger qiymet 0.0 dirsa demeli mehsul yeni qeydiyytdan kecib ve alish olmayib ve qiymeti set etmirik
+                // yox eger qiymet 0.0-dan coxdursa demeli ok Alish olub ve qiymet var ve Qiymeti set edirik
+                if (product.getSalePrice() > 0.0) {
+                    sTF.setText(product.getSalePrice().toString());
                 }
 
                 //ad xanasini sondurek ki redakte etmek olmasin

@@ -26,7 +26,7 @@ public class InvoiceItemWrapper {
         lineNumber = 0; // bu zadece bashlangic olaraq teyin edirem
         name = invoiceItem.getProduct().getName();
         qty = invoiceItem.getProduct().getQty();
-        price = invoiceItem.getProduct().getPurchasePrice();
+        price = invoiceItem.getProduct().getSalePrice();
         totalPrice = invoiceItem.getTotalPrice();
     }
 

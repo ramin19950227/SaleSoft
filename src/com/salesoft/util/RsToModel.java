@@ -6,7 +6,6 @@
 package com.salesoft.util;
 
 import com.salesoft.database.DBUtil;
-import com.salesoft.model.Invoice;
 import com.salesoft.model.InvoiceItem;
 import com.salesoft.model.Product;
 import com.salesoft.model.ProductImportWrapper;
@@ -55,14 +54,6 @@ public class RsToModel {
         }
     }
 
-    /**
-     * Bu Esas Obyektdir ve Bahqa Obyektlerin icinde olmayacagina gore Parametr
-     * olaraq sadece RS verilir ve startPoint-e ehtiyyac yoxdur
-     *
-     * @param rs
-     * @return
-     * @throws SQLException
-     */
     public static ProductImportWrapper rsToPurchaseProduct(ResultSet rs) throws SQLException {
         try {
             if (rs.next()) {
@@ -92,71 +83,73 @@ public class RsToModel {
         }
     }
 
-    /**
-     * Bu metoda ResultSet Tipli obyekt veririk ve neticede eger rs bosh deyilse
-     * yani RS-de melumat varsa Poduct tipli ArrayList qaytarir.
-     *
-     * @param rs
-     * @return
-     * @throws SQLException
-     */
-    public static ArrayList<Product> rsToProductList(ResultSet rs) throws SQLException {
-        try {
-            ArrayList<Product> list = new ArrayList<>();
-
-            //budur dogru metod bir dene next() etdikse Melumatlari almaliyiq 2-ci next etmemishden evvel
-            while (rs.next()) {
-                Product p = new Product();
-                p.setId(rs.getInt(1));
-                p.setName(rs.getString(2));
-                p.setQty(rs.getInt(3));
-                p.setPurchasePrice(rs.getDouble(4));
-                p.setBarCode(rs.getString(5));
-                p.setNote(rs.getString(6));
-
-                list.add(p);
-            }
-            return list;
-
-        } catch (SQLException ex) {
-            throw ex;
-
-        } finally {
-            DBUtil.AllDisconnect();
-        }
-    }
-
-    /**
-     * Bu metoda ResultSet Tipli obyekt veririk ve neticede eger rs bosh deyilse
-     * yani RS-de melumat varsa Poduct tipli obyekt qaytarir
-     *
-     * @param rs ResultSet SQL sorgu neticesinde elde edilen obyekt
-     * @return Product - tipli obyekt qaytarir eger rs bosh deyilse, null - eger
-     * Exception olubsa ve ya RS boshdursa (netice yoxdursa)
-     * @throws java.sql.SQLException
-     */
-    public static Product rsToProduct(ResultSet rs) throws SQLException {
-        try {
-            if (rs.next()) {
-                Product p = new Product();
-                p.setId(rs.getInt(1));
-                p.setName(rs.getString(2));
-                p.setQty(rs.getInt(3));
-                p.setPurchasePrice(rs.getDouble(4));
-                p.setBarCode(rs.getString(5));
-                p.setNote(rs.getString(6));
-                return p;
-            }
-            return null; //boshdur
-
-        } catch (SQLException ex) {
-            throw ex;
-
-        } finally {
-            DBUtil.AllDisconnect();
-        }
-    }
-
+//<editor-fold defaultstate="collapsed" desc="rsToProductListOld">
+//    /**
+//     * Bu metoda ResultSet Tipli obyekt veririk ve neticede eger rs bosh deyilse
+//     * yani RS-de melumat varsa Poduct tipli ArrayList qaytarir.
+//     *
+//     * @param rs
+//     * @return
+//     * @throws SQLException
+//     */
+//    public static ArrayList<Product> rsToProductListOld(ResultSet rs) throws SQLException {
+//        try {
+//            ArrayList<Product> list = new ArrayList<>();
+//            
+//            while (rs.next()) {
+//                Product p = new Product();
+//                p.setId(rs.getInt(1));
+//                p.setName(rs.getString(2));
+//                p.setQty(rs.getInt(3));
+//                p.setPurchasePrice(rs.getDouble(4));
+//                p.setBarCode(rs.getString(5));
+//                p.setNote(rs.getString(6));
+//                
+//                list.add(p);
+//            }
+//            return list;
+//            
+//        } catch (SQLException ex) {
+//            throw ex;
+//            
+//        } finally {
+//            DBUtil.AllDisconnect();
+//        }
+//    }
+//</editor-fold>
+//<editor-fold defaultstate="collapsed" desc="rsToProductOld">
+//    /**
+//     * Bu metoda ResultSet Tipli obyekt veririk ve neticede eger rs bosh deyilse
+//     * yani RS-de melumat varsa Poduct tipli obyekt qaytarir
+//     *
+//     * @param rs ResultSet SQL sorgu neticesinde elde edilen obyekt
+//     * @return Product - tipli obyekt qaytarir eger rs bosh deyilse, null - eger
+//     * Exception olubsa ve ya RS boshdursa (netice yoxdursa)
+//     * @throws java.sql.SQLException
+//     * @deprecated
+//     */
+//    public static Product rsToProductOld(ResultSet rs) throws SQLException {
+//        try {
+//            if (rs.next()) {
+//                Product p = new Product();
+//                p.setId(rs.getInt(1));
+//                p.setName(rs.getString(2));
+//                p.setQty(rs.getInt(3));
+//                p.setPurchasePrice(rs.getDouble(4));
+//                p.setBarCode(rs.getString(5));
+//                p.setNote(rs.getString(6));
+//                return p;
+//            }
+//            return null; //boshdur
+//
+//        } catch (SQLException ex) {
+//            throw ex;
+//
+//        } finally {
+//            DBUtil.AllDisconnect();
+//        }
+//    }
+//</editor-fold>
     public static InvoiceItem rsToInvoiceItem(ResultSet rs) throws SQLException {
         try {
 
@@ -179,34 +172,36 @@ public class RsToModel {
         }
     }
 
-    public static ArrayList<InvoiceItem> rsToInvoiceItemList(ResultSet rs) throws SQLException {
-        try {
-            ArrayList<InvoiceItem> list = new ArrayList<>();
-
-            //budur dogru metod bir dene next() etdikse Melumatlari almaliyiq 2-ci next etmemishden evvel
-            while (rs.next()) {
-                Product p = new Product();
-                p.setId(rs.getInt(4));
-                p.setName(rs.getString(5));
-                p.setQty(rs.getInt(6));
-                p.setPurchasePrice(rs.getDouble(7));
-                p.setBarCode(rs.getString(8));
-                p.setNote(rs.getString(9));
-
-                InvoiceItem item = new InvoiceItem(rs.getInt(1), rs.getInt(2), rs.getDouble(3), p);
-
-                list.add(item);
-            }
-            return list;
-
-        } catch (SQLException ex) {
-            throw ex;
-
-        } finally {
-            DBUtil.AllDisconnect();
-        }
-    }
-
+//<editor-fold defaultstate="collapsed" desc="rsToInvoiceItemList">
+//    public static ArrayList<InvoiceItem> rsToInvoiceItemList(ResultSet rs) throws SQLException {
+//        try {
+//            ArrayList<InvoiceItem> list = new ArrayList<>();
+//
+//            //budur dogru metod bir dene next() etdikse Melumatlari almaliyiq 2-ci next etmemishden evvel
+//            while (rs.next()) {
+//                Product p = new Product();
+//                p.setId(rs.getInt("product_id"));
+//                p.setName(rs.getString("product_name"));
+//                p.setQty(rs.getInt("product_qty"));
+//                p.setPurchasePrice(rs.getDouble("product_purchasePrice"));
+//                p.setSalePrice(rs.getDouble("product_salePrice"));
+//                p.setBarCode(rs.getString("product_barCode"));
+//                p.setNote(rs.getString("product_note"));
+//
+//                InvoiceItem item = new InvoiceItem(rs.getInt("id"), rs.getInt("invoiceId"), rs.getDouble("totalPrice"), p);
+//
+//                list.add(item);
+//            }
+//            return list;
+//
+//        } catch (SQLException ex) {
+//            throw ex;
+//
+//        } finally {
+//            DBUtil.AllDisconnect();
+//        }
+//    }
+//</editor-fold>
     // heleki qalsin sonra davam edecem inshaAllah
 //    public static Invoice rsToInvoice(ResultSet rs) throws SQLException {
 //        try {

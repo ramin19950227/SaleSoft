@@ -5,7 +5,6 @@ import com.salesoft.custom.CustomPf;
 import com.salesoft.custom.CustomTf;
 import com.salesoft.database.DBUtil;
 import com.salesoft.util.ExceptionShowDialog;
-import com.salesoft.util.MyDateConverter;
 import com.salesoft.util.MyFXMLLoader;
 import com.salesoft.util.MyExceptionLogger;
 import com.salesoft.util.MyProperties;
@@ -13,8 +12,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.binding.BooleanBinding;
@@ -98,7 +95,7 @@ public class LoginController implements Initializable {
                 //ne edirik ? -> linki not managed edirik
                 hlCreateAccount.setManaged(false);
 
-                //hetta qeydiyyat varsa DB setup -u dasondurek
+                //hetta qeydiyyat varsa DB setup -u da sondurek
                 //mence men qurrashdirdiqdan sonra istifadeci niye deyishsin ki
                 hlDatabase.setManaged(false);
             } else {
@@ -134,7 +131,6 @@ public class LoginController implements Initializable {
                 oldStage.close();
 
             } else {
-                System.out.println("");
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("İstifadəçi adı və ya Şifrə Yanlışdır");
                 alert.setHeaderText("Xəta : İstifadəçi adı və ya Şifrə Yanlışdır");

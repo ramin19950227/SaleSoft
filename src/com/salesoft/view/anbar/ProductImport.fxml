@@ -28,6 +28,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="81.0" minHeight="10.0" prefHeight="31.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="81.0" minHeight="10.0" prefHeight="31.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="92.0" minHeight="10.0" prefHeight="92.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -40,7 +41,7 @@
             <TextField fx:id="bTF" promptText="BarCodu Daxil Edin" GridPane.columnIndex="1" />
             <TextField fx:id="nTF" promptText="Adı Daxil Edin" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="qTF" promptText="Sayı Daxil Edin" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="pTF" promptText="Qiyməti Daxil Edin" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="pTF" promptText="Alish Qiyməti Daxil Edin" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label text="Mehsulun adi" GridPane.rowIndex="1">
                <font>
                   <Font name="System Bold Italic" size="20.0" />
@@ -49,33 +50,33 @@
                <font>
                   <Font name="System Bold Italic" size="20.0" />
                </font></Label>
-            <Label text="Qiymeti" GridPane.rowIndex="3">
+            <Label text="Alish Qiymeti" GridPane.rowIndex="3">
                <font>
                   <Font name="System Bold Italic" size="20.0" />
                </font></Label>
-            <Label text="Qeyd" GridPane.rowIndex="5">
+            <Label text="Qeyd" GridPane.rowIndex="6">
                <font>
                   <Font name="System Bold Italic" size="20.0" />
                </font></Label>
-            <ButtonBar prefHeight="50.0" prefWidth="446.0" GridPane.columnSpan="2" GridPane.rowIndex="7">
+            <ButtonBar prefHeight="50.0" prefWidth="446.0" GridPane.columnSpan="2" GridPane.rowIndex="8">
               <buttons>
                   <Button fx:id="saveButton" mnemonicParsing="false" prefHeight="35.0" prefWidth="251.0" text="Yadda Saxla" />
                   <Button fx:id="clearButton" mnemonicParsing="false" text="Xanaları Təmizlə" />
               </buttons>
             </ButtonBar>
-            <Label text="Alış Tarixi:" GridPane.rowIndex="4">
+            <Label text="Alış Tarixi:" GridPane.rowIndex="5">
                <font>
                   <Font name="System Bold Italic" size="20.0" />
                </font>
             </Label>
-            <DatePicker fx:id="datePicker" prefHeight="33.0" prefWidth="322.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <DatePicker fx:id="datePicker" prefHeight="33.0" prefWidth="322.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <Label fx:id="barCodeFieldErrorMessage" text="." GridPane.columnIndex="3" />
-            <TextArea fx:id="nTA" prefHeight="200.0" prefWidth="200.0" promptText="Qeydiniz Varsa Daxil edin" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <TextArea fx:id="nTA" prefHeight="200.0" prefWidth="200.0" promptText="Qeydiniz Varsa Daxil edin" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <ImageView fx:id="bIV" fitHeight="48.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
             <ImageView fx:id="nIV" fitHeight="48.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <ImageView fx:id="qIV" fitHeight="48.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             <ImageView fx:id="pIV" fitHeight="48.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <ImageView fx:id="dIV" fitHeight="48.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <ImageView fx:id="dIV" fitHeight="48.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="5" />
             <Label fx:id="bWL" text="Label" GridPane.columnIndex="3">
                <font>
                   <Font size="10.0" />
@@ -92,10 +93,22 @@
                <font>
                   <Font size="10.0" />
                </font></Label>
-            <Label fx:id="dWL" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="4">
+            <Label fx:id="dWL" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="5">
                <font>
                   <Font size="10.0" />
                </font></Label>
+            <Label text="Satish Qiymeti" GridPane.rowIndex="4">
+               <font>
+                  <Font name="System Bold Italic" size="20.0" />
+               </font>
+            </Label>
+            <TextField fx:id="sTF" promptText="Satish Qiyməti Daxil Edin" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label fx:id="sWL" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="4">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="sIV" fitHeight="48.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="4" />
          </children>
       </GridPane>
    </children>

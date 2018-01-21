@@ -2,12 +2,9 @@ package com.salesoft.DAO.impl;
 
 import com.salesoft.DAO.intf.ProductDAOIntf;
 import com.salesoft.database.DBUtil;
-import com.salesoft.database.SQL;
 import com.salesoft.model.Product;
 import com.salesoft.util.ExceptionShowDialog;
 import com.salesoft.util.MyExceptionLogger;
-import com.salesoft.util.RsToModel;
-import com.salesoft.util.UserOperationLogger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,16 +15,75 @@ import java.util.ArrayList;
  */
 public class ProductDAO implements ProductDAOIntf {
 
+    //<editor-fold defaultstate="collapsed" desc="rsToProduct">
     @Override
-    public void create(Product entity) {
+    public Product rsToProduct(ResultSet rs) throws SQLException {
+        try {
+            if (rs.next()) {
+                Product product = new Product(
+                        rs.getInt("ID"),
+                        rs.getString("name"),
+                        rs.getInt("qty"),
+                        rs.getDouble("purchasePrice"),
+                        rs.getDouble("salePrice"),
+                        rs.getString("barCode"),
+                        rs.getString("note"));
+                return product;
+            }
+            return null; //boshdur
 
+        } catch (SQLException ex) {
+            throw ex;
+
+        } finally {
+            DBUtil.AllDisconnect();
+        }
+    }
+//</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="rsToProductList">
+    @Override
+    public ArrayList<Product> rsToProductList(ResultSet rs) throws SQLException {
+        try {
+            ArrayList<Product> list = new ArrayList<>();
+
+            while (rs.next()) {
+                Product product = new Product(
+                        rs.getInt("ID"),
+                        rs.getString("name"),
+                        rs.getInt("qty"),
+                        rs.getDouble("purchasePrice"),
+                        rs.getDouble("salePrice"),
+                        rs.getString("barCode"),
+                        rs.getString("note"));
+
+                list.add(product);
+            }
+            return list;
+
+        } catch (SQLException ex) {
+            throw ex;
+
+        } finally {
+            DBUtil.AllDisconnect();
+        }
+    }
+//</editor-fold>
+
+    @Override
+    public void create(Product product) {
         try {
 //            String SQLQuery = SQL.ProductSQL.CREATE(entity);
 //            UserOperationLogger.logSQL(SQLQuery);
 //            DBUtil.mySQLExecuteUpdate(SQLQuery);
 
-            String SQLQuery = SQL.ProductSQL.CREATE_FOR_ACCESS(entity);
-            DBUtil.msAccessExecuteUpdate(SQLQuery);
+            DBUtil.msAccessExecuteUpdate("INSERT INTO Product (name, qty, purchasePrice, salePrice, barCode, note) "
+                    + "VALUES ('" + product.getName() + "',"
+                    + " '" + product.getQty().toString() + "',"
+                    + " '" + product.getPurchasePrice().toString() + "',"
+                    + " '" + product.getSalePrice().toString() + "',"
+                    + " '" + product.getBarCode() + "',"
+                    + " '" + product.getNote() + "')");
 
 //            return true;
         } catch (SQLException ex) {
@@ -39,14 +95,20 @@ public class ProductDAO implements ProductDAOIntf {
     }
 
     @Override
-    public void update(Product entity) {
+    public void update(Product product) {
         try {
 //            String SQLQuery = SQL.ProductSQL.UPDATE(entity);
 ////            UserOperationLogger.logSQL(SQLQuery);
 //            DBUtil.mySQLExecuteUpdate(SQLQuery);
 
-            String SQLQuery = SQL.ProductSQL.UPDATE_FOR_ACCESS(entity);
-            DBUtil.msAccessExecuteUpdate(SQLQuery);
+            DBUtil.msAccessExecuteUpdate("UPDATE Product SET "
+                    + "`name`='" + product.getName() + "', "
+                    + "`qty`='" + product.getQty().toString() + "', "
+                    + "`purchasePrice`='" + product.getPurchasePrice().toString() + "', "
+                    + "`salePrice`='" + product.getSalePrice().toString() + "', "
+                    + "`barCode`='" + product.getBarCode() + "', "
+                    + "`note`='" + product.getNote() + "' "
+                    + "WHERE  `id`=" + product.getId() + ";");
 
         } catch (SQLException ex) {
             MyExceptionLogger.logException("SQLException - ProductDAO.update()", ex);
@@ -60,8 +122,7 @@ public class ProductDAO implements ProductDAOIntf {
 //            UserOperationLogger.logSQL(SQLQuery);
 //            DBUtil.mySQLExecuteUpdate(SQLQuery);
 
-            String SQLQuery = SQL.ProductSQL.DELETE_FOR_ACCESS(id);
-            DBUtil.msAccessExecuteUpdate(SQLQuery);
+            DBUtil.msAccessExecuteUpdate("DELETE FROM Product WHERE id=" + id);
 
             return true;
 
@@ -81,13 +142,13 @@ public class ProductDAO implements ProductDAOIntf {
 
             ResultSet rs = DBUtil.msAccessExecuteQuery("SELECT * FROM Product WHERE id=" + id);
 
-            return RsToModel.rsToProduct(rs);
+            return rsToProduct(rs);
 
         } catch (SQLException ex) {
             System.out.println("SQLException -  ProductDAO.getById(): " + ex);
             MyExceptionLogger.logException("SQLException - ProductDAO.getById()", ex);
-            return null;
         }
+        return null;
     }
 
     @Override
@@ -99,12 +160,12 @@ public class ProductDAO implements ProductDAOIntf {
 
             ResultSet rs = DBUtil.msAccessExecuteQuery("SELECT * FROM Product WHERE barCode='" + barCode + "'");
 
-            return RsToModel.rsToProduct(rs);
+            return rsToProduct(rs);
 
         } catch (SQLException ex) {
             MyExceptionLogger.logException("SQLException - ProductDAO.getByBarcode()", ex);
-            return null;
         }
+        return null;
     }
 
     @Override
@@ -116,9 +177,9 @@ public class ProductDAO implements ProductDAOIntf {
 //            UserOperationLogger.logSQL(SQLQuery);
 //            ResultSet rs = DBUtil.mySQLExecuteQuery(SQLQuery);
 
-            ResultSet rs = DBUtil.msAccessExecuteQuery("SELECT * FROM Product ORDER BY `id` DESC LIMIT 1000");
+            ResultSet rs = DBUtil.msAccessExecuteQuery("SELECT * FROM Product ORDER BY `id` DESC");
 
-            list = RsToModel.rsToProductList(rs);
+            return rsToProductList(rs);
 
         } catch (SQLException ex) {
             System.out.println("SQLException -  ProductDAO.getAll()(): " + ex);
@@ -139,7 +200,7 @@ public class ProductDAO implements ProductDAOIntf {
 
             ResultSet rs = DBUtil.msAccessExecuteQuery("SELECT * FROM Product WHERE name LIKE '%" + name + "%'");
 
-            list = RsToModel.rsToProductList(rs);
+            return rsToProductList(rs);
 
         } catch (SQLException ex) {
             MyExceptionLogger.logException("SQLException - ProductDAO.searchByNameLike()", ex);
@@ -159,7 +220,7 @@ public class ProductDAO implements ProductDAOIntf {
 
             ResultSet rs = DBUtil.msAccessExecuteQuery("SELECT * FROM Product WHERE barCode='" + barCode + "'");
 
-            list = RsToModel.rsToProductList(rs);
+            return rsToProductList(rs);
 
         } catch (SQLException ex) {
             MyExceptionLogger.logException("SQLException - ProductDAO.searchByNameLike()", ex);

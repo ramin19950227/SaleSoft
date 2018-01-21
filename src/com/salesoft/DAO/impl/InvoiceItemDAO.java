@@ -9,9 +9,8 @@ import com.salesoft.DAO.intf.InvoiceItemDAOIntf;
 import com.salesoft.database.DBUtil;
 import com.salesoft.database.SQL;
 import com.salesoft.model.InvoiceItem;
+import com.salesoft.model.Product;
 import com.salesoft.util.MyExceptionLogger;
-import com.salesoft.util.RsToModel;
-import com.salesoft.util.UserOperationLogger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -21,6 +20,38 @@ import java.util.ArrayList;
  * @author Ramin
  */
 public class InvoiceItemDAO implements InvoiceItemDAOIntf {
+
+    @Override
+    //<editor-fold defaultstate="collapsed" desc="rsToInvoiceItemList()">
+    public ArrayList<InvoiceItem> rsToInvoiceItemList(ResultSet rs) throws SQLException {
+        try {
+            ArrayList<InvoiceItem> list = new ArrayList<>();
+            
+            //budur dogru metod bir dene next() etdikse Melumatlari almaliyiq 2-ci next etmemishden evvel
+            while (rs.next()) {
+                Product p = new Product();
+                p.setId(rs.getInt("product_id"));
+                p.setName(rs.getString("product_name"));
+                p.setQty(rs.getInt("product_qty"));
+                p.setPurchasePrice(rs.getDouble("product_purchasePrice"));
+                p.setSalePrice(rs.getDouble("product_salePrice"));
+                p.setBarCode(rs.getString("product_barCode"));
+                p.setNote(rs.getString("product_note"));
+                
+                InvoiceItem item = new InvoiceItem(rs.getInt("id"), rs.getInt("invoiceId"), rs.getDouble("totalPrice"), p);
+                
+                list.add(item);
+            }
+            return list;
+            
+        } catch (SQLException ex) {
+            throw ex;
+            
+        } finally {
+            DBUtil.AllDisconnect();
+        }
+    }
+//</editor-fold>
 
     @Override
     public void create(InvoiceItem item) {
@@ -75,7 +106,7 @@ public class InvoiceItemDAO implements InvoiceItemDAOIntf {
 
             ResultSet rs = DBUtil.msAccessExecuteQuery("SELECT * FROM InvoiceItem WHERE invoiceId=" + id + " ORDER BY `id` DESC");
 
-            return RsToModel.rsToInvoiceItemList(rs);
+            return rsToInvoiceItemList(rs);
 
         } catch (SQLException ex) {
             MyExceptionLogger.logException("SQLException - InvoiceDAO.getAllInvoiceItemListById(Integer id)", ex);

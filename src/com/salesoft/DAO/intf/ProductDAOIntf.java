@@ -1,6 +1,8 @@
 package com.salesoft.DAO.intf;
 
 import com.salesoft.model.Product;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -8,6 +10,10 @@ import java.util.ArrayList;
  * @author teyyub , Dec 24, 2017 , 9:33:14 AM
  */
 public interface ProductDAOIntf {
+
+    Product rsToProduct(ResultSet rs) throws SQLException;
+
+    ArrayList<Product> rsToProductList(ResultSet rs) throws SQLException;
 
     void create(Product entity);
 

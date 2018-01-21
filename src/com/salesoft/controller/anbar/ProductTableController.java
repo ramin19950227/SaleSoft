@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.salesoft.controller.anbar;
 
 import com.salesoft.DAO.impl.ProductDAO;
@@ -47,24 +42,13 @@ public class ProductTableController implements Initializable {
     @FXML
     private TableColumn<Product, Number> purchasePriceColumn;
     @FXML
+    private TableColumn<Product, Number> salePriceColumn;
+    @FXML
     private TableColumn<Product, String> barCodeColumn;
     @FXML
     private TableColumn<Product, String> noteColumn;
 
     private final ObservableList<Product> productObservableList = FXCollections.observableArrayList();
-
-    @FXML
-    private Label idLabel;
-    @FXML
-    private TextField nameField;
-    @FXML
-    private TextField qtyField;
-    @FXML
-    private TextField purchasePriceField;
-    @FXML
-    private TextField barCodeField;
-    @FXML
-    private TextField noteField;
 
     @FXML
     private TextField searchField;
@@ -93,24 +77,20 @@ public class ProductTableController implements Initializable {
         LOGWriter.println("ProductTableController.initialize()");
         LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
 
-        //Heleki Qerara aldiq ki ad ve Qeyd-den bashqa hecneyi Redakte etmek olmasin
-        qtyField.setEditable(false);
-        purchasePriceField.setEditable(false);
-        barCodeField.setEditable(false);
-
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         qtyColumn.setCellValueFactory(cellData -> cellData.getValue().qtyProperty());
         purchasePriceColumn.setCellValueFactory(cellData -> cellData.getValue().purchasePriceProperty());
+        salePriceColumn.setCellValueFactory(cellData -> cellData.getValue().salePriceProperty());
         barCodeColumn.setCellValueFactory(cellData -> cellData.getValue().barCodeProperty());
         noteColumn.setCellValueFactory(cellData -> cellData.getValue().noteProperty());
         noteColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 
         productTable.setEditable(true);
+
+        //mehsul cedvelden secildikde bu metod ishe dushur
         productTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                setProductToEdit(newValue);
-            }
+            selectedProduct = newValue;
         });
 
         // del duymesi basildiqda mehsulu silir (Secilmish mehsulu Bazadan Silir)
@@ -180,7 +160,6 @@ public class ProductTableController implements Initializable {
         });
 
         showAllProductInTable();
-        setProductToEdit(null);
     }
 
     /**
@@ -266,82 +245,10 @@ public class ProductTableController implements Initializable {
 //            productList.forEach(p -> {
 //                LOGWriter.println(p);
 //            });
-
             productObservableList.clear();
             productObservableList.addAll(productList);
             productTable.setItems(productObservableList);
         }
-    }
-
-    /**
-     * edit bolumunde yadda saxla duymesini basanda bu ishde dushur
-     */
-    @FXML
-    private void handleSave() {
-        LOGWriter.println("");
-        LOGWriter.println("__________________________________________________________________________");
-        LOGWriter.println("ProductTableController.handleSave()");
-        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
-
-        LOGWriter.println("nameField: " + nameField.getText());
-        LOGWriter.println("qtyField: " + qtyField.getText());
-        LOGWriter.println("purchasePriceField: " + purchasePriceField.getText());
-        LOGWriter.println("barCodeField: " + barCodeField.getText());
-        LOGWriter.println("noteField: " + noteField.getText());
-
-        if (isInputValid()) {
-            LOGWriter.println("");
-            LOGWriter.println("Input is Valid");
-
-            if (selectedProduct != null) {
-
-                LOGWriter.println("Product is Selected");
-                LOGWriter.println("Product Updated");
-
-                LOGWriter.println("Product OLD state: " + selectedProduct);
-
-                selectedProduct.setName(nameField.getText());
-                selectedProduct.setQty(Integer.valueOf(qtyField.getText()));
-                selectedProduct.setPurchasePrice(Double.valueOf(purchasePriceField.getText()));
-                selectedProduct.setBarCode(barCodeField.getText());
-                selectedProduct.setNote(noteField.getText());
-
-                ProductDAO.update(selectedProduct);
-                LOGWriter.println("Product NEW state: " + selectedProduct);
-
-                showAllProductInTable();
-
-            } else if (selectedProduct == null) {
-                LOGWriter.println("");
-                LOGWriter.println("Selected Product is Null");
-                LOGWriter.println("Showing Alert");
-
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Mehsulu Secin");
-                alert.setHeaderText("Zehmet olmasa Mehsulu Cedvelden Secin");
-                alert.setContentText("Redakte etmek istediyiniz mehsulu secin");
-
-                alert.showAndWait();
-            }
-        } else {
-            LOGWriter.println("");
-            LOGWriter.println("Input is NOT Valid");
-        }
-    }
-
-    /**
-     * edit bolumunde legv et duymesini basdiqda bu ishde dushur
-     */
-    @FXML
-    private void handleCansel() {
-        LOGWriter.println("");
-        LOGWriter.println("__________________________________________________________________________");
-        LOGWriter.println("ProductTableController.handleCansel()");
-        LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
-
-        productTable.getSelectionModel().clearSelection();
-        setProductToEdit(null);
-        searchField.requestFocus();
     }
 
     /**
@@ -385,116 +292,5 @@ public class ProductTableController implements Initializable {
         }
 
         showAllProductInTable();
-
-        //Mesulu Sildikden sonra xanalari da temizleyek
-        handleCansel();
-    }
-
-    /**
-     * Заполняет все текстовые поля, отображая подробности об адресате. Если
-     * указанный адресат = null, то все текстовые поля очищаются.
-     *
-     * @param product — адресат типа product или null
-     */
-    private void setProductToEdit(Product product) {
-        selectedProduct = product;
-        if (product != null) {
-
-            LOGWriter.println("");
-            LOGWriter.println("__________________________________________________________________________");
-            LOGWriter.println("ProductTableController.setProductToEdit()");
-            LOGWriter.println("Action Date: " + MyDateConverter.utilDate.toString(new Date()));
-
-            LOGWriter.println("Selected Product is: " + product);
-
-            // Заполняем метки информацией из объекта person.
-            idLabel.setText(product.getId().toString());
-            nameField.setText(product.getName());
-            qtyField.setText(product.getQty().toString());
-            purchasePriceField.setText(product.getPurchasePrice().toString());
-            barCodeField.setText(product.getBarCode());
-            noteField.setText(product.getNote());
-
-            // TODO: Нам нужен способ для перевода дня рождения в тип String! 
-            // birthdayLabel.setText(...);
-        } else {
-            // Если Person = null, то убираем весь текст.
-            idLabel.setText("");
-            nameField.setText("");
-            qtyField.setText("");
-            purchasePriceField.setText("");
-            barCodeField.setText("");
-            noteField.setText("");
-            nameField.setStyle("-fx-border-color: white;-fx-border-width: 0");
-            qtyField.setStyle("-fx-border-color: white;-fx-border-width: 0;");
-            purchasePriceField.setStyle("-fx-border-color: white;-fx-border-width: 0;");
-            barCodeField.setStyle("-fx-border-color: white;-fx-border-width: 0;");
-
-        }
-
-    }
-
-    /**
-     * Проверяет пользовательский ввод в текстовых полях.
-     *
-     * @return true, если пользовательский ввод корректен
-     */
-    private boolean isInputValid() {
-        String errorMessage = "";
-
-        if (nameField.getText() == null || nameField.getText().length() == 0) {
-            errorMessage += "Mehsulun Adini dogru daxil edin!\n";
-            nameField.setStyle("-fx-border-color: red;-fx-border-width: 5;");
-        }
-
-        if (qtyField.getText() == null || qtyField.getText().length() == 0) {
-            errorMessage += "Mehsulun Sayini dogru daxil edin!\n";
-            qtyField.setStyle("-fx-border-color: red;-fx-border-width: 5;");
-        } else {
-            // пытаемся преобразовать почтовый код в int.
-            try {
-                Integer.parseInt(qtyField.getText());
-            } catch (NumberFormatException e) {
-                errorMessage += "Kecərli say daxil edin (Tam eded olmalidir)!\n";
-                qtyField.setStyle("-fx-border-color: red;-fx-border-width: 5;");
-            }
-        }
-
-        if (purchasePriceField.getText() == null || purchasePriceField.getText().length() == 0) {
-            errorMessage += "Mehsulun Qiymetini dogru daxil edin!\n";
-            purchasePriceField.setStyle("-fx-border-color: red;-fx-border-width: 5;");
-        } else {
-            // пытаемся преобразовать почтовый код в int.
-            try {
-                Double.parseDouble(purchasePriceField.getText());
-            } catch (NumberFormatException e) {
-                errorMessage += "Kecərli Qiymət daxil edin!\n";
-                purchasePriceField.setStyle("-fx-border-color: red;-fx-border-width: 5;");
-            }
-        }
-
-        if (barCodeField.getText() == null || barCodeField.getText().length() == 0) {
-            errorMessage += "Mehsulun Barcodunu dogru daxil edin!\n";
-            barCodeField.setStyle("-fx-border-color: red;-fx-border-width: 5;");
-
-        }
-
-        if (errorMessage.length() == 0) {
-            nameField.setStyle("-fx-border-color: white;-fx-border-width: 0");
-            qtyField.setStyle("-fx-border-color: white;-fx-border-width: 0;");
-            purchasePriceField.setStyle("-fx-border-color: white;-fx-border-width: 0;");
-            barCodeField.setStyle("-fx-border-color: white;-fx-border-width: 0;");
-            return true;
-        } else {
-            // Показываем сообщение об ошибке.
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Dogru Daxil edin");
-            alert.setHeaderText("Zehmet olmasa Mehsulun melumatlarini dogru daxil edin");
-            alert.setContentText(errorMessage);
-
-            alert.showAndWait();
-
-            return false;
-        }
     }
 }

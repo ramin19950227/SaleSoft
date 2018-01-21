@@ -169,8 +169,6 @@ public class DBUtil {
         try {
             //conn = DriverManager.getConnection("jdbc:ucanaccess://test.accdb;jackcessOpener=com.salesoft.database.CryptCodecOpener", "hamreen", "12345");
             conn = DriverManager.getConnection("jdbc:ucanaccess://" + MS_ACCESS_DB_FILE_NAME + ";");
-            System.out.println("Connected to DB: " + conn);
-
         } catch (SQLException e) {
             System.err.println(e);
             new ExceptionShowDialog(e).showAndWait();

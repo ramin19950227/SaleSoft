@@ -22,13 +22,18 @@ public class MainApp extends Application {
 
         URL loginViewURL = MyProperties.getURLProperties().getLoginFxmlURL();
         Scene loginViewScene = MyFXMLLoader.getSceneFromURL(loginViewURL);
-        
+
         primaryStage.setScene(loginViewScene);
-        primaryStage.setTitle("SaleSoft Alpha versiyasi 1.12.6");
+        primaryStage.setTitle(" * SaleSoft Alpha versiya 1.21 * ");
         primaryStage.getIcons().add(new Image("com/salesoft/image/icon.png"));
         primaryStage.setMaximized(false);
-        primaryStage.setMinHeight(500.0);
-        primaryStage.setMinWidth(850.0);
+
+        // Bu Yontemle Pencerenin olcusunu deyishmeyi qadagn edirik
+        primaryStage.resizableProperty().set(false);
+
+        //ekranin olcusunu deyishmeye icaze vermirikse minimum olcu qoymagada ehtiyyac yoxdur
+//        primaryStage.setMinHeight(500.0);
+//        primaryStage.setMinWidth(850.0);
         primaryStage.show();
     }
 

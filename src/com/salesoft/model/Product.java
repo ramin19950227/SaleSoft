@@ -1,17 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.salesoft.model;
 
+//<editor-fold defaultstate="collapsed" desc="import">
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+//</editor-fold>
 
+//<editor-fold defaultstate="collapsed" desc="JavaDoc">
 /**
  *
  * Product Model Class-idir yani bu klassimizla modelimizin nece olacagini
@@ -21,25 +19,22 @@ import javafx.beans.property.StringProperty;
  *
  * @author Ramin
  */
+//</editor-fold>
 public class Product {
 
+//<editor-fold defaultstate="collapsed" desc="comment">
     //modellerin Property-lerini javaFX de nece lzimdirsa ele yigiram
     //cunki adi qayda ile int a, String b, tipli yazsam irelide
-    //problemle rastlashacam Cedvelde Redkte 
-    private final IntegerProperty id;//1
+    //problemle rastlashacam Cedvelde Redkte
+//</editor-fold>
+    private final IntegerProperty id;
     private final StringProperty name;
-    ;//2
-    private final IntegerProperty qty;//3  
-    private final DoubleProperty purchasePrice;//4
-    private final StringProperty barCode;//5
-    private final StringProperty note;//6
+    private final IntegerProperty qty;
+    private final DoubleProperty purchasePrice;
+    private final StringProperty barCode;
+    private final StringProperty note;
+    private final DoubleProperty salePrice;
 
-    /**
-     * Kohne Constructor bele olanda gerek her sheyi set edem hansinisa unutsam
-     * Problem Cixacaq
-     *
-     * @deprecated
-     */
     public Product() {
         this.id = new SimpleIntegerProperty(0);
         this.name = new SimpleStringProperty("");
@@ -47,10 +42,12 @@ public class Product {
         this.purchasePrice = new SimpleDoubleProperty(0.0);
         this.barCode = new SimpleStringProperty("");
         this.note = new SimpleStringProperty("");
+        this.salePrice = new SimpleDoubleProperty(0.0);
     }
 
+//<editor-fold defaultstate="collapsed" desc="JavaDoc">
     /**
-     * Yeni Construktor Yeni DAO-da Bunu Istifade edecem
+     * Kohne
      *
      * @param id
      * @param name
@@ -58,7 +55,9 @@ public class Product {
      * @param purchasePrice
      * @param barCode
      * @param note
+     * @deprecated
      */
+//</editor-fold>
     public Product(Integer id, String name, Integer qty, Double purchasePrice, String barCode, String note) {
         this.id = new SimpleIntegerProperty(id);
         this.name = new SimpleStringProperty(name);
@@ -66,8 +65,34 @@ public class Product {
         this.purchasePrice = new SimpleDoubleProperty(purchasePrice);
         this.barCode = new SimpleStringProperty(barCode);
         this.note = new SimpleStringProperty(note);
+        this.salePrice = new SimpleDoubleProperty(0.0);
     }
 
+//<editor-fold defaultstate="collapsed" desc="JavaDoc">
+    /**
+     * Yeni Constructor
+     *
+     * @param id
+     * @param name
+     * @param qty
+     * @param purchasePrice
+     * @param barCode
+     * @param note
+     * @param salePrice
+     */
+//</editor-fold>
+    public Product(Integer id, String name, Integer qty, Double purchasePrice, Double salePrice, String barCode, String note) {
+        this.id = new SimpleIntegerProperty(id);
+        this.name = new SimpleStringProperty(name);
+        this.qty = new SimpleIntegerProperty(qty);
+        this.purchasePrice = new SimpleDoubleProperty(purchasePrice);
+        this.salePrice = new SimpleDoubleProperty(salePrice);
+
+        this.barCode = new SimpleStringProperty(barCode);
+        this.note = new SimpleStringProperty(note);
+    }
+
+//<editor-fold defaultstate="collapsed" desc="JavaDoc">
     /**
      *
      * Metod Bu Obyektin Yeni Clonunu Qaytarir Yeni Obyekt Bu obyekt ile eyni
@@ -76,20 +101,21 @@ public class Product {
      *
      * @return
      */
+//</editor-fold>
     public Product dublicateThisProduct() {
-        Product newProduct = new Product();
+        Product p = new Product(
+                this.getId(),
+                this.getName(),
+                this.getQty(),
+                this.getPurchasePrice(),
+                this.getSalePrice(),
+                this.getBarCode(),
+                this.getNote());
 
-        newProduct.setId(this.getId());
-        newProduct.setName(this.getName());
-        newProduct.setBarCode(this.getBarCode());
-        newProduct.setNote(this.getNote());
-        newProduct.setPurchasePrice(this.getPurchasePrice());
-        newProduct.setQty(this.getQty());
-
-        return newProduct;
+        return p;
     }
 
-    public final void setId(int value) {
+    public final void setId(Integer value) {
         id.set(value);
     }
 
@@ -113,7 +139,7 @@ public class Product {
         return name;
     }
 
-    public final void setQty(int value) {
+    public final void setQty(Integer value) {
         qty.set(value);
     }
 
@@ -125,7 +151,7 @@ public class Product {
         return qty;
     }
 
-    public final void setPurchasePrice(double value) {
+    public final void setPurchasePrice(Double value) {
         purchasePrice.set(value);
     }
 
@@ -161,16 +187,37 @@ public class Product {
         return note;
     }
 
-    @Override
-    public String toString() {
-        return "Product{" + "id=" + id.get() + ", name=" + name.get() + ", qty=" + qty.get() + ", purchasePrice=" + purchasePrice.get() + ", barCode=" + barCode.get() + ", note=" + note.get() + '}';
+    public final void setSalePrice(Double value) {
+        salePrice.set(value);
     }
 
+    public final Double getSalePrice() {
+        return salePrice.get();
+    }
+
+    public final DoubleProperty salePriceProperty() {
+        return salePrice;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{"
+                + "id=" + id.get()
+                + ", name=" + name.get()
+                + ", qty=" + qty.get()
+                + ", purchasePrice=" + purchasePrice.get()
+                + ", barCode=" + barCode.get()
+                + ", note=" + note.get()
+                + ", salePrice=" + salePrice.get() + '}';
+    }
+
+//<editor-fold defaultstate="collapsed" desc="JavaDoc">
     /**
      * Yeni Metod Mehsulun indiki sayina verilen sayi elave edir yani Plus
      *
      * @param qty
      */
+//</editor-fold>
     public void plusQty(Integer qty) {
         setQty(getQty() + qty);
     }

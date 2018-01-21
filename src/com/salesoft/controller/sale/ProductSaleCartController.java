@@ -122,14 +122,6 @@ public class ProductSaleCartController implements Initializable {
 
         qtyField.setPromptText("Say daxil edin");
 
-        qtyField.setOnKeyPressed((event) -> {
-            System.out.println("KEYCODE is: " + event.getCode().toString());
-            if (event.isControlDown() && (event.getCode() == KeyCode.BACK_SPACE)) {
-                clearFields();
-                barCodeField.requestFocus();
-            }
-        });
-
         //mebleg Label-imizi sifirlayiriq
         cartTotalPrice.setText("0.00");
 
@@ -195,11 +187,6 @@ public class ProductSaleCartController implements Initializable {
     }
 
     /**
-     * -----------------------------ACTIONS
-     *
-     *
-     *
-     *
      * Barcod daxil edib enter basdiqda bu metod ishe dushur
      */
     @FXML
@@ -283,53 +270,69 @@ public class ProductSaleCartController implements Initializable {
      */
     @FXML
     private void onActionQtyField() {
-        Integer say, maxSay;
-        System.out.println("onActionQtyField");
-
-        //xanada yaziln sayi aliriq
+        //Burda Menqtiqi Seyf Qurmusham Duzeldek
+        //demeli birinci ne etmek lazimdir
+        //1. Xanaya daxil edilen melumatin valid olub olmadigini yoxlayaq
+        //2. Sonra Daxil Edilen mehsul Barcodlu Mehsuldursa - bizde barcodsuz mehsulda daxil edib satmaq olacaq
+        // demeli barcodlu mehsuldursa 
+        // sayini yoxlayiriq If Blokunun icinde ve sayda Validdirse o zaman emeliyyati davam eele
         String sayString = qtyField.getText();
+        Integer say;
 
-        System.out.println("sayString=:" + sayString);
-        if (sayString == null || sayString.equals("") || Integer.valueOf(sayString) <= 0) {
+        //1 - eger validdirsa true deyilse false
+        if (!(sayString == null || sayString.equals("") || sayString.trim().length() == 0)) {
+            try {
+                say = Integer.parseInt(sayString);
+            } catch (NumberFormatException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Zehmet Olmasa Kecerli say Daxil edin");
+                alert.setHeaderText("Sayi Daxil edin");
+                alert.setContentText("Sayi Daxil Edin");
+                alert.showAndWait();
+                return;
+            }
+
+            // bu yerde say dogru daxil edilib indi bashlayaq say emeliyyatina
+            //eger mehsul barcodludursa ....
+            //yox eger adlidirsa
+            //eksi teqdirde mehsulun barcodunu daxil edin
+            if (barCodeEnteredProduct != null) {
+                int maxSay = barCodeEnteredProduct.getQty();
+
+                if (say <= maxSay) {
+                    //mehsulun 1- ededinin qiymetini  alriq TextField-den
+                    Double salePrice = Double.valueOf(onePrice.getText());
+
+                    //Meblegi hesablayiriq
+                    Double mebleg = say * salePrice;
+                    totalPrice.setText(mebleg.toString());
+                    onePrice.requestFocus();
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Zehmet Olmaza Sayi Dogru Daxil Edin");
+                    alert.setHeaderText("Anbarda Bu sayda Mehsul yoxdur");
+                    alert.setContentText("Siz Daxil etdiyiniz say: " + say + "\n Anbarda Olan say: " + maxSay);
+                    alert.showAndWait();
+                    qtyField.setText(null);
+                }
+            } else if (nameEnteredProduct != null) {
+                //mehsulun 1- ededinin qiymetini  alriq TextField-den
+                Double salePrice = Double.valueOf(onePrice.getText());
+
+                //Meblegi hesablayiriq
+                Double mebleg = say * salePrice;
+                totalPrice.setText(mebleg.toString());
+                onePrice.requestFocus();
+            } else {
+                clearFields();
+            }
+
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Zehmet Olmaza Sayi Daxil Edib Sonra Enteri basin");
+            alert.setTitle("Zehmet Olmasa Sayi Daxil Edib Sonra Enteri basin");
             alert.setHeaderText("Sayi Daxil edin");
             alert.setContentText("Sayi Daxil Edin");
             alert.showAndWait();
-            return;
-        } else {
-            say = Integer.valueOf(sayString);
-        }
-        // barcodlu mehsulun say yoxlanishi
-        if (barCodeEnteredProduct != null && barCodeEnteredProduct.getQty() >= say) {
-            //mehsulun maks sayini barcod vurulanda alinan mehsuldan oyrenirik
-            maxSay = barCodeEnteredProduct.getQty();
-
-            //mehsulun 1- ededinin qiymetini  alriq TextField-den
-            Double onePrice = Double.valueOf(this.onePrice.getText());
-
-            //Meblegi hesablayiriq
-            Double mebleg = say * onePrice;
-            totalPrice.setText(mebleg.toString());
-            this.onePrice.requestFocus();
-
-        } else if (barCodeEnteredProduct != null && barCodeEnteredProduct.getQty() < say) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Zehmet Olmaza Sayi Dogru Daxil Edin");
-            alert.setHeaderText("Bazada Bu sayda mal yoxdur");
-            alert.setContentText("Siz Daxil etdiyiniz say: " + say + "\n Bazada Olan say: " + barCodeEnteredProduct.getQty());
-            alert.showAndWait();
-            qtyField.setText(null);
-        }
-        //barcodsuz mehsulun say emeliyyati
-        if (barCodeEnteredProduct == null) {
-            //mehsulun 1- ededinin qiymetini  alriq TextField-den
-            Double onePrice = Double.valueOf(this.onePrice.getText());
-
-            //Meblegi hesablayiriq
-            Double mebleg = say * onePrice;
-            totalPrice.setText(mebleg.toString());
-            this.onePrice.requestFocus();
         }
     }
 
@@ -482,12 +485,14 @@ public class ProductSaleCartController implements Initializable {
     private void clearFields() {
         barCodeField.setText(null);
         barCodeField.setDisable(false);
+        barCodeField.requestFocus();
 
         nameField.setEditable(true);
         nameField.setText(null);
         qtyField.setText(null);
         onePrice.setText(null); //onePrice yox // onePriceField olmali idi Duzelderem
         totalPrice.setText(null);
+
     }
 
     /**
@@ -505,7 +510,7 @@ public class ProductSaleCartController implements Initializable {
     }
 
     /**
-     * onePrice Gette and Validator
+     * salePrice Gette and Validator
      *
      * @return
      */
@@ -605,9 +610,9 @@ public class ProductSaleCartController implements Initializable {
         barCodeField.setText(product.getBarCode());
         nameField.setText(product.getName());
         nameField.setEditable(false);
-        qtyField.setText(product.getQty().toString());
+        qtyField.setPromptText("Anbarda:" + product.getQty().toString());
         qtyField.requestFocus();
-        onePrice.setText(product.getPurchasePrice().toString());
+        onePrice.setText(product.getSalePrice().toString());
         totalPrice.setText(Double.toString(product.getPurchasePrice() * product.getQty()));
     }
 
@@ -708,14 +713,17 @@ public class ProductSaleCartController implements Initializable {
                 productDAO.update(product);
 
                 //Inner Object Product data's IN InvoiceItem
-                Integer id = ci.getId();
-                String name = ci.getName();
+                //Integer id = ci.getId();
+                //String name = ci.getName();
                 Integer qty = ci.getQty();
                 Double price = ci.getSalePrice();
-                String barCode = ci.getProduct().getBarCode();
-                String note = ci.getProduct().getNote();
+                //String barCode = ci.getProduct().getBarCode();
+                //String note = ci.getProduct().getNote();
 
-                Product saleProduct = new Product(id, name, qty, price, barCode, note);
+                //Product saleProduct = new Product(id, name, qty, price, barCode, note);
+                Product saleProduct = ci.getProduct();
+                saleProduct.setQty(qty);
+                saleProduct.setSalePrice(price);
 
                 InvoiceItem saleItem = new InvoiceItem(0, invoiceId, ci.getTotalPrice(), saleProduct);
 
@@ -727,15 +735,18 @@ public class ProductSaleCartController implements Initializable {
                 // bazamizda olmadigi ucun mehsul say hesabi da etmirik 
                 //sadece satish yaziriq ve birdi
 
-                Integer id = ci.getId();
-                String name = ci.getName();
+                //Integer id = ci.getId();
+                //String name = ci.getName();
                 Integer qty = ci.getQty();
                 Double price = ci.getSalePrice();
-                String barCode = ci.getProduct().getBarCode();
-                String note = ci.getProduct().getNote();
+                //String barCode = ci.getProduct().getBarCode();
+                //String note = ci.getProduct().getNote();
 
-                Product saleProduct = new Product(id, name, qty, price, barCode, note);
-
+                //Product saleProduct = new Product(id, name, qty, price, barCode, note);
+                Product saleProduct = ci.getProduct();
+                saleProduct.setQty(qty);
+                saleProduct.setSalePrice(price);
+                
                 InvoiceItem saleItem = new InvoiceItem(0, invoiceId, ci.getTotalPrice(), saleProduct);
 
                 //indi satish haqqinda melumati yazaq bazaya brbir
